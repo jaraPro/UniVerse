@@ -35,6 +35,7 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
     }
 
     body::before {
@@ -866,56 +867,10 @@
     }
 
     @media (max-width: 768px) {
-      .hero {
-        min-height: 68vh;
-        padding: 1.4rem 1rem 1rem;
-        text-align: center;
-      }
-
-      .hero-content {
-        min-height: calc(68vh - 2.4rem);
-      }
-
-      .hero h1 {
-        font-size: 2rem;
-      }
-
-      .hero p {
-        font-size: clamp(1.2rem, 6vw, 1.7rem);
-      }
-
-      .features h2 {
-        font-size: 1.8rem;
-      }
-
-      .nav-center {
-        flex-direction: column;
-        gap: 0.5rem;
-        margin: 0;
-        width: 100%;
-      }
-
-      .nav-btn {
-        width: 100%;
-        text-align: center;
-      }
-
-      .cta h2 {
-        font-size: 1.8rem;
-      }
-
-      .design-switcher {
-        right: 12px;
-        top: 74px;
-      }
-
-      .design-toggle-float {
-        padding: 0.58rem 0.8rem;
-        font-size: 0.82rem;
-      }
-
-      .design-menu {
-        min-width: 220px;
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
       }
     }
   </style>
