@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пример интеграции Auth.js - UniVerse Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    nav {
+      background: linear-gradient(90deg, #062abb 0%, #0a4bb8 100%);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-nav:hover {
+      background: white;
+      color: #062abb;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .card h2 {
+      color: #062abb;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+    }
+
+    pre {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #062abb;
+      margin: 1rem 0;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      background: #f8f9fa;
+      border-left: 3px solid #062abb;
+      border-radius: 5px;
+    }
+
+    .feature-list i {
+      color: #62c957;
+      margin-right: 0.5rem;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #2ecc71;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
+
+    .warning {
+      background: #fff3cd;
+      color: #f39c12;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #f39c12;
+    }
+
+    a {
+      color: #062abb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">
+    <i class="fas fa-graduation-cap"></i> UniVerse Pro
+  </div>
+  <div class="nav-right">
+    <div id="userPanel" style="display: none; color: white; display: flex; align-items: center; gap: 1rem;">
+      <span id="userName">Пользователь</span>
+      <button class="btn-nav" onclick="window.location.href='obshaga/obshaga.html'" style="color: #062abb;">
+        <i class="fas fa-building"></i> Общежитие
+      </button>
+      <button class="btn-nav" onclick="goToProfile()" style="color: #062abb;">
+        <i class="fas fa-user"></i> Профиль
+      </button>
+      <button class="btn-nav" onclick="logout()" style="color: #062abb;">
+        <i class="fas fa-sign-out-alt"></i> Выход
+      </button>
+    </div>
+    <button class="btn-nav" id="loginBtn" onclick="universeAuth.openModal()">
+      <i class="fas fa-sign-in-alt"></i> Вход/Регистрация
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- OVERVIEW -->
+  <div class="card">
+    <h2><i class="fas fa-book"></i> Документация по интеграции Auth.js</h2>
+    <p>
+      Данная библиотека предоставляет единую систему аутентификации для всех страниц сайта UniVerse Pro.
+      Она обрабатывает регистрацию, вход, выход и хранит данные в localStorage.
+    </p>
+    <div class="success">
+      <i class="fas fa-check-circle"></i> <strong>Готово к использованию!</strong> 
+      Просто добавьте <code>&lt;script src="auth.js"&gt;&lt;/script&gt;</code> перед </body>
+    </div>
+  </div>
+
+  <!-- QUICK START -->
+  <div class="card">
+    <h2><i class="fas fa-rocket"></i> Быстрый старт</h2>
+    <h3>1. Подключить скрипт:</h3>
+    <pre>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
+&lt;script src="auth.js"&gt;&lt;/script&gt;</pre>
+
+    <h3>2. Добавить кнопку входа:</h3>
+    <pre>&lt;button onclick="universeAuth.openModal()"&gt;
+  &lt;i class="fas fa-sign-in-alt"&gt;&lt;/i&gt; Войти
+&lt;/button&gt;</pre>
+
+    <h3>3. Проверить аутентификацию:</h3>
+    <pre>// В JavaScript
+if (universeAuth.isAuthenticated()) {
+  console.log("Пользователь вошел:", universeAuth.currentUser);
+} else {
+  console.log("Пользователь не авторизован");
+}</pre>
+  </div>
+
+  <!-- API REFERENCE -->
+  <div class="card">
+    <h2><i class="fas fa-code"></i> API Справка</h2>
+    
+    <h3>Свойства:</h3>
+    <ul class="feature-list">
+      <li><code>universeAuth.currentUser</code> - Объект текущего пользователя или null</li>
+      <li><code>universeAuth.isAuthenticated()</code> - Возвращает true/false</li>
+    </ul>
+
+    <h3>Методы:</h3>
+    <ul class="feature-list">
+      <li><code>universeAuth.openModal()</code> - Открыть модальное окно регистрации</li>
+      <li><code>universeAuth.closeModal()</code> - Закрыть модальное окно</li>
+      <li><code>universeAuth.switchTab(tab)</code> - Переключить вкладку ('login' или 'register')</li>
+      <li><code>universeAuth.register(name, email, phone, password)</code> - Регистрация</li>
+      <li><code>universeAuth.login(email, password)</code> - Вход</li>
+      <li><code>universeAuth.logout()</code> - Выход</li>
+      <li><code>universeAuth.showError(message)</code> - Показать ошибку</li>
+      <li><code>universeAuth.showSuccess(message)</code> - Показать успех</li>
+    </ul>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="card">
+    <h2><i class="fas fa-cogs"></i> Примеры использования</h2>
+
+    <h3>Пример 1: Защита контента</h3>
+    <pre>&lt;div id="content"&gt;&lt;/div&gt;
+
+&lt;script src="auth.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.addEventListener('load', () => {
+    if (!universeAuth.isAuthenticated()) {
+      document.getElementById('content').innerHTML = 
+        '&lt;p&gt;Пожалуйста, &lt;button onclick="universeAuth.openModal()"&gt;войдите&lt;/button&gt;&lt;/p&gt;';
+    } else {
+      console.log("Добро пожаловать,", universeAuth.currentUser.name);
+    }
+  });
+&lt;/script&gt;</pre>
+
+    <h3>Пример 2: Показать данные пользователя</h3>
+    <pre>&lt;div id="userInfo"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  if (universeAuth.isAuthenticated()) {
+    const user = universeAuth.currentUser;
+    document.getElementById('userInfo').innerHTML = `
+      &lt;p&gt;&lt;strong&gt;Привет, ${user.name}!&lt;/strong&gt;&lt;/p&gt;
+      &lt;p&gt;Email: ${user.email}&lt;/p&gt;
+      &lt;p&gt;Дата регистрации: ${new Date(user.createdAt).toLocaleDateString('ru-RU')}&lt;/p&gt;
+    `;
+  }
+&lt;/script&gt;</pre>
+
+    <h3>Пример 3: Проверка перед отправкой</h3>
+    <pre>function submitForm(data) {
+  if (!universeAuth.isAuthenticated()) {
+    alert("Сначала войдите в систему!");
+    universeAuth.openModal();
+    return;
+  }
+  
+  // Отправить данные с информацией пользователя
+  data.userId = universeAuth.currentUser.id;
+  // ... отправка формы ...
+}</pre>
+
+    <h3>Пример 4: Условный рендер навигации</h3>
+    <pre>&lt;script&gt;
+  window.addEventListener('load', () => {
+    const isAuth = universeAuth.isAuthenticated();
+    const loginBtn = document.getElementById('loginBtn');
+    const userPanel = document.getElementById('userPanel');
+    
+    if (isAuth) {
+      loginBtn.style.display = 'none';
+      userPanel.style.display = 'flex';
+      document.getElementById('userName').textContent = universeAuth.currentUser.name;
+    } else {
+      loginBtn.style.display = 'flex';
+      userPanel.style.display = 'none';
+    }
+  });
+&lt;/script&gt;</pre>
+  </div>
+
+  <!-- STRUCTURE -->
+  <div class="card">
+    <h2><i class="fas fa-database"></i> Структура данных</h2>
+
+    <h3>Объект пользователя:</h3>
+    <pre>{
+  id: 1234567890,              // Уникальный ID (timestamp)
+  name: "Иван Иванов",         // Имя
+  email: "ivan@example.com",   // Email (уникальный)
+  phone: "+7 (777) 123-45-67", // Телефон (опционально)
+  password: "password123",     // Пароль (минимум 8 символов)
+  bio: "...",                  // Описание профиля
+  city: "Алматы",              // Город
+  picture: null,               // Аватар (для расширения)
+  provider: "local",           // "local" или "google"
+  isEmailVerified: false,      // Email подтвержден?
+  isPhoneVerified: false,      // Phone подтвержден?
+  createdAt: "2026-04-01T...", // ISO дата регистрации
+  favorites: []                // Массив ID избранных
+}</pre>
+
+    <div class="warning">
+      <i class="fas fa-exclamation-triangle"></i>
+      <strong>Внимание!</strong> Пароли хранятся в открытом виде в localStorage.
+      Для production нужно использовать backend с хешированием!
+    </div>
+  </div>
+
+  <!-- PAGES THAT USE IT -->
+  <div class="card">
+    <h2><i class="fas fa-file-code"></i> Страницы с интегрированным auth.js</h2>
+    <ul class="feature-list">
+      <li><strong>index2.html</strong> - Главная страница (интегрировано)</li>
+      <li><strong>index5.html</strong> - Поиск университетов (интегрировано)</li>
+      <li><strong>profile.html</strong> - Профиль пользователя (использует текущего пользователя)</li>
+    </ul>
+
+    <h3>Если добавить на другие страницы:</h3>
+    <p>Просто добавьте перед </body>:</p>
+    <pre>&lt;script src="auth.js"&gt;&lt;/script&gt;</pre>
+    <p>И кнопку:</p>
+    <pre>&lt;button onclick="universeAuth.openModal()"&gt;Вход&lt;/button&gt;</pre>
+  </div>
+
+  <!-- VALIDATION -->
+  <div class="card">
+    <h2><i class="fas fa-check"></i> Правила валидации</h2>
+    <ul class="feature-list">
+      <li><strong>Имя:</strong> минимум 2 символа</li>
+      <li><strong>Email:</strong> должен содержать @ и быть уникальным</li>
+      <li><strong>Пароль:</strong> минимум 8 символов</li>
+      <li><strong>Телефон:</strong> любой формат (опционально)</li>
+    </ul>
+
+    <h3>Сообщения об ошибках:</h3>
+    <ul class="feature-list">
+      <li>"Имя должно содержать минимум 2 символа"</li>
+      <li>"Некорректный email"</li>
+      <li>"Пароль должен содержать минимум 8 символов"</li>
+      <li>"Email уже зарегистрирован"</li>
+      <li>"Неверный email или пароль"</li>
+      <li>"Пароли не совпадают"</li>
+    </ul>
+  </div>
+
+  <!-- BEST PRACTICES -->
+  <div class="card">
+    <h2><i class="fas fa-lightbulb"></i> Best Practices</h2>
+    <ul class="feature-list">
+      <li>Всегда проверяйте <code>universeAuth.isAuthenticated()</code> перед показом private контента</li>
+      <li>Сохраняйте данные пользователя в <code>universeAuth.currentUser</code></li>
+      <li>Не забывайте добавить Font Awesome для иконок</li>
+      <li>Вызывайте <code>location.reload()</code> после входа/выхода если нужна синхронизация</li>
+      <li>Используйте localStorage ключи: 'universe_users', 'universe_currentUser'</li>
+      <li>Тестируйте в разных браузерах и мобильных устройствах</li>
+    </ul>
+  </div>
+
+  <!-- CONTRIBUTE -->
+  <div class="card">
+    <h2><i class="fas fa-heart"></i> Развитие</h2>
+    <p>Что еще можно добавить в auth.js:</p>
+    <ul class="feature-list">
+      <li>Google OAuth 2.0 интеграция</li>
+      <li>Email OTP верификация</li>
+      <li>SMS верификация</li>
+      <li>Backend интеграция (Node.js, JWT токены)</li>
+      <li>MongoDB для хранения пользователей</li>
+      <li>Забыл пароль функция</li>
+      <li>Двухфакторная аутентификация</li>
+      <li>Социальные сети для входа</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="card" style="text-align: center; background: #f0f7ff; border: 2px solid #062abb;">
+    <h2 style="margin-bottom: 1rem;">Готово к использованию! 🚀</h2>
+    <p>Начните добавлять auth.js на другие страницы прямо сейчас</p>
+    <div style="margin-top: 2rem;">
+      <a href="index2.html" class="btn" style="margin-right: 1rem; display: inline-block; padding: 0.8rem 2rem; background: #062abb; color: white; border-radius: 8px;">
+        Главная страница
+      </a>
+      <a href="index5.html" class="btn" style="display: inline-block; padding: 0.8rem 2rem; background: #062abb; color: white; border-radius: 8px;">
+        Поиск университетов
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Update navbar
+window.addEventListener('load', () => {
+  const user = localStorage.getItem('universe_currentUser');
+  if (user) {
+    const userData = JSON.parse(user);
+    document.getElementById('userPanel').style.display = 'flex';
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('userName').textContent = userData.name || 'Пользователь';
+  }
+});
+
+function goToProfile() {
+  window.location.href = 'profile.html';
+}
+
+function logout() {
+  localStorage.removeItem('universe_currentUser');
+  location.reload();
+}
+</script>
+
+</body>
+</html>
