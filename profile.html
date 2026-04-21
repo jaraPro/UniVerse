@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой профиль - UniVerse Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #062abb;
+      --secondary: #ff6b6b;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --light: #f8f9fa;
+      --dark: #1a1a2e;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-bg: white;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e9ecef;
+      --shadow: #cfd6e6;
+    }
+
+    /* Dark Theme Variables */
+    .dark-theme {
+      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      --card-bg: #2d3748;
+      --text-color: #e2e8f0;
+      --text-light: #a0aec0;
+      --border-color: #4a5568;
+      --shadow: #1f2937;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      color: var(--text-color);
+      -webkit-text-size-adjust: 100%;
+      transition: all 0.3s ease;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-color);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease;
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 0.6s ease;
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.6s ease;
+    }
+
+    /* Hover Effects */
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px var(--shadow);
+    }
+
+    .btn-hover {
+      transition: all 0.3s ease;
+    }
+
+    .btn-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px #0a4bb8;
+    }
+
+    /* Pulse Animation for Notifications */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: transparent;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: none;
+      sticky: top;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      color: #ffffff;
+    }
+
+    .navbar-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-btn {
+      background: #3f5db8;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .page-tabs {
+      background: #5f79c4;
+      backdrop-filter: blur(6px);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #8ea1d8;
+    }
+
+    .page-tab {
+      text-decoration: none;
+      color: white;
+      border: 1px solid #9eb0de;
+      background: #6b84c9;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .page-tab:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .page-tab.active {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .profile-wrapper {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px #cfd6e6;
+      height: fit-content;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #0a4bb8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px #0a4bb8;
+    }
+
+    .profile-avatar-edit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .profile-name {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-email {
+      text-align: center;
+      color: #999;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 1rem;
+      background: var(--light);
+      border-radius: 12px;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.3rem;
+    }
+
+    /* ACCOUNTS SWITCHER */
+    .accounts-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--light);
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .accounts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .account-item {
+      padding: 0.8rem;
+      background: var(--light);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border: 2px solid transparent;
+    }
+
+    .account-item:hover {
+      background: #e8e8f0;
+    }
+
+    .account-item.active {
+      background: #e8f0ff;
+      border-color: var(--primary);
+    }
+
+    .account-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .account-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .add-account-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .add-account-btn:hover {
+      background: #0a4bb8;
+      transform: translateY(-2px);
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      background: #ff4757;
+      transform: translateY(-2px);
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px #cfd6e6;
+      overflow: hidden;
+    }
+
+    .tabs-header {
+      display: flex;
+      background: var(--light);
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #999;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--primary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: white;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 2rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #f0f7ff;
+      box-shadow: 0 0 0 3px #b7c8f7;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0a4bb8;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--light);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* FAVORITES GRID */
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .favorite-card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 1rem;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .favorite-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px #d6dce8;
+    }
+
+    .favorite-card-title {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .favorite-card-location {
+      font-size: 0.85rem;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .favorite-card-price {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .favorite-card-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .favorite-card-btn:hover {
+      background: #ff4757;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    .comparison-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .comparison-card {
+      background: var(--light);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: all 0.3s;
+    }
+
+    .comparison-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px #d6dce8;
+    }
+
+    .comparison-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .comparison-date {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .comparison-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .comparison-item {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.85rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .comparison-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #1f2937;
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 95%;
+      max-width: 500px;
+      box-shadow: 0 20px 60px #9ca3af;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .success-msg {
+      background: #e8f5e9;
+      color: var(--success);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .success-msg.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <i class="fas fa-graduation-cap"></i> UniVerse Pro
+  </div>
+  <div class="navbar-right">
+    <a class="nav-btn" href="index2.html">
+      <i class="fas fa-house"></i> Главная страница
+    </a>
+    <a class="nav-btn" href="index5.html">
+      <i class="fas fa-graduation-cap"></i> Университет
+    </a>
+    <a class="nav-btn" href="/obshaga/obshaga.html">
+      <i class="fas fa-building"></i> Общежитие
+    </a>
+    <a class="nav-btn" href="info.html">
+      <i class="fas fa-circle-info"></i> Информация о нас
+    </a>
+    <a class="nav-btn" href="profile.html">
+      <i class="fas fa-user"></i> Профиль
+    </a>
+  </div>
+</nav>
+
+<div class="page-tabs">
+  <a class="page-tab" href="index5.html">Рейтинги</a>
+  <a class="page-tab" href="country.html">Страны</a>
+  <a class="page-tab active" href="profile.html">Личный кабинет</a>
+</div>
+
+<div class="container">
+  <div class="profile-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="profile-avatar" onclick="editAvatar()">
+        <span id="avatarInitials">У</span>
+        <div class="profile-avatar-edit" title="Изменить аватар">
+          <i class="fas fa-camera"></i>
+        </div>
+      </div>
+
+      <div class="profile-name" id="sidebarName">Пользователь</div>
+      <div class="profile-email" id="sidebarEmail">email@example.com</div>
+
+      <div class="profile-stats">
+        <div class="stat">
+          <div class="stat-number" id="favCount">0</div>
+          <div class="stat-label">Избранное</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="accCount">1</div>
+          <div class="stat-label">Аккаунтов</div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT SWITCHER -->
+      <div class="accounts-section">
+        <div class="section-title">
+          <i class="fas fa-users"></i> Мои аккаунты
+        </div>
+        <div class="accounts-list" id="accountsList"></div>
+        <button class="add-account-btn" onclick="openAddAccountModal()">
+          <i class="fas fa-plus"></i> Добавить аккаунт
+        </button>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Выйти
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- TABS -->
+      <div class="tabs-header">
+        <div class="tab active" onclick="switchTab('profile', this)">
+          <i class="fas fa-user-circle"></i> Профиль
+        </div>
+        <div class="tab" onclick="switchTab('edit', this)">
+          <i class="fas fa-edit"></i> Редактирование
+        </div>
+        <div class="tab" onclick="switchTab('favorites', this)">
+          <i class="fas fa-heart"></i> Избранное
+        </div>
+        <div class="tab" onclick="switchTab('comparisons', this)">
+          <i class="fas fa-scale-balanced"></i> Сравнение
+        </div>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div id="profileTab" class="tab-content active">
+        <h2>Информация профиля</h2>
+        <div style="margin-top: 2rem;">
+          <div class="form-group">
+            <label>Имя</label>
+            <input type="text" id="displayName" readonly>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="displayEmail" readonly>
+          </div>
+          <div class="form-group">
+            <label>Телефон</label>
+            <input type="tel" id="displayPhone" readonly>
+          </div>
+          <div class="form-group">
+            <label>Город</label>
+            <input type="text" id="displayCity" readonly>
+          </div>
+          <div class="form-group">
+            <label>Описание</label>
+            <textarea id="displayBio" readonly rows="4"></textarea>
+          </div>
+          <div style="color: #999; font-size: 0.9rem;">
+            <p>Дата регистрации: <strong id="joinDate">-</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT TAB -->
+      <div id="editTab" class="tab-content">
+        <h2>Редактирование профиля</h2>
+        <form onsubmit="saveProfile(event)" style="margin-top: 2rem;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Имя</label>
+              <input type="text" id="editName" required>
+            </div>
+            <div class="form-group">
+              <label>Телефон</label>
+              <input type="tel" id="editPhone">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Город</label>
+              <input type="text" id="editCity" placeholder="Алматы">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="editEmail" readonly style="background: #f5f5f5;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>О себе</label>
+            <textarea id="editBio" rows="4" placeholder="Расскажите о себе..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Новый пароль (опционально)</label>
+            <input type="password" id="editPassword" placeholder="Оставьте пустым, чтобы не менять">
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Сохранить изменения
+          </button>
+        </form>
+      </div>
+
+      <!-- FAVORITES TAB -->
+      <div id="favoritesTab" class="tab-content">
+        <h2>Мое избранное</h2>
+        <div class="sub-tabs">
+          <div class="sub-tab active" onclick="switchSubTab('universities')">
+            <i class="fas fa-graduation-cap"></i> Университеты
+          </div>
+          <div class="sub-tab" onclick="switchSubTab('dorms')">
+            <i class="fas fa-building"></i> Общежития
+          </div>
+        </div>
+        <div id="universitiesSubTab" class="sub-content active">
+          <div id="universitiesContainer" style="margin-top: 2rem;">
+            <div class="empty-state">
+              <i class="fas fa-heart"></i>
+              <p>У вас пока нет добавленных университетов в избранное</p>
+            </div>
+          </div>
+        </div>
+        <div id="dormsSubTab" class="sub-content">
+          <div id="dormsContainer" style="margin-top: 2rem;">
+            <div class="empty-state">
+              <i class="fas fa-building"></i>
+              <p>У вас пока нет добавленных общежитий в избранное</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARISONS TAB -->
+      <div id="comparisonsTab" class="tab-content">
+        <h2>Мои сравнения</h2>
+        <div id="comparisonsContainer" style="margin-top: 2rem;">
+          <div class="empty-state">
+            <i class="fas fa-scale-balanced"></i>
+            <p>Сохраненные сравнения пока отсутствуют</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ACCOUNT MODAL -->
+<div class="modal" id="addAccountModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Добавить новый аккаунт</h2>
+      <button class="modal-close" onclick="closeModal('addAccountModal')">×</button>
+    </div>
+
+    <div class="success-msg" id="addAccountSuccess">
+      ✅ Аккаунт успешно добавлен!
+    </div>
+
+    <form onsubmit="addNewAccount(event)">
+      <div class="form-group">
+        <label>Имя</label>
+        <input type="text" id="newAccName" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="newAccEmail" required>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" id="newAccPassword" required minlength="8">
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">
+          <i class="fas fa-plus"></i> Создать
+        </button>
+        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal('addAccountModal')">
+          <i class="fas fa-times"></i> Отмена
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let currentUser = null;
+let allAccounts = [];
+let favorites = [];
+let dormFavorites = [];
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// INITIALIZATION
+window.onload = () => {
+  loadFavorites();
+  loadDormFavorites();
+  loadUserData();
+  applyRequestedTabFromUrl();
+};
+
+function applyRequestedTabFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedTab = (params.get('tab') || '').trim().toLowerCase();
+
+  if (!requestedTab) {
+    return;
+  }
+
+  let targetTab = null;
+  if (requestedTab === 'favorites' || requestedTab === 'favorite') {
+    targetTab = 'favorites';
+  } else if (requestedTab === 'comparisons' || requestedTab === 'comparison') {
+    targetTab = 'comparisons';
+  } else if (requestedTab === 'edit') {
+    targetTab = 'edit';
+  } else if (requestedTab === 'profile') {
+    targetTab = 'profile';
+  }
+
+  if (!targetTab) {
+    return;
+  }
+
+  const tabEl = document.querySelector(`.tab[onclick*="switchTab('${targetTab}'"]`);
+  switchTab(targetTab, tabEl);
+}
+
+function loadUserData() {
+  const user = localStorage.getItem('universe_currentUser');
+  if (!user) {
+    const guestUser = {
+      id: Date.now(),
+      name: 'Гость',
+      email: 'guest@universe.local',
+      createdAt: new Date().toISOString()
+    };
+    localStorage.setItem('universe_currentUser', JSON.stringify(guestUser));
+    currentUser = guestUser;
+    loadAllAccounts();
+    updateUI();
+    return;
+  }
+
+  currentUser = JSON.parse(user);
+  loadAllAccounts();
+  updateUI();
+}
+
+function loadAllAccounts() {
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  allAccounts = users;
+}
+
+function normalizeFavoriteIds(rawFavorites) {
+  if (!Array.isArray(rawFavorites)) {
+    return [];
+  }
+
+  const normalizeOne = (favoriteItem) => {
+    if (typeof favoriteItem === 'number') {
+      return Number.isFinite(favoriteItem) ? String(favoriteItem) : null;
+    }
+
+    if (typeof favoriteItem === 'string') {
+      const trimmed = favoriteItem.trim();
+      return trimmed.length ? trimmed : null;
+    }
+
+    if (favoriteItem && typeof favoriteItem === 'object') {
+      return normalizeOne(favoriteItem.id ?? favoriteItem.universityId ?? favoriteItem.path);
+    }
+
+    return null;
+  };
+
+  const normalized = rawFavorites
+    .map(normalizeOne)
+    .filter((favoriteId) => typeof favoriteId === 'string' && favoriteId.length > 0);
+
+  return [...new Set(normalized)];
+}
+
+function ensureFavoriteMeta(ids) {
+  const favoriteMeta = JSON.parse(localStorage.getItem('universe_favorites_meta') || '{}');
+  let changed = false;
+
+  ids.forEach((key) => {
+    if (favoriteMeta[key]) {
+      return;
+    }
+
+    favoriteMeta[key] = {
+      id: key,
+      name: `Университет ${key}`,
+      city: 'Город не указан'
+    };
+    changed = true;
+  });
+
+  if (changed) {
+    localStorage.setItem('universe_favorites_meta', JSON.stringify(favoriteMeta));
+  }
+}
+
+function loadFavorites() {
+  const rawFavorites = JSON.parse(localStorage.getItem('universe_favorites') || '[]');
+  favorites = normalizeFavoriteIds(rawFavorites);
+  localStorage.setItem('universe_favorites', JSON.stringify(favorites));
+  ensureFavoriteMeta(favorites);
+}
+
+function loadDormFavorites() {
+  const rawDormFavorites = JSON.parse(localStorage.getItem('universe_dorm_favorites') || '[]');
+  if (!Array.isArray(rawDormFavorites)) {
+    dormFavorites = [];
+    return;
+  }
+
+  dormFavorites = rawDormFavorites
+    .map((favoriteItem) => {
+      if (typeof favoriteItem === 'string') {
+        return favoriteItem.trim();
+      }
+      if (favoriteItem && typeof favoriteItem === 'object') {
+        return String(favoriteItem.name || favoriteItem.title || favoriteItem.id || '').trim();
+      }
+      return '';
+    })
+    .filter((favoriteName) => favoriteName.length > 0);
+
+  dormFavorites = [...new Set(dormFavorites)];
+}
+
+function normalizeUniversityPath(pathValue) {
+  if (!pathValue || typeof pathValue !== 'string') {
+    return null;
+  }
+
+  const trimmed = pathValue.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  if (trimmed.startsWith('/univer/')) {
+    return trimmed;
+  }
+
+  if (trimmed.startsWith('univer/')) {
+    return '/' + trimmed;
+  }
+
+  if (trimmed.includes('/univer/')) {
+    const idx = trimmed.indexOf('/univer/');
+    return trimmed.slice(idx);
+  }
+
+  return null;
+}
+
+function inferUniversityPath(favoriteKey, universityName, universityMeta) {
+  const fromMetaPath = normalizeUniversityPath(universityMeta && universityMeta.path);
+  if (fromMetaPath) {
+    return fromMetaPath;
+  }
+
+  const fromMetaLink = normalizeUniversityPath(universityMeta && universityMeta.link);
+  if (fromMetaLink) {
+    return fromMetaLink;
+  }
+
+  const byId = {
+    '1': '/univer/kazakhstan/Almaty/kaznu.html',
+    '2': '/univer/kazakhstan/Astana/enu.html',
+    '3': '/univer/kazakhstan/Almaty/almau.html',
+    '4': '/univer/kazakhstan/Almaty/aty.html',
+    '5': '/univer/kazakhstan/Almaty/Civil_Aviation_Academy.html',
+    '6': '/univer/kazakhstan/Almaty/DMU Kazakhstan.html',
+    '7': '/univer/kazakhstan/Almaty/ety.html',
+    '8': '/univer/kazakhstan/Almaty/Kaznmy.html',
+    '9': '/univer/kazakhstan/Almaty/KazNAU.html',
+    '10': '/univer/kazakhstan/Almaty/Satbayev.html',
+    '11': '/univer/UST/mit.html',
+    '12': '/univer/Yaponiya/yaponiya.html',
+    '13': '/univer/kazakhstan/Almaty/CAU.html',
+    '14': '/univer/kazakhstan/Almaty/КаzАСТ.html',
+    '15': '/univer/kazakhstan/Almaty/EYIK.html',
+    '16': '/univer/kazakhstan/Almaty/ety.html',
+    '17': '/univer/kazakhstan/Almaty/kaynar.html',
+    '18': '/univer/kazakhstan/Almaty/KazADImG.html',
+    '19': '/univer/kazakhstan/Almaty/KazATiSO.html',
+    '20': '/univer/kazakhstan/Almaty/KazMUNO.html',
+    '21': '/univer/kazakhstan/Almaty/KazNaC.html',
+    '22': '/univer/kazakhstan/Almaty/KazNAI.html',
+    '23': '/univer/kazakhstan/Almaty/KazNPY.html',
+    '24': '/univer/kazakhstan/Almaty/KazNJP.html',
+    '25': '/univer/kazakhstan/Almaty/КаzАСТ.html',
+    '26': '/univer/kazakhstan/Almaty/KazNAU.html',
+    '27': '/univer/kazakhstan/Almaty/gumaniter.html',
+    '28': '/univer/kazakhstan/Almaty/univer_enerji.html',
+    '29': '/univer/kazakhstan/Almaty/narhoz.html',
+    '30': '/univer/kazakhstan/Almaty/UIB.html',
+    '31': '/univer/kazakhstan/Almaty/Kunaeva.html',
+    '32': '/univer/kazakhstan/Almaty/Kimep.html',
+    '33': '/univer/kazakhstan/Almaty/UIADK.html',
+    '34': '/univer/kazakhstan/Almaty/Turan.html',
+    '35': '/univer/kazakhstan/Almaty/MUIT.html',
+    '36': '/univer/kazakhstan/Almaty/MTGU.html',
+    '37': '/univer/kazakhstan/Almaty/METU.html',
+    '38': '/univer/kazakhstan/Almaty/MOK.html'
+  };
+
+  if (byId[String(favoriteKey)]) {
+    return byId[String(favoriteKey)];
+  }
+
+  const n = String(universityName || '').toLowerCase();
+  if (!n) {
+    return null;
+  }
+
+  if (n.includes('mit')) return '/univer/UST/mit.html';
+  if (n.includes('ену') || n.includes('gumilyov')) return '/univer/kazakhstan/Astana/enu.html';
+  if (n.includes('kaznu') || n.includes('казну')) return '/univer/kazakhstan/Almaty/kaznu.html';
+  if (n.includes('kimep') || n.includes('кимэп')) return '/univer/kazakhstan/Almaty/Kimep.html';
+  if (n.includes('satbayev')) return '/univer/kazakhstan/Almaty/Satbayev.html';
+  if (n.includes('narhoz')) return '/univer/kazakhstan/Almaty/narhoz.html';
+  if (n.includes('tokyo') || n.includes('токий')) return '/univer/Yaponiya/yaponiya.html';
+
+  return null;
+}
+
+function updateUI() {
+  // Sidebar
+  document.getElementById('sidebarName').textContent = currentUser.name || 'Пользователь';
+  document.getElementById('sidebarEmail').textContent = currentUser.email;
+  document.getElementById('favCount').textContent = favorites.length;
+  const dormFavCountElement = document.getElementById('dormFavCount');
+  if (dormFavCountElement) {
+    dormFavCountElement.textContent = dormFavorites.length;
+  }
+  document.getElementById('accCount').textContent = allAccounts.length;
+
+  const initials = (currentUser.name || 'У').split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('avatarInitials').textContent = initials;
+
+  // Profile Tab
+  document.getElementById('displayName').value = currentUser.name || '';
+  document.getElementById('displayEmail').value = currentUser.email;
+  document.getElementById('displayPhone').value = currentUser.phone || '';
+  document.getElementById('displayCity').value = currentUser.city || '';
+  document.getElementById('displayBio').value = currentUser.bio || '';
+  document.getElementById('joinDate').textContent = currentUser.createdAt ? 
+    new Date(currentUser.createdAt).toLocaleDateString('ru-RU') : '-';
+
+  // Edit Tab
+  document.getElementById('editName').value = currentUser.name || '';
+  document.getElementById('editEmail').value = currentUser.email;
+  document.getElementById('editPhone').value = currentUser.phone || '';
+  document.getElementById('editCity').value = currentUser.city || '';
+  document.getElementById('editBio').value = currentUser.bio || '';
+
+  // Accounts List
+  renderAccountsList();
+
+  // Favorites
+  renderFavorites();
+
+  renderDormFavorites();
+
+  renderComparisons();
+}
+
+function renderAccountsList() {
+  const container = document.getElementById('accountsList');
+  container.innerHTML = allAccounts.map(acc => `
+    <div class="account-item ${acc.id === currentUser.id ? 'active' : ''}" onclick="switchAccount(${acc.id})">
+      <div class="account-avatar">${acc.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2)}</div>
+      <div>
+        <div class="account-name">${acc.name}</div>
+        <div style="font-size: 0.75rem; color: #999;">${acc.email}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchAccount(accountId) {
+  const account = allAccounts.find(a => a.id === accountId);
+  if (account) {
+    currentUser = account;
+    localStorage.setItem('universe_currentUser', JSON.stringify(account));
+    location.reload();
+  }
+}
+
+function switchTab(tabName, tabElement) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+  if (tabElement) {
+    tabElement.classList.add('active');
+  }
+  document.getElementById(tabName + 'Tab').classList.add('active');
+}
+
+function switchSubTab(tabName) {
+  document.querySelectorAll('.sub-tab').forEach((tab) => tab.classList.remove('active'));
+  document.querySelectorAll('.sub-content').forEach((content) => content.classList.remove('active'));
+
+  const targetTab = document.querySelector(`.sub-tab[onclick*="switchSubTab('${tabName}')"]`);
+  const targetContent = document.getElementById(tabName + 'SubTab');
+
+  if (targetTab) {
+    targetTab.classList.add('active');
+  }
+  if (targetContent) {
+    targetContent.classList.add('active');
+  }
+}
+
+function saveProfile(e) {
+  e.preventDefault();
+
+  const updatedUser = {
+    ...currentUser,
+    name: document.getElementById('editName').value,
+    phone: document.getElementById('editPhone').value,
+    city: document.getElementById('editCity').value,
+    bio: document.getElementById('editBio').value
+  };
+
+  const password = document.getElementById('editPassword').value;
+  if (password) {
+    if (password.length < 8) {
+      alert('❌ Пароль должен содержать минимум 8 символов');
+      return;
+    }
+    updatedUser.password = password;
+  }
+
+  // Update in localStorage
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  const index = users.findIndex(u => u.id === currentUser.id);
+  if (index > -1) {
+    users[index] = updatedUser;
+    localStorage.setItem('universe_users', JSON.stringify(users));
+  }
+
+  currentUser = updatedUser;
+  localStorage.setItem('universe_currentUser', JSON.stringify(updatedUser));
+  loadAllAccounts();
+  updateUI();
+
+  alert('✅ Профиль успешно обновлен!');
+  const profileTab = document.querySelector(".tab[onclick*=\"switchTab('profile'\"]");
+  switchTab('profile', profileTab);
+}
+
+function renderFavorites() {
+  const container = document.getElementById('universitiesContainer');
+  const favoriteMeta = JSON.parse(localStorage.getItem('universe_favorites_meta') || '{}');
+  let metaChanged = false;
+
+  if (favorites.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-heart"></i>
+        <p>У вас пока нет добавленных университетов в избранное</p>
+      </div>
+    `;
+    return;
+  }
+
+  const allUniversities = [
+    {id: 1, name: "КазНУ", city: "Алматы"},
+    {id: 2, name: "ЕНУ", city: "Астана"},
+    {id: 3, name: "AlmaU", city: "Алматы"},
+    {id: 4, name: "АТУ", city: "Алматы"},
+    {id: 5, name: "Академия гражданской авиации", city: "Алматы"},
+    {id: 6, name: "DMU", city: "Алматы"},
+    {id: 7, name: "ЕТУ", city: "Алматы"},
+    {id: 8, name: "КАЗНМУ", city: "Алматы"},
+    {id: 9, name: "КазНАУ", city: "Алматы"},
+    {id: 10, name: "Satbayev", city: "Алматы"},
+    {id: 11, name: "MIT", city: "Бостан"},
+    {id: 12, name: "Токийский Университет", city: "Токио"},
+    {id: 13, name: "ЦАУ", city: "Алматы"},
+    {id: 14, name: "КазАСТ", city: "Алматы"},
+    {id: 15, name: "ЕУИК", city: "Алматы"},
+    {id: 16, name: "ЭТИ", city: "Алматы"},
+    {id: 17, name: "Кайнар", city: "Алматы"},
+    {id: 18, name: "КазАДИ", city: "Алматы"},
+    {id: 19, name: "КазАТиСО", city: "Алматы"},
+    {id: 20, name: "КазМУНО", city: "Алматы"},
+    {id: 21, name: "Консерватория", city: "Алматы"},
+    {id: 22, name: "КазНАИ", city: "Алматы"},
+    {id: 23, name: "QYZPU", city: "Алматы"},
+    {id: 24, name: "КазНПУ", city: "Алматы"},
+    {id: 25, name: "КазАСТ", city: "Алматы"},
+    {id: 26, name: "КазНАУ", city: "Алматы"},
+    {id: 27, name: "ЕУФВК", city: "Алматы"},
+    {id: 28, name: "АГЭУ", city: "Алматы"},
+    {id: 29, name: "Нархоз", city: "Алматы"},
+    {id: 30, name: "UIB", city: "Алматы"},
+    {id: 31, name: "Кунаева", city: "Алматы"},
+    {id: 32, name: "КИМЭП", city: "Алматы"},
+    {id: 33, name: "УИЯДК", city: "Алматы"},
+    {id: 34, name: "Туран", city: "Алматы"},
+    {id: 35, name: "МУИТ", city: "Алматы"},
+    {id: 36, name: "МТГУ", city: "Алматы"},
+    {id: 37, name: "МИТУ", city: "Алматы"},
+    {id: 38, name: "МОК", city: "Алматы"},
+  ];
+
+  const allUniversitiesByKey = Object.fromEntries(
+    allUniversities.map((u) => [String(u.id), u])
+  );
+
+  const favCards = favorites.map((favKey) => {
+    const key = String(favKey);
+    const universityFromList = allUniversitiesByKey[key];
+    const universityFromMeta = favoriteMeta[key];
+    const inferredPath = inferUniversityPath(key, (universityFromMeta && (universityFromMeta.title || universityFromMeta.name)) || (universityFromList && universityFromList.name), universityFromMeta);
+
+    if (inferredPath && (!universityFromMeta || !universityFromMeta.path)) {
+      favoriteMeta[key] = {
+        ...(favoriteMeta[key] || {}),
+        path: inferredPath
+      };
+      metaChanged = true;
+    }
+
+    const university = {
+      id: key,
+      name: (universityFromMeta && (universityFromMeta.title || universityFromMeta.name)) || (universityFromList && universityFromList.name) || `Университет ${key}`,
+      city: (universityFromMeta && universityFromMeta.city) || (universityFromList && universityFromList.city) || 'Город не указан',
+      path: (universityFromMeta && universityFromMeta.path) || inferredPath || null
+    };
+
+    const encodedKey = encodeURIComponent(key);
+    const safeName = escapeHtml(university.name);
+    const safeCity = escapeHtml(university.city);
+    const openBtn = university.path
+      ? `<button class="favorite-card-btn" style="margin-bottom:0.5rem;background:var(--primary);" onclick="window.location.href='${escapeHtml(university.path)}'">
+          <i class="fas fa-up-right-from-square"></i> Открыть
+        </button>`
+      : '';
+
+    return `
+      <div class="favorite-card card-hover fade-in">
+        <div class="favorite-card-title">${safeName}</div>
+        <div class="favorite-card-location">
+          <i class="fas fa-map-marker-alt"></i> ${safeCity}
+        </div>
+        ${openBtn}
+        <button class="favorite-card-btn" onclick="removeFavorite('${encodedKey}', true)">
+          <i class="fas fa-trash"></i> Удалить
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  if (metaChanged) {
+    localStorage.setItem('universe_favorites_meta', JSON.stringify(favoriteMeta));
+  }
+
+  container.innerHTML = `<div class="favorites-grid">${favCards}</div>`;
+}
+
+
+function removeFavorite(favoriteId, isEncoded = false) {
+  const normalizedKey = String(isEncoded ? decodeURIComponent(favoriteId) : favoriteId);
+  favorites = favorites.filter(f => String(f) !== normalizedKey);
+
+  const favoriteMeta = JSON.parse(localStorage.getItem('universe_favorites_meta') || '{}');
+  delete favoriteMeta[normalizedKey];
+
+  localStorage.setItem('universe_favorites', JSON.stringify(favorites));
+  localStorage.setItem('universe_favorites_meta', JSON.stringify(favoriteMeta));
+  document.getElementById('favCount').textContent = favorites.length;
+  renderFavorites();
+}
+
+function renderDormFavorites() {
+  const container = document.getElementById('dormsContainer');
+
+  if (dormFavorites.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-building"></i>
+        <p>У вас пока нет добавленных общежитий в избранное</p>
+      </div>
+    `;
+    return;
+  }
+
+  const allDorms = [
+    { name: "Общежитие КазНУ №1", university: "КазНУ имени аль-Фараби", city: "Алматы", country: "Казахстан", price: "от 35 000 ₸ / месяц" },
+    { name: "ENU Student House", university: "ЕНУ имени Л.Н. Гумилёва", city: "Астана", country: "Казахстан", price: "от 45 000 ₸ / месяц" },
+    { name: "AlmaU Residence", university: "AlmaU", city: "Алматы", country: "Казахстан", price: "от 60 000 ₸ / месяц" },
+    { name: "Harvard Yard Dormitory", university: "Harvard University", city: "Cambridge", country: "США", price: "от $950 / месяц" },
+    { name: "MIT Student Residence", university: "MIT", city: "Cambridge", country: "США", price: "от $1100 / месяц" },
+    { name: "Oxford Student Hall", university: "University of Oxford", city: "Oxford", country: "Великобритания", price: "от £800 / месяц" },
+    { name: "TUM Campus Dorm", university: "Technical University of Munich", city: "Munich", country: "Германия", price: "от €420 / месяц" },
+    { name: "University of Toronto Residence", university: "University of Toronto", city: "Toronto", country: "Канада", price: "от CAD 900 / месяц" },
+    { name: "NUS Student Hostel", university: "National University of Singapore", city: "Singapore", country: "Сингапур", price: "от SGD 550 / месяц" },
+    { name: "Seoul National Dorm", university: "Seoul National University", city: "Seoul", country: "Южная Корея", price: "от ₩480 000 / месяц" },
+    { name: "University of Melbourne Lodge", university: "University of Melbourne", city: "Melbourne", country: "Австралия", price: "от AUD 1200 / месяц" },
+    { name: "UAEU Student Residence", university: "United Arab Emirates University", city: "Al Ain", country: "ОАЭ", price: "от AED 700 / месяц" }
+  ];
+
+  const favCards = dormFavorites.map(dormName => {
+    const dorm = allDorms.find(d => d.name === dormName);
+    const safeName = escapeHtml(dormName);
+
+    if (!dorm) {
+      return `
+      <div class="favorite-card card-hover fade-in">
+        <div class="favorite-card-title">${safeName}</div>
+        <div class="favorite-card-location">
+          <i class="fas fa-map-marker-alt"></i> Общежитие сохранено
+        </div>
+        <button class="favorite-card-btn" onclick="removeDormFavorite('${encodeURIComponent(dormName)}', true)">
+          <i class="fas fa-trash"></i> Удалить
+        </button>
+      </div>
+    `;
+    }
+
+    return `
+      <div class="favorite-card card-hover fade-in">
+        <div class="favorite-card-title">${escapeHtml(dorm.name)}</div>
+        <div class="favorite-card-location">
+          <i class="fas fa-map-marker-alt"></i> ${escapeHtml(dorm.city)}, ${escapeHtml(dorm.country)}
+        </div>
+        <div class="favorite-card-price">${escapeHtml(dorm.price)}</div>
+        <button class="favorite-card-btn" onclick="removeDormFavorite('${encodeURIComponent(dormName)}', true)">
+          <i class="fas fa-trash"></i> Удалить
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `<div class="favorites-grid">${favCards}</div>`;
+}
+
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'universe_favorites' || event.key === 'universe_favorites_meta') {
+    loadFavorites();
+    const favCountElement = document.getElementById('favCount');
+    if (favCountElement) {
+      favCountElement.textContent = favorites.length;
+    }
+    renderFavorites();
+  }
+});
+
+function removeDormFavorite(dormName, isEncoded = false) {
+  const normalizedName = isEncoded ? decodeURIComponent(dormName) : dormName;
+  dormFavorites = dormFavorites.filter(f => f !== normalizedName);
+  localStorage.setItem('universe_dorm_favorites', JSON.stringify(dormFavorites));
+  const dormFavCountElement = document.getElementById('dormFavCount');
+  if (dormFavCountElement) {
+    dormFavCountElement.textContent = dormFavorites.length;
+  }
+  renderDormFavorites();
+}
+
+function renderComparisons() {
+  const container = document.getElementById('comparisonsContainer');
+  if (!container) {
+    return;
+  }
+
+  const rawComparisons = JSON.parse(localStorage.getItem('universe_profile_comparisons') || '[]');
+  if (!Array.isArray(rawComparisons) || rawComparisons.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-scale-balanced"></i>
+        <p>Сохраненные сравнения пока отсутствуют</p>
+      </div>
+    `;
+    return;
+  }
+
+  const items = [...rawComparisons].sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+  container.innerHTML = `
+    <div class="comparison-list">
+      ${items.map((comparison) => {
+        const formattedDate = comparison.createdAt
+          ? new Date(comparison.createdAt).toLocaleString('ru-RU')
+          : '-';
+        const universities = Array.isArray(comparison.universities) ? comparison.universities : [];
+
+        return `
+          <div class="comparison-card card-hover fade-in">
+            <div class="comparison-meta">
+              <strong><i class="fas fa-scale-balanced"></i> Сравнение #${comparison.id}</strong>
+              <span class="comparison-date">${formattedDate}</span>
+            </div>
+            <div class="comparison-items">
+              ${universities.map((u) => `<span class="comparison-item">${u.name || 'Без названия'}</span>`).join('')}
+            </div>
+            <div class="comparison-actions">
+              <button class="favorite-card-btn" style="width:auto;" onclick="removeComparison(${Number(comparison.id)})">
+                <i class="fas fa-trash"></i> Удалить
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function removeComparison(comparisonId) {
+  const rawComparisons = JSON.parse(localStorage.getItem('universe_profile_comparisons') || '[]');
+  const filtered = rawComparisons.filter((item) => Number(item.id) !== Number(comparisonId));
+  localStorage.setItem('universe_profile_comparisons', JSON.stringify(filtered));
+  renderComparisons();
+}
+
+function openAddAccountModal() {
+  document.getElementById('addAccountModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+function addNewAccount(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('newAccName').value.trim();
+  const email = document.getElementById('newAccEmail').value.trim().toLowerCase();
+  const password = document.getElementById('newAccPassword').value;
+
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  if (users.find(u => u.email === email)) {
+    alert('❌ Email уже зарегистрирован');
+    return;
+  }
+
+  const newAccount = {
+    id: Date.now(),
+    name,
+    email,
+    password,
+    phone: '',
+    bio: '',
+    city: '',
+    createdAt: new Date().toISOString(),
+    favorites: []
+  };
+
+  users.push(newAccount);
+  localStorage.setItem('universe_users', JSON.stringify(users));
+
+  document.getElementById('addAccountSuccess').classList.add('show');
+  setTimeout(() => {
+    closeModal('addAccountModal');
+    document.getElementById('addAccountSuccess').classList.remove('show');
+    document.getElementById('newAccName').value = '';
+    document.getElementById('newAccEmail').value = '';
+    document.getElementById('newAccPassword').value = '';
+    loadAllAccounts();
+    switchAccount(newAccount.id);
+  }, 1500);
+}
+
+function editAvatar() {
+  alert('Функция загрузки аватара будет реализована позже');
+}
+
+function deleteAccount() {
+  const confirm = prompt('⚠️ Введите "УДАЛИТЬ", чтобы подтвердить удаление аккаунта:');
+  if (confirm === 'УДАЛИТЬ') {
+    const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+    const filtered = users.filter(u => u.id !== currentUser.id);
+    localStorage.setItem('universe_users', JSON.stringify(filtered));
+    localStorage.removeItem('universe_currentUser');
+    window.location.href = 'index5.html';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('universe_currentUser');
+  window.location.href = 'index5.html';
+}
+
+function goBack() {
+  window.location.href = 'index5.html';
+}
+
+// Theme Management
+function toggleTheme() {
+  const body = document.body;
+  const toggle = document.getElementById('theme-toggle');
+  const icon = toggle.querySelector('i');
+
+  body.classList.toggle('dark-theme');
+
+  if (body.classList.contains('dark-theme')) {
+    icon.className = 'fas fa-sun';
+    localStorage.setItem('universe_theme', 'dark');
+  } else {
+    icon.className = 'fas fa-moon';
+    localStorage.setItem('universe_theme', 'light');
+  }
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('universe_theme');
+  const toggle = document.getElementById('theme-toggle');
+  const icon = toggle.querySelector('i');
+
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    icon.className = 'fas fa-sun';
+  } else {
+    icon.className = 'fas fa-moon';
+  }
+}
+
+// Push Notifications
+async function togglePushNotifications() {
+  const checkbox = document.getElementById('notifyPush');
+
+  if (checkbox.checked) {
+    // Request permission and subscribe
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        const permission = await Notification.requestPermission();
+
+        if (permission === 'granted') {
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY') // Replace with your VAPID key
+          });
+
+          // Send subscription to backend
+          await fetch('/api/auth/subscribe-push', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('universe_accessToken')}`
+            },
+            body: JSON.stringify({ subscription })
+          });
+
+          showMessage('Push-уведомления включены!', 'success');
+        } else {
+          checkbox.checked = false;
+          showMessage('Разрешение на уведомления отклонено', 'error');
+        }
+      } catch (error) {
+        console.error('Push subscription failed:', error);
+        checkbox.checked = false;
+        showMessage('Ошибка при включении уведомлений', 'error');
+      }
+    } else {
+      checkbox.checked = false;
+      showMessage('Push-уведомления не поддерживаются в этом браузере', 'error');
+    }
+  } else {
+    // Unsubscribe
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+
+      if (subscription) {
+        await subscription.unsubscribe();
+
+        // Remove from backend
+        await fetch('/api/auth/unsubscribe-push', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('universe_accessToken')}`
+          }
+        });
+      }
+
+      showMessage('Push-уведомления отключены', 'success');
+    } catch (error) {
+      console.error('Push unsubscribe failed:', error);
+      showMessage('Ошибка при отключении уведомлений', 'error');
+    }
+  }
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodePointAt(i);
+  }
+  return outputArray;
+}
+
+function showMessage(message, type) {
+  // Simple message display
+  const msgDiv = document.createElement('div');
+  msgDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'success' ? '#2ecc71' : '#e74c3c'};
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+  `;
+  msgDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}"></i> ${message}`;
+
+  document.body.appendChild(msgDiv);
+
+  setTimeout(() => {
+    msgDiv.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => msgDiv.remove(), 300);
+  }, 3000);
+}
+</script>
+<script src="/design-switcher-index2.js"></script>
+</body>
+</html>
