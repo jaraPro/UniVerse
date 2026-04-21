@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подтверждение оплаты</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(140deg, #eef5ff, #ffffff);
+      color: #1f2b4f;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+
+    .card {
+      width: min(560px, 92vw);
+      background: #fff;
+      border: 1px solid #d9e4ff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(11, 32, 86, 0.12);
+      padding: 22px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      color: #1243b0;
+    }
+
+    p {
+      margin: 0;
+      color: #465886;
+    }
+
+    .status {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #1c5b1d;
+      background: #e7f8e7;
+      border: 1px solid #9fd39f;
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+    }
+
+    .status.warn {
+      display: block;
+      color: #6f5016;
+      background: #fff8e7;
+      border-color: #ebcc87;
+    }
+
+    .status.ok {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Проверяем платеж...</h1>
+    <p>Подтверждаем оплату и открываем полный доступ к выбранному университету.</p>
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const universityId = params.get('universityId');
+    const premiumPath = params.get('premiumPath') || '/index5.html';
+    const previewPath = params.get('previewPath') || '/index5.html';
+
+    function getAccessToken() {
+      return localStorage.getItem('universe_accessToken') || localStorage.getItem('accessToken') || '';
+    }
+
+    function ensureClientId() {
+      const key = 'findu2_client_id';
+      let clientId = localStorage.getItem(key);
+      if (!clientId) {
+        clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        localStorage.setItem(key, clientId);
+      }
+      return clientId;
+    }
+
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = 'status ' + type;
+    }
+
+    async function confirmPayment() {
+      if (!sessionId || !universityId) {
+        showStatus('Некорректная ссылка подтверждения. Возврат на страницу университета.', 'warn');
+        setTimeout(() => {
+          window.location.href = previewPath;
+        }, 1200);
+        return;
+      }
+
+      try {
+        const token = getAccessToken();
+        const clientId = ensureClientId();
+
+        const response = await fetch('/api/payments/confirm-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            sessionId,
+            universityId,
+            clientId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('confirm-failed');
+        }
+
+        showStatus('Оплата подтверждена. Перенаправляем на полную страницу...', 'ok');
+        setTimeout(() => {
+          window.location.href = premiumPath;
+        }, 900);
+      } catch (error) {
+        showStatus('Не удалось подтвердить платеж. Возврат на страницу университета.', 'warn');
+        setTimeout(() => {
+          window.location.href = previewPath;
+        }, 1400);
+      }
+    }
+
+    confirmPayment();
+  </script>
+</body>
+</html>
