@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Поиск университетов</title>
+</head>
+<body>
+
+<form class="form">
+  <input
+    style="width:500px; height:30px;"
+    list="countries"
+    id="countryInput"
+    placeholder="Поиск стран">
+
+  <datalist id="countries">
+    <option value="Казахстан">
+    <option value="США">
+    <option value="Великобритания">
+  </datalist>
+
+  <button type="button" onclick="searchUniversities()">Найти</button>
+</form>
+
+<script>
+  function searchUniversities() {
+    const country = document.getElementById("countryInput").value;
+
+    if (country === "Казахстан") {
+      window.location.href = "/univer/kazakhstan/kazakstan.html";
+    } 
+    else if (country === "США") {
+      window.location.href = "univer/UST/USA.html";
+    } 
+    else if (country === "Великобритания") {
+      window.location.href = "/univer/uk.html";
+    } 
+    else {
+      alert("Страна не найдена ❌");
+    }
+
+  }
+
+</script>
+
+</body>
+</html>
