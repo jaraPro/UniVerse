@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О нас | UniVerse Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #062abb;
+      --primary-2: #0a4bb8;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --muted: #5f6b84;
+      --line: #dde4ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body.old-design {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body.dark-design {
+      --primary: #e5e7eb;
+      --primary-2: #cbd5e1;
+      --muted: #b6c1db;
+      --line: rgba(203, 213, 225, 0.35);
+      background:
+        radial-gradient(circle at 15% -10%, rgba(140,170,255,0.22) 0%, transparent 35%),
+        radial-gradient(circle at 85% 8%, rgba(153,223,255,0.16) 0%, transparent 35%),
+        #020308;
+      color: #eaf1ff;
+    }
+
+    body.white-design {
+      background: #ffffff;
+      color: #1f2937;
+    }
+
+    .design-switcher {
+      position: fixed;
+      right: 20px;
+      top: 86px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .design-toggle-float {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.78);
+      color: #f2f6ff;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: all 0.25s ease;
+    }
+
+    .design-toggle-float:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.92);
+      color: #101827;
+    }
+
+    .design-menu {
+      display: none;
+      min-width: 250px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.88);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.32);
+      padding: 0.45rem;
+    }
+
+    .design-menu.open {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .design-option {
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 10px;
+      padding: 0.58rem 0.72rem;
+      background: rgba(255,255,255,0.06);
+      color: #eef2ff;
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .design-option:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .design-option.active {
+      background: rgba(255,255,255,0.92);
+      color: #0f172a;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-2) 100%);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      white-space: nowrap;
+    }
+
+    .logo i {
+      color: #ffd700;
+      animation: pulse 2s infinite;
+    }
+
+    .nav-center {
+      flex: 1;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .page-tabs {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .page-tab {
+      text-decoration: none;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.08);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .page-tab:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .page-tab.active {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+    }
+
+    body.dark-design .navbar {
+      background: rgba(10, 12, 20, 0.72);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+      backdrop-filter: blur(12px);
+    }
+
+    body.dark-design .logo i {
+      color: #cfd6ea;
+    }
+
+    body.dark-design .nav-btn {
+      background: rgba(255,255,255,0.04);
+      color: #e8edff;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 0.48rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    body.dark-design .page-tab {
+      color: #ffffff;
+    }
+
+    body.dark-design .page-tab:hover,
+    body.dark-design .page-tab.active {
+      background: #ffffff;
+      color: #101827;
+      border-color: #ffffff;
+    }
+
+    body.dark-design .hero,
+    body.dark-design .stat-card,
+    body.dark-design .card,
+    body.dark-design .faq details {
+      background: rgba(12, 16, 28, 0.88);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    }
+
+    body.dark-design .hero h1,
+    body.dark-design .card h2,
+    body.dark-design .faq summary {
+      color: #f3f6ff;
+    }
+
+    body.dark-design .list li,
+    body.dark-design .step p,
+    body.dark-design .faq p,
+    body.dark-design .stat-label,
+    body.dark-design .card p,
+    body.dark-design .hero p {
+      color: #b8c5e8;
+    }
+
+    body.dark-design .check {
+      color: #f3f6ff;
+      background: rgba(255,255,255,0.14);
+    }
+
+    body.dark-design .step {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    body.dark-design .btn-primary {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    body.dark-design .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.2);
+      color: #e5e7eb;
+    }
+
+    body.dark-design .cta {
+      background: linear-gradient(120deg, #111827, #1f2937);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    }
+
+    body.dark-design .cta a {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    body.white-design .navbar {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.12);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.1);
+    }
+
+    body.white-design .logo,
+    body.white-design .logo i {
+      color: #111827;
+    }
+
+    body.white-design .nav-btn {
+      color: #111827;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+    }
+
+    body.white-design .nav-btn:hover {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .page-tabs {
+      background: linear-gradient(180deg, #ffffff 0%, #f6f8fc 100%);
+      border-top: 1px solid rgba(15,23,42,0.08);
+      border-bottom: 1px solid rgba(15,23,42,0.12);
+      backdrop-filter: none;
+      box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+    }
+
+    body.white-design .page-tab {
+      color: #1f2937;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.06);
+    }
+
+    body.white-design .page-tab:hover {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .page-tab.active {
+      background: linear-gradient(135deg, #111827 0%, #374151 100%);
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.old-design .design-toggle-float {
+      background: var(--primary);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.45);
+      backdrop-filter: none;
+    }
+
+    body.old-design .design-menu {
+      background: rgba(32, 56, 162, 0.92);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    body.white-design .design-toggle-float {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.18);
+      backdrop-filter: none;
+    }
+
+    body.white-design .design-menu {
+      background: #ffffff;
+      border-color: rgba(15,23,42,0.16);
+      backdrop-filter: none;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.16);
+    }
+
+    body.white-design .design-option {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    body.white-design .design-option:hover {
+      background: #e5e7eb;
+    }
+
+    body.white-design .design-option.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 2rem auto;
+      padding: 0 1rem 2rem;
+    }
+
+    .hero {
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -70px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(10,75,184,0.2) 0%, rgba(10,75,184,0) 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 1.2rem + 2vw, 2.8rem);
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 0.8rem;
+      max-width: 850px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.65;
+      max-width: 860px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 1.6rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.28);
+    }
+
+    .btn-secondary {
+      border: 1px solid #ced8ff;
+      background: #f7f9ff;
+      color: var(--primary);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border: 1px solid #eef2ff;
+    }
+
+    .stat-value {
+      font-size: clamp(1.35rem, 1.1rem + 1vw, 2rem);
+      color: var(--primary);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.4rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border: 1px solid #edf1ff;
+    }
+
+    .card h2 {
+      color: var(--dark);
+      font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.55rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 0.7rem;
+    }
+
+    .list {
+      list-style: none;
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.7rem;
+    }
+
+    .list li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 0.6rem;
+      align-items: start;
+      color: #233255;
+      line-height: 1.45;
+    }
+
+    .check {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: rgba(6, 42, 187, 0.12);
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.8rem 0.9rem;
+      background: #f8faff;
+    }
+
+    .step strong {
+      display: inline-block;
+      margin-bottom: 0.25rem;
+      color: var(--primary);
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+    }
+
+    .faq {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.4rem;
+    }
+
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8faff;
+      padding: 0.75rem 0.9rem;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #1e2b4a;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary::after {
+      content: "+";
+      color: var(--primary);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .faq details[open] summary::after {
+      content: "-";
+    }
+
+    .faq p {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .cta {
+      margin-top: 1.1rem;
+      border-radius: 16px;
+      background: linear-gradient(120deg, rgba(6, 42, 187, 0.95), rgba(10, 75, 184, 0.92));
+      color: white;
+      padding: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 14px 30px rgba(6, 42, 187, 0.35);
+    }
+
+    .cta h3 {
+      font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+      margin-bottom: 0.35rem;
+    }
+
+    .cta p {
+      color: rgba(255,255,255,0.92);
+      line-height: 1.55;
+      max-width: 750px;
+    }
+
+    .cta a {
+      flex-shrink: 0;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      transition: transform 0.25s ease;
+    }
+
+    .cta a:hover {
+      transform: translateY(-2px);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @media (max-width: 1024px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body class="old-design">
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      UniVerse Pro
+    </div>
+    <div class="nav-center">
+      <a class="nav-btn" href="index2.html"><i class="fas fa-home"></i> Главная</a>
+      <a class="nav-btn" href="index5.html"><i class="fas fa-ranking-star"></i> Рейтинги</a>
+      <a class="nav-btn" href="/obshaga/obshaga.html"><i class="fas fa-building"></i> Общежитие</a>
+      <a class="nav-btn" href="profile.html"><i class="fas fa-user"></i> Профиль</a>
+    </div>
+  </nav>
+
+  <div class="design-switcher" id="designSwitcher">
+    <button class="design-toggle-float" onclick="toggleDesignMenu(event)" id="designToggleBtn" type="button">
+      <i class="fas fa-palette"></i> Выбор дизайна
+    </button>
+    <div class="design-menu" id="designMenu">
+      <button class="design-option" type="button" data-variant="old" onclick="selectDesignVariant('old')">Главный дизайн</button>
+      <button class="design-option" type="button" data-variant="dark" onclick="selectDesignVariant('dark')">Тёмный</button>
+      <button class="design-option" type="button" data-variant="white" onclick="selectDesignVariant('white')">Белый</button>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a class="page-tab" href="index5.html">Рейтинги</a>
+    <a class="page-tab" href="country.html">Страны</a>
+    <a class="page-tab" href="/obshaga/obshaga.html">Общежитие</a>
+    <a class="page-tab" href="profile.html">Личный кабинет</a>
+    <a class="page-tab active" href="info.html">О нас</a>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">О платформе</p>
+      <h1>Делаем выбор университета понятным, быстрым и уверенным</h1>
+      <p>
+        UniVerse Pro помогает абитуриентам и родителям пройти весь путь поступления: от поиска
+        подходящего вуза до финального сравнения программ, условий проживания и бюджета.
+        Мы объединяем структурированные данные, практические советы и удобные инструменты в одном месте.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="country.html"><i class="fas fa-search"></i> Подобрать университет</a>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Ключевые показатели">
+      <article class="stat-card">
+        <div class="stat-value">1500+</div>
+        <p class="stat-label">университетов в каталоге по разным странам</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-value">35+</div>
+        <p class="stat-label">городов и образовательных направлений для фильтрации</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-value">24/7</div>
+        <p class="stat-label">доступ к данным и избранному с любого устройства</p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-value">5 шагов</div>
+        <p class="stat-label">от первого поиска до итогового решения</p>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Что вы получаете на UniVerse Pro</h2>
+        <p>
+          Мы проектируем сервис как персонального навигатора по образованию: четко, прозрачно и без лишнего шума.
+          Платформа помогает сравнивать варианты по фактам, а не по случайным отзывам.
+        </p>
+        <ul class="list">
+          <li><span class="check">1</span><span>Умный поиск по стране, городу, специальности и формату обучения.</span></li>
+          <li><span class="check">2</span><span>Карточки вузов с аккредитацией, требованиями и ориентировочной стоимостью.</span></li>
+          <li><span class="check">3</span><span>Сохранение в избранное и быстрый доступ к ключевым сравнениям.</span></li>
+          <li><span class="check">4</span><span>Маршрут поступления: дедлайны, документы и рекомендации по подготовке.</span></li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Как мы развиваем платформу</h2>
+        <div class="roadmap">
+          <div class="step">
+            <strong>Этап 01</strong>
+            <p>Расширение каталога и уточнение данных по программам и стипендиям.</p>
+          </div>
+          <div class="step">
+            <strong>Этап 02</strong>
+            <p>Запуск персональных рекомендаций на основе целей, бюджета и интересов.</p>
+          </div>
+          <div class="step">
+            <strong>Этап 03</strong>
+            <p>Поддержка онлайн-заявки и трекинг статуса по каждому вузу в личном кабинете.</p>
+          </div>
+          <div class="step">
+            <strong>Этап 04</strong>
+            <p>Интеграция консультаций с экспертами по стратегиям поступления.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Частые вопросы</h2>
+      <div class="faq">
+        <details>
+          <summary>Для кого подходит UniVerse Pro?</summary>
+          <p>Для школьников, студентов, родителей и всех, кто выбирает вуз и хочет ориентироваться в требованиях и возможностях без лишней путаницы.</p>
+        </details>
+        <details>
+          <summary>Насколько актуальна информация?</summary>
+          <p>Мы регулярно обновляем карточки вузов и улучшаем структуру данных, чтобы вы принимали решения на основе проверенной информации.</p>
+        </details>
+        <details>
+          <summary>Можно ли использовать платформу с телефона?</summary>
+          <p>Да. Интерфейс адаптирован под мобильные устройства: поиск, избранное и просмотр информации работают удобно на любом экране.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div>
+        <h3>Начните искать университет уже сегодня</h3>
+        <p>
+          Создайте свой список вузов, сравните варианты и выберите образовательный маршрут,
+          который действительно подходит вашим целям.
+        </p>
+      </div>
+      <a href="country.html">Перейти к поиску</a>
+    </section>
+  </main>
+
+  <script>
+    function applySavedDesignVariant() {
+      const variant = localStorage.getItem('universe_info_design_variant') || 'old';
+      const body = document.body;
+      const button = document.getElementById('designToggleBtn');
+      const menu = document.getElementById('designMenu');
+
+      body.classList.remove('old-design', 'dark-design', 'white-design');
+      if (variant === 'white') {
+        body.classList.add('white-design');
+      } else if (variant === 'dark') {
+        body.classList.add('dark-design');
+      } else {
+        body.classList.add('old-design');
+      }
+
+      if (button) {
+        const label = variant === 'white'
+          ? 'Белый дизайн'
+          : (variant === 'dark' ? 'Тёмный дизайн' : 'Главный дизайн');
+        button.innerHTML = `<i class="fas fa-palette"></i> ${label}`;
+      }
+
+      document.querySelectorAll('.design-option').forEach((option) => {
+        option.classList.toggle('active', option.dataset.variant === variant);
+      });
+
+      if (menu) {
+        menu.classList.remove('open');
+      }
+    }
+
+    function toggleDesignMenu(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      const menu = document.getElementById('designMenu');
+      if (!menu) return;
+      menu.classList.toggle('open');
+    }
+
+    function selectDesignVariant(variant) {
+      localStorage.setItem('universe_info_design_variant', variant);
+      applySavedDesignVariant();
+    }
+
+    document.addEventListener('click', (event) => {
+      const switcher = document.getElementById('designSwitcher');
+      const menu = document.getElementById('designMenu');
+      if (!switcher || !menu) return;
+      if (!switcher.contains(event.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    applySavedDesignVariant();
+  </script>
+</body>
+</html>
