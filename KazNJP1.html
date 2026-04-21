@@ -1,0 +1,696 @@
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QYZPU г.Алматы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: "Manrope", sans-serif;
+    background:
+        radial-gradient(circle at 12% 12%, rgba(47, 128, 237, 0.18), transparent 38%),
+        radial-gradient(circle at 86% 22%, rgba(13, 71, 161, 0.15), transparent 42%),
+        linear-gradient(135deg, #f7faff 0%, #eaf0ff 44%, #f9fbff 100%);
+    color: #10203f;
+    min-height: 100vh;
+}
+
+header {
+    background: transparent;
+    color: #1f2a38;
+    padding: 14px 26px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: none;
+    box-shadow: none;
+    position: static;
+    backdrop-filter: none;
+}
+
+header::after {
+    content: none;
+}
+
+header img {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    object-fit: cover;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+.logo-btn {
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    cursor: zoom-in;
+    border-radius: 14px;
+    line-height: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.logo-btn:focus-visible {
+    outline: 3px solid rgba(31, 42, 56, 0.5);
+    outline-offset: 4px;
+}
+
+.logo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 13, 36, 0.93);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 9999;
+    padding: 24px;
+}
+
+.logo-modal.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.logo-modal img {
+    width: min(92vw, 920px);
+    height: auto;
+    max-height: 86vh;
+    object-fit: contain;
+    border-radius: 24px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.logo-modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.logo-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+h1 {
+    margin: 0;
+    font-family: "Unbounded", sans-serif;
+    font-size: clamp(0.95rem, 1.9vw, 1.25rem);
+    line-height: 1.18;
+    letter-spacing: 0.02em;
+}
+
+.brand-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 220px;
+    position: relative;
+    z-index: 1;
+}
+
+.brand-subtitle {
+    margin: 0;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(31, 42, 56, 0.62);
+    font-weight: 700;
+}
+
+.nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+}
+
+.nav button {
+    background: rgba(255, 255, 255, 0.72);
+    color: #1f2a38;
+    border: 1px solid rgba(31, 42, 56, 0.22);
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: "Manrope", sans-serif;
+    backdrop-filter: blur(6px);
+}
+
+.nav button:hover {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(31, 42, 56, 0.35);
+}
+
+.card-hero {
+    max-width: 1320px;
+    width: calc(100% - 48px);
+    margin: 48px auto 34px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 28px 48px rgba(21, 54, 132, 0.16);
+    border: 1px solid rgba(76, 130, 224, 0.2);
+}
+
+.campus-carousel {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #dfe9ff;
+}
+
+.campus-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.35s ease;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    flex: 0 0 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    min-height: 420px;
+    max-height: 520px;
+    object-fit: cover;
+    object-position: center 35%;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(15, 31, 70, 0.55);
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+
+.carousel-btn:hover {
+    background: rgba(15, 31, 70, 0.75);
+}
+
+.carousel-btn.prev {
+    left: 14px;
+}
+
+.carousel-btn.next {
+    right: 14px;
+}
+
+.carousel-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carousel-dot {
+    width: 11px;
+    height: 11px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.carousel-dot.active {
+    background: #ffffff;
+    transform: scale(1.1);
+}
+
+.card-content {
+    width: 100%;
+    padding: 42px 54px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.eyebrow {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3563c5;
+    font-weight: 800;
+}
+
+.card-content h2 {
+    color: #0e2d75;
+    margin: 0;
+    font-family: "Unbounded", sans-serif;
+    font-size: clamp(1.3rem, 2vw, 2rem);
+    line-height: 1.2;
+}
+
+.card-content p {
+    color: #2a3f67;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.fact {
+    background: linear-gradient(180deg, #f7fbff 0%, #eef4ff 100%);
+    border: 1px solid #d5e2ff;
+    border-radius: 14px;
+    padding: 12px 10px;
+}
+
+.fact strong {
+    display: block;
+    color: #1b3f99;
+    font-size: 1.1rem;
+}
+
+.fact span {
+    color: #3f5f97;
+    font-size: 0.9rem;
+}
+
+.section-title {
+    margin-top: 6px;
+    margin-bottom: 0;
+    color: #14357f;
+    font-size: 1.04rem;
+    font-weight: 800;
+}
+
+.program-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #2c426b;
+    line-height: 1.6;
+}
+
+.program-list li {
+    margin-bottom: 7px;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.chip {
+    background: #e8f0ff;
+    border: 1px solid #cadeff;
+    color: #294987;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+
+.action-row {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: 1px solid rgba(16, 32, 63, 0.2);
+    background: #ffffff;
+    color: #10203f;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(16, 32, 63, 0.45);
+}
+
+.action-btn.favorited {
+    background: #ffe9ef;
+    border-color: #ff8ca8;
+    color: #b21e44;
+}
+
+@media (max-width: 1024px) {
+    .card-hero {
+        width: calc(100% - 28px);
+        margin-top: 34px;
+    }
+
+    .carousel-slide img {
+        min-height: 460px;
+    }
+
+    .card-content {
+        padding: 30px 28px 34px;
+    }
+
+    .facts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 820px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 16px 18px;
+    }
+
+    .brand-block {
+        min-width: auto;
+    }
+
+    .nav {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+    }
+
+    .carousel-slide img {
+        min-height: 400px;
+        max-height: 460px;
+        object-position: center 35%;
+    }
+
+    .card-content {
+        padding: 24px 18px 28px;
+    }
+
+    .facts {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<header>
+    <button class="logo-btn" id="logoOpenBtn" type="button" aria-label="Открыть логотип на весь экран">
+        <img src="https://avatars.mds.yandex.net/i?id=d324f50713e61eec87fe05a1fd59f06401c68cdc-12527687-images-thumbs&n=13" alt="Логотип QYZPU">
+    </button>
+    <div class="brand-block">
+        <h1>QYZPU</h1>
+        <p class="brand-subtitle">Казахский национальный женский педагогический университет</p>
+    </div>
+    <div class="nav">
+        <button onclick="window.location.href='../../../index2.html'">Главная страница</button>
+        <button onclick="window.location.href='../../../index5.html'">Университет</button>
+        <button onclick="window.location.href='../../../info.html'">Информация о нас</button>
+        <button onclick="window.location.href='../../../profile.html'">Профиль</button>
+    </div>
+</header>
+
+<div class="card-hero">
+    <div class="campus-carousel" aria-label="Фотогалерея QYZPU">
+        <div class="campus-track" id="campusTrack">
+            <div class="carousel-slide">
+                <img src="https://avatars.mds.yandex.net/get-altay/3629247/2a000001761f2a78fe32896ecef4d646ffd5/orig" alt="Кампус QYZPU, вид 1">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80" alt="Кампус QYZPU, вид 2">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1600&q=80" alt="Кампус QYZPU, вид 3">
+            </div>
+        </div>
+
+        <button class="carousel-btn prev" id="carouselPrev" type="button" aria-label="Предыдущее фото">&#10094;</button>
+        <button class="carousel-btn next" id="carouselNext" type="button" aria-label="Следующее фото">&#10095;</button>
+
+        <div class="carousel-dots" id="carouselDots">
+            <button class="carousel-dot active" type="button" data-index="0" aria-label="Фото 1"></button>
+            <button class="carousel-dot" type="button" data-index="1" aria-label="Фото 2"></button>
+            <button class="carousel-dot" type="button" data-index="2" aria-label="Фото 3"></button>
+        </div>
+    </div>
+
+    <div class="card-content">
+        <p class="eyebrow">Университет и карьерные возможности</p>
+        <h2>Казахский национальный женский педагогический университет</h2>
+        <p>
+            Казахский национальный женский педагогический университет - современный университет с фокусом на качественное образование, развитие профессиональных навыков и международные академические возможности. Здесь сочетаются фундаментальная подготовка, практика и поддержка карьерного роста студентов.
+        </p>
+
+        <div class="facts">
+            <div class="fact">
+                <strong>5 000+</strong>
+                <span>студентов и магистрантов</span>
+            </div>
+            <div class="fact">
+                <strong>30+</strong>
+                <span>образовательных программ</span>
+            </div>
+            <div class="fact">
+                <strong>40+</strong>
+                <span>партнеров и проектов</span>
+            </div>
+        </div>
+
+        <h3 class="section-title">Почему выбирают этот университет</h3>
+        <ul class="program-list">
+            <li>Практико-ориентированное обучение и реальные кейсы.</li>
+            <li>Сильный преподавательский состав и актуальные программы.</li>
+            <li>Международные возможности, обмены и академическое сотрудничество.</li>
+            <li>Карьерная поддержка: стажировки, консультации и партнерства с работодателями.</li>
+        </ul>
+
+        <h3 class="section-title">Ключевые направления подготовки</h3>
+        <div class="chip-row">
+            <span class="chip">Современные программы</span>
+            <span class="chip">Практика и стажировки</span>
+            <span class="chip">Международные проекты</span>
+            <span class="chip">Карьерная поддержка</span>
+            <span class="chip">Студенческие сообщества</span>
+            <span class="chip">Исследовательская среда</span>
+            <span class="chip">Digital-навыки</span>
+            <span class="chip">Партнерства с индустрией</span>
+        </div>
+
+        <h3 class="section-title">Факультеты и школы</h3>
+        <ul class="program-list">
+            <li>Факультет педагогики и психологии.</li>
+            <li>Факультет филологии и языкового образования.</li>
+            <li>Факультет истории и общественных наук.</li>
+            <li>Факультет математики, физики и информатики.</li>
+            <li>Факультет естествознания и географии.</li>
+            <li>Факультет дошкольного и инклюзивного образования.</li>
+            <li>Факультет искусства и музыкального образования.</li>
+            <li>Факультет физической культуры и спорта.</li>
+        </ul>
+
+        <h3 class="section-title">Стоимость обучения</h3>
+        <ul class="program-list">
+            <li>Ориентировочная стоимость обучения: от 620 000 тг/год.</li>
+            <li>Точная сумма зависит от программы, языка обучения и формата обучения.</li>
+        </ul>
+
+        <h3 class="section-title">Популярные специальности по каждому факультету</h3>
+        <ul class="program-list">
+            <li><strong>Факультет педагогики и психологии:</strong> образовательные технологии, методика преподавания.</li>
+            <li><strong>Факультет филологии и языкового образования:</strong> перевод и интерпретация, межкультурная коммуникация.</li>
+            <li><strong>Факультет истории и общественных наук:</strong> прикладные исследования, профессиональные практики.</li>
+            <li><strong>Факультет математики, физики и информатики:</strong> программная инженерия, data science.</li>
+            <li><strong>Факультет естествознания и географии:</strong> прикладные исследования, профессиональные практики.</li>
+            <li><strong>Факультет дошкольного и инклюзивного образования:</strong> прикладные исследования, профессиональные практики.</li>
+            <li><strong>Факультет искусства и музыкального образования:</strong> архитектурное проектирование, digital-дизайн.</li>
+            <li><strong>Факультет физической культуры и спорта:</strong> спортивный менеджмент, тренерская подготовка.</li>
+        </ul>
+
+
+        <section data-uni-quick-info style="margin-top: 22px; padding: 18px; border-radius: 18px; background: rgba(16, 32, 63, 0.04); border: 1px solid rgba(16, 32, 63, 0.12);">
+            <h3 class="section-title">Кратко об университете</h3>
+            <p style="margin: 0; line-height: 1.65; color: #24365f;">Казахский национальный женский педагогический университет - университет в городе Алматы, Казахстан. Здесь студенты получают академическую подготовку, практические навыки и возможности для международного развития и карьеры.</p>
+            <h3 class="section-title" style="margin-top: 16px;">Расположение на карте мира</h3>
+            <div style="border-radius: 14px; overflow: hidden; border: 1px solid rgba(16, 32, 63, 0.15); background: #ffffff;">
+                <iframe
+                    title="Казахский национальный женский педагогический университет на карте"
+                    src="https://maps.google.com/maps?q=Almaty%2C%20Kazakhstan&z=4&output=embed"
+                    width="100%"
+                    height="280"
+                    style="border: 0; display: block;"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+    </div>
+        <div class="action-row">
+            <button class="action-btn" id="favoriteBtn" type="button" onclick="toggleFavorite()">В избранное</button>
+        </div>
+    </div>
+</div>
+
+<div class="logo-modal" id="logoModal" aria-hidden="true">
+    <button class="logo-modal-close" id="logoCloseBtn" aria-label="Закрыть">×</button>
+    <img src="https://avatars.mds.yandex.net/i?id=d324f50713e61eec87fe05a1fd59f06401c68cdc-12527687-images-thumbs&n=13" alt="Логотип QYZPU в полном размере">
+</div>
+
+<script>
+const logoOpenBtn = document.getElementById("logoOpenBtn");
+const logoModal = document.getElementById("logoModal");
+const logoCloseBtn = document.getElementById("logoCloseBtn");
+
+function openLogoModal() {
+    logoModal.classList.add("open");
+    logoModal.setAttribute("aria-hidden", "false");
+}
+
+function closeLogoModal() {
+    logoModal.classList.remove("open");
+    logoModal.setAttribute("aria-hidden", "true");
+}
+
+logoOpenBtn.addEventListener("click", openLogoModal);
+logoCloseBtn.addEventListener("click", closeLogoModal);
+
+logoModal.addEventListener("click", function (event) {
+    if (event.target === logoModal) {
+        closeLogoModal();
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && logoModal.classList.contains("open")) {
+        closeLogoModal();
+    }
+});
+
+const campusTrack = document.getElementById("campusTrack");
+const carouselPrev = document.getElementById("carouselPrev");
+const carouselNext = document.getElementById("carouselNext");
+const carouselDots = Array.from(document.querySelectorAll(".carousel-dot"));
+let currentSlide = 0;
+
+function updateCarousel() {
+    campusTrack.style.transform = "translateX(-" + currentSlide * 100 + "%)";
+    carouselDots.forEach(function (dot, index) {
+        dot.classList.toggle("active", index === currentSlide);
+    });
+}
+
+carouselPrev.addEventListener("click", function () {
+    currentSlide = (currentSlide - 1 + carouselDots.length) % carouselDots.length;
+    updateCarousel();
+});
+
+carouselNext.addEventListener("click", function () {
+    currentSlide = (currentSlide + 1) % carouselDots.length;
+    updateCarousel();
+});
+
+carouselDots.forEach(function (dot) {
+    dot.addEventListener("click", function () {
+        currentSlide = Number(dot.dataset.index);
+        updateCarousel();
+    });
+});
+
+const UNIVERSITY_ID = 18;
+const UNIVERSITY_META = {
+    id: UNIVERSITY_ID,
+    name: "КазНЖПУ",
+    city: "Алматы",
+    link: "univer/kazakhstan/Almaty/KazNJP.html"
+};
+
+function getFavorites() {
+    const raw = JSON.parse(localStorage.getItem("universe_favorites") || "[]");
+    return raw.map(function (id) { return Number(id); }).filter(function (id) { return Number.isFinite(id); });
+}
+
+function setFavorites(values) {
+    localStorage.setItem("universe_favorites", JSON.stringify(values));
+}
+
+function getFavoriteMeta() {
+    return JSON.parse(localStorage.getItem("universe_favorites_meta") || "{}");
+}
+
+function setFavoriteMeta(meta) {
+    localStorage.setItem("universe_favorites_meta", JSON.stringify(meta));
+}
+
+function updateFavoriteButton() {
+    const btn = document.getElementById("favoriteBtn");
+    if (!btn) {
+        return;
+    }
+
+    const isFavorite = getFavorites().includes(UNIVERSITY_ID);
+    btn.textContent = isFavorite ? "Убрать из избранного" : "В избранное";
+    btn.classList.toggle("favorited", isFavorite);
+}
+
+function toggleFavorite() {
+    let favorites = getFavorites();
+    const meta = getFavoriteMeta();
+
+    if (favorites.includes(UNIVERSITY_ID)) {
+        favorites = favorites.filter(function (id) { return id !== UNIVERSITY_ID; });
+        delete meta[String(UNIVERSITY_ID)];
+    } else {
+        favorites.push(UNIVERSITY_ID);
+        meta[String(UNIVERSITY_ID)] = UNIVERSITY_META;
+    }
+
+    setFavorites(favorites);
+    setFavoriteMeta(meta);
+    updateFavoriteButton();
+}
+
+updateFavoriteButton();
+
+</script>
+<script src="/design-switcher-index2.js"></script>
+</body>
+</html>

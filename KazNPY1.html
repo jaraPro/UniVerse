@@ -1,0 +1,325 @@
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КазНПУ г. Алматы</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7ff;
+}
+
+
+
+
+header {
+    background: #0033a0;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+}
+.nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+header img {
+    width: 60px;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+    }
+}
+
+header button {
+    background: #eee;
+    color: #333;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+header button:hover {
+    background: #ddd;
+}
+
+header img {
+    width: 60px;
+}
+
+/* Карточка */
+.card-hero {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeIn 1s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-hero:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.card-hero img {
+    width: 350px;
+    object-fit: cover;
+}
+
+/* Контент внутри */
+.card-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-content h2 {
+    color: #0033a0;
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    color: #444;
+    line-height: 1.5;
+}
+
+.section-title {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: #0033a0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.program-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #2c426b;
+    line-height: 1.55;
+}
+
+.program-list li {
+    margin-bottom: 6px;
+}
+
+/* Кнопка */
+button {
+    background: #0033a0;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0055ff;
+    transform: scale(1.05);
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Подвал */
+footer {
+    background: #0033a0;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 30px;
+}
+
+.action-row {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: 1px solid rgba(16, 32, 63, 0.2);
+    background: #ffffff;
+    color: #10203f;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(16, 32, 63, 0.45);
+}
+
+.action-btn.favorited {
+    background: #ffe9ef;
+    border-color: #ff8ca8;
+    color: #b21e44;
+}
+
+</style>
+
+</head>
+<body>
+
+
+<header>
+    <img src="https://www.kaznpu.kz/docs/logotip2023.jpg">
+    <h1 style="position: left;">КазНПУ г. Алматы</h1>
+    <div class="nav">
+        <button onclick="window.location.href='../../../index2.html'">Главная страница</button>
+        <button onclick="window.location.href='../../../index5.html'">Университет</button>
+        <button onclick="window.location.href='../../../info.html'">Информация о нас</button>
+        <button onclick="window.location.href='../../../profile.html'">Профиль</button>
+        <div class="action-row">
+            <button class="action-btn" id="favoriteBtn" type="button" onclick="toggleFavorite()">В избранное</button>
+        </div>
+    </div>
+</header>
+
+<div class="card-hero">
+    <img src="https://kaznpu.kz/docs/smi/031.07.2020.1.jpg">
+    
+    <div class="card-content">
+        <h2>Казахский национальный педагогический университет имени Абая</h2>
+        <p>
+            Один из лучших университетов Казахстана, расположенный в Астане. 
+            Университет предлагает современные программы обучения, международные возможности 
+            и высокий уровень образования.
+        </p>
+
+        <h3 class="section-title">Факультеты и школы</h3>
+        <ul class="program-list">
+            <li>Факультет педагогики и образовательных программ.</li>
+            <li>Факультет филологии, языков и литературы.</li>
+            <li>Факультет истории, права и социальных наук.</li>
+            <li>Факультет математики, физики и информатики.</li>
+            <li>Факультет естественных наук и географии.</li>
+            <li>Факультет психологии и инклюзивного образования.</li>
+            <li>Факультет искусства, культуры и дизайна.</li>
+            <li>Факультет физической культуры и спорта.</li>
+        </ul>
+
+        <h3 class="section-title">Стоимость обучения</h3>
+        <ul class="program-list">
+            <li>Ориентировочная стоимость обучения: от 650 000 тг/год.</li>
+            <li>Точная сумма зависит от программы, языка обучения и формата обучения.</li>
+        </ul>
+
+        <h3 class="section-title">Популярные специальности по каждому факультету</h3>
+        <ul class="program-list">
+            <li><strong>Факультет педагогики и образовательных программ:</strong> образовательные технологии, методика преподавания.</li>
+            <li><strong>Факультет филологии, языков и литературы:</strong> перевод и интерпретация, межкультурная коммуникация.</li>
+            <li><strong>Факультет истории, права и социальных наук:</strong> международное право, корпоративное право.</li>
+            <li><strong>Факультет математики, физики и информатики:</strong> программная инженерия, data science.</li>
+            <li><strong>Факультет естественных наук и географии:</strong> прикладные исследования, профессиональные практики.</li>
+            <li><strong>Факультет психологии и инклюзивного образования:</strong> прикладные исследования, профессиональные практики.</li>
+            <li><strong>Факультет искусства, культуры и дизайна:</strong> архитектурное проектирование, digital-дизайн.</li>
+            <li><strong>Факультет физической культуры и спорта:</strong> спортивный менеджмент, тренерская подготовка.</li>
+        </ul>
+
+
+        <button onclick="alert('Ты нажал подробнее 🚀')">
+            Подробнее
+        </button>
+    </div>
+</div>
+
+<script>
+const UNIVERSITY_ID = 17;
+const UNIVERSITY_META = {
+    id: UNIVERSITY_ID,
+    name: "КазНПУ",
+    city: "Алматы",
+    link: "univer/kazakhstan/Almaty/KazNPY.html"
+};
+
+function getFavorites() {
+    const raw = JSON.parse(localStorage.getItem("universe_favorites") || "[]");
+    return raw.map(function (id) { return Number(id); }).filter(function (id) { return Number.isFinite(id); });
+}
+
+function setFavorites(values) {
+    localStorage.setItem("universe_favorites", JSON.stringify(values));
+}
+
+function getFavoriteMeta() {
+    return JSON.parse(localStorage.getItem("universe_favorites_meta") || "{}");
+}
+
+function setFavoriteMeta(meta) {
+    localStorage.setItem("universe_favorites_meta", JSON.stringify(meta));
+}
+
+function updateFavoriteButton() {
+    const btn = document.getElementById("favoriteBtn");
+    if (!btn) {
+        return;
+    }
+
+    const isFavorite = getFavorites().includes(UNIVERSITY_ID);
+    btn.textContent = isFavorite ? "Убрать из избранного" : "В избранное";
+    btn.classList.toggle("favorited", isFavorite);
+}
+
+function toggleFavorite() {
+    let favorites = getFavorites();
+    const meta = getFavoriteMeta();
+
+    if (favorites.includes(UNIVERSITY_ID)) {
+        favorites = favorites.filter(function (id) { return id !== UNIVERSITY_ID; });
+        delete meta[String(UNIVERSITY_ID)];
+    } else {
+        favorites.push(UNIVERSITY_ID);
+        meta[String(UNIVERSITY_ID)] = UNIVERSITY_META;
+    }
+
+    setFavorites(favorites);
+    setFavoriteMeta(meta);
+    updateFavoriteButton();
+}
+
+updateFavoriteButton();
+</script>
+<script src="/design-switcher-index2.js"></script>
+</body>
+</html>

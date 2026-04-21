@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIT - Перенаправление на оплату</title>
+</head>
+<body>
+<script>
+const query = new URLSearchParams({
+  universityId: 'univer/UST/mit1',
+  previewPath: '/univer/UST/mit.html',
+  premiumPath: '/univer/UST/mit1.html'
+});
+
+window.location.replace(`/subscription/checkout.html?${query.toString()}`);
+</script>
+</body>
+</html>
