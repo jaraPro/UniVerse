@@ -1,0 +1,28 @@
+{
+  "name": "UniVerse Pro - Поиск университетов",
+  "short_name": "UniVerse",
+  "description": "Найди свой идеальный университет с продвинутым поиском и персонализацией",
+  "start_url": "/index2.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#062abb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/image/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/image/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "ru",
+  "dir": "ltr"
+}
