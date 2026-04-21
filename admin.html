@@ -1,0 +1,21 @@
+<h2>Admin Panel</h2>
+<div id="users"></div>
+
+<script>
+fetch("/admin/users")
+  .then(res => res.json())
+  .then(users => {
+    document.getElementById("users").innerHTML =
+      users.map(u => `
+        <div>
+          ${u.email} | ${u.isSubscribed ? "PRO" : "FREE"}
+          <button onclick="del('${u.id}')">X</button>
+        </div>
+      `).join("");
+  });
+
+function del(id) {
+  fetch("/admin/user/" + id, { method: "DELETE" })
+    .then(() => location.reload());
+}
+</script>
