@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVerse — Общежития</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1f1f1f;
+      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body.old-design {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body.dark-design {
+      background:
+        radial-gradient(circle at 15% -10%, rgba(140,170,255,0.22) 0%, transparent 35%),
+        radial-gradient(circle at 85% 8%, rgba(153,223,255,0.16) 0%, transparent 35%),
+        #020308;
+      color: #eaf1ff;
+    }
+
+    body.white-design {
+      background: #ffffff;
+      color: #1f2937;
+    }
+
+    .design-switcher {
+      position: fixed;
+      right: 20px;
+      top: 86px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .design-toggle-float {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.78);
+      color: #f2f6ff;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: all 0.25s ease;
+    }
+
+    .design-toggle-float:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.92);
+      color: #101827;
+    }
+
+    .design-menu {
+      display: none;
+      min-width: 250px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.88);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.32);
+      padding: 0.45rem;
+    }
+
+    .design-menu.open {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .design-option {
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 10px;
+      padding: 0.58rem 0.72rem;
+      background: rgba(255,255,255,0.06);
+      color: #eef2ff;
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .design-option:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .design-option.active {
+      background: rgba(255,255,255,0.92);
+      color: #0f172a;
+    }
+
+    .navbar {
+      width: 100%;
+      background: linear-gradient(90deg, #062abb 0%, #0a4bb8 100%);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      color: #ffffff;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .nav-center {
+      flex: 1;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 0 2rem;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: #062abb;
+    }
+
+    .nav-btn.active-nav-btn {
+      background: white;
+      color: #062abb;
+      border-color: white;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffd700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #062abb;
+    }
+
+    .page-tabs {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .page-tab {
+      text-decoration: none;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .page-tab:hover {
+      background: white;
+      color: #062abb;
+    }
+
+    .page-tab.active {
+      background: white;
+      color: #062abb;
+      border-color: white;
+    }
+
+    body.dark-design .navbar {
+      background: rgba(10, 12, 20, 0.72);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+      backdrop-filter: blur(12px);
+    }
+
+    body.dark-design .logo i {
+      color: #cfd6ea;
+    }
+
+    body.dark-design .nav-btn {
+      background: rgba(255,255,255,0.04);
+      color: #e8edff;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 0.48rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    body.dark-design .user-info {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 999px;
+    }
+
+    body.white-design .navbar {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.12);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.1);
+    }
+
+    body.white-design .logo,
+    body.white-design .logo i {
+      color: #111827;
+    }
+
+    body.white-design .nav-btn {
+      color: #111827;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+    }
+
+    body.white-design .nav-btn:hover,
+    body.white-design .nav-btn.active-nav-btn {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .user-info {
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+    }
+
+    body.white-design .page-tabs {
+      background: linear-gradient(180deg, #ffffff 0%, #f6f8fc 100%);
+      border-top: 1px solid rgba(15,23,42,0.08);
+      border-bottom: 1px solid rgba(15,23,42,0.12);
+      backdrop-filter: none;
+      box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+    }
+
+    body.white-design .page-tab {
+      color: #1f2937;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.06);
+    }
+
+    body.white-design .page-tab:hover {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .page-tab.active {
+      background: linear-gradient(135deg, #111827 0%, #374151 100%);
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.old-design .design-toggle-float {
+      background: #062abb;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.45);
+      backdrop-filter: none;
+    }
+
+    body.old-design .design-menu {
+      background: rgba(32, 56, 162, 0.92);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    body.white-design .design-toggle-float {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.18);
+      backdrop-filter: none;
+    }
+
+    body.white-design .design-menu {
+      background: #ffffff;
+      border-color: rgba(15,23,42,0.16);
+      backdrop-filter: none;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.16);
+    }
+
+    body.white-design .design-option {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    body.white-design .design-option:hover {
+      background: #e5e7eb;
+    }
+
+    body.white-design .design-option.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    body.dark-design .page-tab:hover,
+    body.dark-design .page-tab.active {
+      background: #ffffff;
+      color: #101827;
+      border-color: #ffffff;
+    }
+
+    body.dark-design .hero-box,
+    body.dark-design .stat-card,
+    body.dark-design .dorm-card,
+    body.dark-design .details-box,
+    body.dark-design .detail-card,
+    body.dark-design .feature-card,
+    body.dark-design .empty-state {
+      background: rgba(12, 16, 28, 0.88);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+      color: #eaf1ff;
+    }
+
+    body.dark-design .hero h1,
+    body.dark-design .section-title h2,
+    body.dark-design .features-title h2,
+    body.dark-design .details-header h3,
+    body.dark-design .dorm-name,
+    body.dark-design .feature-card h3,
+    body.dark-design .detail-card h4 {
+      color: #f3f6ff;
+    }
+
+    body.dark-design .hero p,
+    body.dark-design .section-title p,
+    body.dark-design .features-title p,
+    body.dark-design .dorm-sub,
+    body.dark-design .stat-card p,
+    body.dark-design .feature-card p,
+    body.dark-design .details-header p,
+    body.dark-design .detail-card ul,
+    body.dark-design #resultsInfo {
+      color: #b8c5e8;
+    }
+
+    body.dark-design .features-title {
+      background: rgba(12, 16, 28, 0.82);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 18px 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
+
+    body.dark-design .filters input,
+    body.dark-design .filters select {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+      color: #eaf1ff;
+      box-shadow: none;
+    }
+
+    body.dark-design .filters input::placeholder {
+      color: #a9b6d4;
+    }
+
+    body.dark-design .filters button,
+    body.dark-design .btn-primary {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    body.dark-design .btn-secondary,
+    body.dark-design .close-btn {
+      background: rgba(255,255,255,0.08);
+      color: #eaf1ff;
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    body.dark-design .btn-secondary:hover,
+    body.dark-design .close-btn:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    body.dark-design .stat-card h3,
+    body.dark-design .price {
+      color: #f3f6ff;
+    }
+
+    body.dark-design .pill {
+      background: rgba(255,255,255,0.12);
+      color: #eaf1ff;
+    }
+
+    body.dark-design .dorm-cover {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #f3f6ff;
+    }
+
+    body.dark-design .dorm-card:hover {
+      box-shadow: 0 18px 34px rgba(0,0,0,0.35);
+    }
+
+    body.white-design .stat-card h3,
+    body.white-design .price {
+      color: #111827;
+    }
+
+    .hero {
+      max-width: 1300px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, #eaf1ff, #f8fbff);
+      border: 1px solid #d8e3ff;
+      border-radius: 28px;
+      padding: 36px 26px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #16213e;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #5e6475;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 26px;
+      line-height: 1.6;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 180px;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      border: 1px solid #dbe5ff;
+      background: white;
+      padding: 15px 16px;
+      border-radius: 16px;
+      outline: none;
+      font-size: 15px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+    }
+
+    .filters button {
+      border: none;
+      background: linear-gradient(135deg, #062abb, #0a4bb8);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      padding: 0.8rem 1.2rem;
+    }
+
+    .filters button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.3);
+    }
+
+    .stats {
+      max-width: 1300px;
+      margin: 22px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+      border: 1px solid #edf1fb;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #1540ff;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card p {
+      color: #687186;
+      font-size: 14px;
+    }
+
+    .section {
+      max-width: 1300px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-title h2 {
+      font-size: 30px;
+      color: #16213e;
+      font-weight: 800;
+    }
+
+    .section-title p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .dorm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+
+    .dorm-card {
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+      border: 1px solid #edf1fb;
+      transition: 0.3s ease;
+    }
+
+    .dorm-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 34px rgba(21, 64, 255, 0.12);
+    }
+
+    .dorm-cover {
+      height: 170px;
+      background: linear-gradient(135deg, #92b7ff, #dce9ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      color: #1238cc;
+      font-weight: bold;
+    }
+
+    .dorm-content {
+      padding: 18px;
+    }
+
+    .dorm-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: #1b2340;
+      margin-bottom: 8px;
+    }
+
+    .dorm-sub {
+      font-size: 14px;
+      color: #6a7285;
+      line-height: 1.5;
+      min-height: 44px;
+    }
+
+    .dorm-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      background: #eef3ff;
+      color: #2442b8;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .dorm-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1540ff;
+    }
+
+    .dorm-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #062abb, #0a4bb8);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(12, 41, 131, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid transparent;
+      color: #062abb;
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-favorited {
+      background: #ffe8ef;
+      border-color: #ffb6c1;
+      color: #d32f45;
+    }
+
+    .details-section {
+      max-width: 1300px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+    }
+
+    .details-box {
+      background: white;
+      border-radius: 28px;
+      padding: 28px 24px;
+      border: 1px solid #e7ebf7;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+      display: none;
+    }
+
+    .details-box.show {
+      display: block;
+      animation: fadeUp 0.35s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .details-header h3 {
+      font-size: 30px;
+      color: #16213e;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .details-header p {
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 850px;
+    }
+
+    .close-btn {
+      border: 2px solid transparent;
+      background: rgba(255,255,255,0.1);
+      color: #062abb;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .close-btn:hover {
+      background: white;
+      transform: translateY(-1px);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 20px;
+    }
+
+    .detail-card {
+      background: #f8fbff;
+      border: 1px solid #e6edff;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .detail-card h4 {
+      font-size: 20px;
+      color: #1d2747;
+      margin-bottom: 12px;
+    }
+
+    .detail-card ul {
+      padding-left: 18px;
+      color: #677086;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .features {
+      max-width: 1300px;
+      margin: 10px auto 70px;
+      padding: 0 20px;
+    }
+
+    .features-title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .features-title h2 {
+      font-size: 34px;
+      color: #16213e;
+      margin-bottom: 8px;
+    }
+
+    .features-title p {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf1fb;
+      text-align: center;
+    }
+
+    .feature-card .icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      color: #1f2a4b;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: #657084;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #687186;
+      font-size: 16px;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #edf1fb;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    @media (max-width: 980px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body class="old-design">
+
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      UniVerse Pro
+    </div>
+    <div class="nav-center">
+      <button class="nav-btn" onclick="goHome()">
+        <i class="fas fa-home"></i> Главная
+      </button>
+      <button class="nav-btn" onclick="window.location.href='../index5.html'">
+        <i class="fas fa-university"></i> Университеты
+      </button>
+      <button class="nav-btn active-nav-btn" onclick="window.location.href='/obshaga/obshaga.html'">
+        <i class="fas fa-building"></i> Общежитие
+      </button>
+      <button class="nav-btn" onclick="goInfo()">
+        <i class="fas fa-info-circle"></i> О нас
+      </button>
+    </div>
+    <div class="nav-right">
+      <div class="user-info" onclick="goProfile()" id="userInfo" style="display:none;">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="userName">Пользователь</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <button class="nav-btn" onclick="openAuthModal()" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i> Вход/Регистрация
+      </button>
+    </div>
+  </nav>
+
+  <div class="design-switcher" id="designSwitcher">
+    <button class="design-toggle-float" onclick="toggleDesignMenu(event)" id="designToggleBtn" type="button">
+      <i class="fas fa-palette"></i> Выбор дизайна
+    </button>
+    <div class="design-menu" id="designMenu">
+      <button class="design-option" type="button" data-variant="old" onclick="selectDesignVariant('old')">Главный дизайн</button>
+      <button class="design-option" type="button" data-variant="dark" onclick="selectDesignVariant('dark')">Тёмный</button>
+      <button class="design-option" type="button" data-variant="white" onclick="selectDesignVariant('white')">Белый</button>
+    </div>
+  </div>
+
+  <div class="page-tabs">
+    <a class="page-tab" href="../index5.html">Рейтинги</a>
+    <a class="page-tab" href="../country.html">Страны</a>
+    <a class="page-tab active" href="obshaga.html">Общежитие</a>
+    <a class="page-tab" href="../profile.html">Личный кабинет</a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-box">
+      <h1>Общежития для студентов</h1>
+      <p>
+        Находите общежития при университетах, сравнивайте условия проживания,
+        стоимость, тип комнат, удобства и выбирайте самый комфортный вариант
+        для учебы и жизни.
+      </p>
+
+      <div class="filters">
+        <input type="text" id="searchInput" placeholder="Поиск по университету, городу или стране..." />
+        <select id="roomFilter">
+          <option value="all">Все типы комнат</option>
+          <option value="2-местная">2-местная</option>
+          <option value="3-местная">3-местная</option>
+          <option value="4-местная">4-местная</option>
+          <option value="семейная">Семейная</option>
+        </select>
+        <button onclick="renderDorms()">Найти</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="dormCount">0</h3>
+      <p>общежитий в каталоге</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="countryCount">0</h3>
+      <p>стран представлено</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="roomCount">0</h3>
+      <p>типов размещения</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="favCount">0</h3>
+      <p>общежитий в избранном</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>Каталог общежитий</h2>
+      <p id="resultsInfo">Найдено общежитий: 0</p>
+    </div>
+
+    <div class="dorm-grid" id="dormGrid"></div>
+  </section>
+
+  <section class="details-section">
+    <div class="details-box" id="detailsBox">
+      <div class="details-header">
+        <div>
+          <h3 id="detailsTitle">Информация об общежитии</h3>
+          <p id="detailsSubtitle">Подробные условия проживания, удобства и особенности размещения.</p>
+        </div>
+        <button class="close-btn" onclick="closeDetails()">Закрыть</button>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-card">
+          <h4>Основная информация</h4>
+          <ul id="mainInfo"></ul>
+        </div>
+
+        <div class="detail-card">
+          <h4>Удобства и условия</h4>
+          <ul id="facilityInfo"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-title">
+      <h2>Что есть в разделе общежитий</h2>
+      <p>Не просто список, а нормальная страница, чтобы студенту было реально удобно.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🏠</div>
+        <h3>Проживание</h3>
+        <p>Информация о доступных местах, типах комнат и условиях размещения студентов.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">💸</div>
+        <h3>Стоимость</h3>
+        <p>Сравнение цен на общежития, чтобы сразу понимать, где жить выгоднее.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🛏️</div>
+        <h3>Удобства</h3>
+        <p>Кухня, прачечная, Wi-Fi, охрана, мебель и всё, что важно в повседневной жизни.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📍</div>
+        <h3>Расположение</h3>
+        <p>Близость к кампусу, транспорту, магазинам и другим важным точкам для студентов.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    ©️ 2026 UniVerse — Платформа поиска университетов и студенческих общежитий
+  </footer>
+
+  <script>
+    const dormsData = [
+      {
+        name: "Общежитие КазНУ №1",
+        university: "КазНУ имени аль-Фараби",
+        city: "Алматы",
+        country: "Казахстан",
+        roomType: "3-местная",
+        price: "от 35 000 ₸ / месяц",
+        shortDesc: "Удобное размещение рядом с кампусом, подходит для студентов первых курсов.",
+        cover: "🏢",
+        address: "Кампус КазНУ, Алматы",
+        distance: "5 минут до учебных корпусов",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Кухня на этаже", "Прачечная", "Пропускная система", "Мебель"],
+        rules: ["Заселение по студенческому билету", "Соблюдение комендантского порядка", "Чистота комнаты обязательна"]
+      },
+      {
+        name: "ENU Student House",
+        university: "ЕНУ имени Л.Н. Гумилёва",
+        city: "Астана",
+        country: "Казахстан",
+        roomType: "2-местная",
+        price: "от 45 000 ₸ / месяц",
+        shortDesc: "Современное общежитие с удобным расположением возле университета.",
+        cover: "🏬",
+        address: "Рядом с кампусом ЕНУ, Астана",
+        distance: "7 минут пешком",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Учебные комнаты", "Прачечная", "Охрана", "Столовая рядом"],
+        rules: ["Проживание только для студентов", "Электронный пропуск", "Соблюдение внутреннего распорядка"]
+      },
+      {
+        name: "AlmaU Residence",
+        university: "AlmaU",
+        city: "Алматы",
+        country: "Казахстан",
+        roomType: "2-местная",
+        price: "от 60 000 ₸ / месяц",
+        shortDesc: "Комфортное студенческое проживание с хорошими базовыми условиями.",
+        cover: "🏠",
+        address: "Алматы, недалеко от AlmaU",
+        distance: "10 минут до корпуса",
+        gender: "Смешанный формат по блокам",
+        conditions: ["Wi-Fi", "Кухня", "Холодильник", "Зона отдыха", "Охрана"],
+        rules: ["Предоплата за месяц", "Соблюдение тишины ночью", "Запрет на порчу имущества"]
+      },
+      {
+        name: "Harvard Yard Dormitory",
+        university: "Harvard University",
+        city: "Cambridge",
+        country: "США",
+        roomType: "2-местная",
+        price: "от $950 / месяц",
+        shortDesc: "Классическое общежитие кампусного типа с удобной студенческой средой.",
+        cover: "🏛️",
+        address: "Cambridge, Massachusetts",
+        distance: "На территории кампуса",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Общая кухня", "Study lounge", "Security", "Laundry"],
+        rules: ["Доступ по campus ID", "Соблюдение quiet hours", "Регистрация гостей обязательна"]
+      },
+      {
+        name: "MIT Student Residence",
+        university: "MIT",
+        city: "Cambridge",
+        country: "США",
+        roomType: "2-местная",
+        price: "от $1100 / месяц",
+        shortDesc: "Технологичный формат общежития для активной студенческой жизни.",
+        cover: "💡",
+        address: "MIT Campus, Cambridge",
+        distance: "3 минуты до корпусов",
+        gender: "Смешанное размещение",
+        conditions: ["High-speed Wi-Fi", "Study spaces", "Kitchen", "Security", "Laundry"],
+        rules: ["ID-пропуск", "Правила совместного проживания", "Соблюдение campus policy"]
+      },
+      {
+        name: "Oxford Student Hall",
+        university: "University of Oxford",
+        city: "Oxford",
+        country: "Великобритания",
+        roomType: "1-местная",
+        price: "от £800 / месяц",
+        shortDesc: "Тихое и академичное проживание рядом с учебной средой Оксфорда.",
+        cover: "📚",
+        address: "Oxford, United Kingdom",
+        distance: "В пешей доступности",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Common room", "Security", "Heating", "Study areas"],
+        rules: ["Соблюдение академической дисциплины", "Контроль доступа", "Запрет на шум ночью"]
+      },
+      {
+        name: "TUM Campus Dorm",
+        university: "Technical University of Munich",
+        city: "Munich",
+        country: "Германия",
+        roomType: "3-местная",
+        price: "от €420 / месяц",
+        shortDesc: "Практичный вариант для студентов с удобной транспортной доступностью.",
+        cover: "🚆",
+        address: "Munich, Germany",
+        distance: "12 минут на транспорте",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Laundry", "Shared kitchen", "Bike parking", "Security"],
+        rules: ["Контракт на семестр", "Соблюдение правил блока", "Ответственность за имущество"]
+      },
+      {
+        name: "University of Toronto Residence",
+        university: "University of Toronto",
+        city: "Toronto",
+        country: "Канада",
+        roomType: "2-местная",
+        price: "от CAD 900 / месяц",
+        shortDesc: "Удобное общежитие с хорошей инфраструктурой и студенческой атмосферой.",
+        cover: "🍁",
+        address: "Toronto, Canada",
+        distance: "Рядом с кампусом",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Kitchen", "Study hall", "Laundry", "24/7 security"],
+        rules: ["Проживание по договору", "Пропускной режим", "Соблюдение чистоты"]
+      },
+      {
+        name: "NUS Student Hostel",
+        university: "National University of Singapore",
+        city: "Singapore",
+        country: "Сингапур",
+        roomType: "4-местная",
+        price: "от SGD 550 / месяц",
+        shortDesc: "Популярное общежитие с развитой инфраструктурой и безопасной средой.",
+        cover: "🌆",
+        address: "NUS Campus, Singapore",
+        distance: "На территории кампуса",
+        gender: "Раздельные блоки",
+        conditions: ["Wi-Fi", "Air conditioning", "Laundry", "Security", "Cafeteria"],
+        rules: ["Электронный пропуск", "Соблюдение campus rules", "Ответственность за порядок"]
+      },
+      {
+        name: "Seoul National Dorm",
+        university: "Seoul National University",
+        city: "Seoul",
+        country: "Южная Корея",
+        roomType: "2-местная",
+        price: "от ₩480 000 / месяц",
+        shortDesc: "Современное проживание для студентов с хорошими условиями и учебной атмосферой.",
+        cover: "🌃",
+        address: "Seoul, South Korea",
+        distance: "8 минут до учебных зданий",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Heating", "Laundry", "Kitchen", "Study area"],
+        rules: ["Система доступа по карте", "Тишина после 23:00", "Уважение соседей"]
+      },
+      {
+        name: "University of Melbourne Lodge",
+        university: "University of Melbourne",
+        city: "Melbourne",
+        country: "Австралия",
+        roomType: "семейная",
+        price: "от AUD 1200 / месяц",
+        shortDesc: "Хороший вариант для студентов и молодых семей с расширенными условиями.",
+        cover: "☀️",
+        address: "Melbourne, Australia",
+        distance: "15 минут до кампуса",
+        gender: "Семейное размещение",
+        conditions: ["Wi-Fi", "Private kitchen", "Laundry", "Security", "Parking"],
+        rules: ["Контракт на длительный срок", "Соблюдение условий аренды", "Бережное отношение к имуществу"]
+      },
+      {
+        name: "UAEU Student Residence",
+        university: "United Arab Emirates University",
+        city: "Al Ain",
+        country: "ОАЭ",
+        roomType: "3-местная",
+        price: "от AED 700 / месяц",
+        shortDesc: "Комфортное студенческое общежитие с базовыми и дополнительными удобствами.",
+        cover: "🌴",
+        address: "Al Ain, UAE",
+        distance: "6 минут до кампуса",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Prayer room", "Laundry", "Security", "Common lounge"],
+        rules: ["Соблюдение правил кампуса", "Тихий режим ночью", "Регистрация гостей"]
+      }
+    ];
+
+    const dormGrid = document.getElementById("dormGrid");
+    const searchInput = document.getElementById("searchInput");
+    const roomFilter = document.getElementById("roomFilter");
+    const detailsBox = document.getElementById("detailsBox");
+    let currentUser = null;
+    let dormFavorites = [];
+
+    function checkAuthStatus() {
+      const user = localStorage.getItem('universe_currentUser');
+      if (user) {
+        currentUser = JSON.parse(user);
+        updateUserUI();
+      }
+    }
+
+    function updateUserUI() {
+      if (currentUser) {
+        document.getElementById('userInfo').style.display = 'flex';
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('userName').textContent = currentUser.name || 'Пользователь';
+        const initials = (currentUser.name || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        document.getElementById('userAvatar').textContent = initials;
+      } else {
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('loginBtn').style.display = 'flex';
+      }
+    }
+
+    function openAuthModal() {
+      window.location.href = '../login.html';
+    }
+
+    function goHome() {
+      window.location.href = '../index2.html';
+    }
+
+    function goInfo() {
+      window.location.href = '../info.html';
+    }
+
+    function goProfile() {
+      window.location.href = '../profile.html';
+    }
+
+    function applySavedDesignVariant() {
+      const variant = localStorage.getItem('universe_obshaga_design_variant') || 'old';
+      const body = document.body;
+      const button = document.getElementById('designToggleBtn');
+      const menu = document.getElementById('designMenu');
+
+      body.classList.remove('old-design', 'dark-design', 'white-design');
+      if (variant === 'white') {
+        body.classList.add('white-design');
+      } else if (variant === 'dark') {
+        body.classList.add('dark-design');
+      } else {
+        body.classList.add('old-design');
+      }
+
+      if (button) {
+        const label = variant === 'white'
+          ? 'Белый дизайн'
+          : (variant === 'dark' ? 'Тёмный дизайн' : 'Главный дизайн');
+        button.innerHTML = `<i class="fas fa-palette"></i> ${label}`;
+      }
+
+      document.querySelectorAll('.design-option').forEach((option) => {
+        option.classList.toggle('active', option.dataset.variant === variant);
+      });
+
+      if (menu) {
+        menu.classList.remove('open');
+      }
+    }
+
+    function toggleDesignMenu(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      const menu = document.getElementById('designMenu');
+      if (!menu) return;
+      menu.classList.toggle('open');
+    }
+
+    function selectDesignVariant(variant) {
+      localStorage.setItem('universe_obshaga_design_variant', variant);
+      applySavedDesignVariant();
+    }
+
+    function loadDormFavorites() {
+      dormFavorites = JSON.parse(localStorage.getItem('universe_dorm_favorites') || '[]');
+    }
+
+    function saveDormFavorites() {
+      localStorage.setItem('universe_dorm_favorites', JSON.stringify(dormFavorites));
+    }
+
+    function toggleDormFavorite(dormName) {
+      const idx = dormFavorites.indexOf(dormName);
+      if (idx !== -1) {
+        dormFavorites.splice(idx, 1);
+      } else {
+        dormFavorites.push(dormName);
+      }
+      saveDormFavorites();
+      renderDorms();
+    }
+
+    function updateFavoriteCount() {
+      const favCountElem = document.getElementById('favCount');
+      if (favCountElem) {
+        favCountElem.textContent = dormFavorites.length;
+      }
+    }
+
+    function updateStats() {
+      document.getElementById("dormCount").textContent = dormsData.length;
+
+      const uniqueCountries = [...new Set(dormsData.map(item => item.country))];
+      document.getElementById("countryCount").textContent = uniqueCountries.length;
+
+      const uniqueRooms = [...new Set(dormsData.map(item => item.roomType))];
+      document.getElementById("roomCount").textContent = uniqueRooms.length;
+
+      updateFavoriteCount();
+    }
+
+    function renderDorms() {
+      const query = searchInput.value.trim().toLowerCase();
+      const roomValue = roomFilter.value;
+
+      const filtered = dormsData.filter(dorm => {
+        const matchesSearch =
+          dorm.name.toLowerCase().includes(query) ||
+          dorm.university.toLowerCase().includes(query) ||
+          dorm.city.toLowerCase().includes(query) ||
+          dorm.country.toLowerCase().includes(query);
+
+        const matchesRoom =
+          roomValue === "all" || dorm.roomType === roomValue;
+
+        return matchesSearch && matchesRoom;
+      });
+
+      dormGrid.innerHTML = "";
+      document.getElementById("resultsInfo").textContent = `Найдено общежитий: ${filtered.length}`;
+
+      if (filtered.length === 0) {
+        dormGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            Ничего не найдено. Попробуй изменить запрос или выбрать другой тип комнаты.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(dorm => {
+        const card = document.createElement("div");
+        card.className = "dorm-card";
+
+        card.innerHTML = `
+          <div class="dorm-cover">${dorm.cover}</div>
+          <div class="dorm-content">
+            <div class="dorm-name">${dorm.name}</div>
+            <div class="dorm-sub">${dorm.shortDesc}</div>
+
+            <div class="dorm-info">
+              <span class="pill">${dorm.country}</span>
+              <span class="pill">${dorm.city}</span>
+              <span class="pill">${dorm.roomType}</span>
+            </div>
+
+            <div class="dorm-bottom">
+              <div class="price">${dorm.price}</div>
+              <div class="dorm-actions">
+                <button class="btn btn-primary" onclick="event.stopPropagation(); showDetails(dorm)">Подробнее</button>
+                <button class="btn btn-secondary ${dormFavorites.includes(dorm.name) ? 'btn-favorited' : ''}" onclick="event.stopPropagation(); toggleDormFavorite('${dorm.name}')">
+                  ${dormFavorites.includes(dorm.name) ? '❤️ В избранном' : '♡ В избранное'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.onclick = () => showDetails(dorm);
+        dormGrid.appendChild(card);
+      });
+    }
+
+    function showDetails(dorm) {
+      document.getElementById("detailsTitle").textContent = `${dorm.cover} ${dorm.name}`;
+      document.getElementById("detailsSubtitle").textContent = `${dorm.university} • ${dorm.city}, ${dorm.country}`;
+
+      const mainInfo = document.getElementById("mainInfo");
+      const facilityInfo = document.getElementById("facilityInfo");
+
+      mainInfo.innerHTML = `
+        <li><strong>Университет:</strong> ${dorm.university}</li>
+        <li><strong>Город:</strong> ${dorm.city}</li>
+        <li><strong>Страна:</strong> ${dorm.country}</li>
+        <li><strong>Тип комнаты:</strong> ${dorm.roomType}</li>
+        <li><strong>Стоимость:</strong> ${dorm.price}</li>
+        <li><strong>Адрес:</strong> ${dorm.address}</li>
+        <li><strong>Расстояние до кампуса:</strong> ${dorm.distance}</li>
+        <li><strong>Формат размещения:</strong> ${dorm.gender}</li>
+      `;
+
+      facilityInfo.innerHTML = `
+        ${dorm.conditions.map(item => `<li>${item}</li>`).join("")}
+        ${dorm.rules.map(item => `<li>${item}</li>`).join("")}
+      `;
+
+      detailsBox.classList.add("show");
+      detailsBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeDetails() {
+      detailsBox.classList.remove("show");
+    }
+
+    searchInput.addEventListener("input", renderDorms);
+    roomFilter.addEventListener("change", renderDorms);
+
+    document.addEventListener('click', (event) => {
+      const switcher = document.getElementById('designSwitcher');
+      const menu = document.getElementById('designMenu');
+      if (!switcher || !menu) return;
+      if (!switcher.contains(event.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    applySavedDesignVariant();
+    checkAuthStatus();
+    loadDormFavorites();
+    updateStats();
+    renderDorms();
+  </script>
+</body>
+</html>
