@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата подписки - Premium Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root {
+      --bg-1: #eef6ff;
+      --bg-2: #fff5e8;
+      --ink: #17284f;
+      --muted: #596d97;
+      --line: #d8e4ff;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-border: rgba(255, 255, 255, 0.6);
+      --blue: #1747d9;
+      --blue-dark: #0e2f98;
+      --orange: #ff8a3d;
+      --ok: #186a31;
+      --warn: #7d540f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 5%, #c8ddff 0%, transparent 34%),
+        radial-gradient(circle at 88% 15%, #ffd9bb 0%, transparent 30%),
+        linear-gradient(150deg, var(--bg-1) 0%, #f8fbff 50%, var(--bg-2) 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+
+    .hero {
+      border-radius: 24px;
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08)),
+        linear-gradient(125deg, #0f2b87, #1b57dd 56%, #3579ff);
+      color: #fff;
+      padding: 24px;
+      box-shadow: 0 24px 40px rgba(17, 42, 125, 0.22);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      right: -70px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
+    }
+
+    .hero h1 {
+      margin: 0 0 6px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(24px, 4vw, 34px);
+      letter-spacing: 0.01em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #d7e6ff;
+      max-width: 640px;
+    }
+
+    .panel {
+      border-radius: 22px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      box-shadow: 0 18px 34px rgba(18, 46, 126, 0.12);
+    }
+
+    .price {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: #123db0;
+      margin-bottom: 2px;
+    }
+
+    .meta {
+      color: #4e6393;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .visa-type {
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .visa-option {
+      border: 1px solid #cbd8f9;
+      background: #f5f8ff;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: #1e3d8a;
+    }
+
+    .tab {
+      border: 1px solid #c3d2fb;
+      background: #eff4ff;
+      color: #173e98;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tab:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(24, 71, 217, 0.15);
+    }
+
+    .tab.active {
+      background: linear-gradient(130deg, var(--blue), #2d63f2);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .method { display: none; }
+    .method.active { display: block; }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--blue), #3f6ef0);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(19, 69, 200, 0.25);
+    }
+
+    .btn-ghost {
+      background: #edf2ff;
+      color: #1f438d;
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+    }
+
+    .card-shell {
+      margin-top: 12px;
+      display: none;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(120deg, #fafdff, #f2f7ff);
+    }
+
+    .card-shell.visible {
+      display: block;
+      animation: rise 0.24s ease;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #284188;
+    }
+
+    .field input,
+    .stripe-field {
+      width: 100%;
+      border: 1px solid #c5d4ff;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .stripe-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #6176a8;
+      margin-top: 6px;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .qr {
+      margin-top: 10px;
+      border: 1px dashed #b4c6f6;
+      border-radius: 14px;
+      text-align: center;
+      padding: 12px;
+      background: #fbfdff;
+    }
+
+    .qr img {
+      width: 240px;
+      max-width: 100%;
+      border: 1px solid #dae4ff;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .notice {
+      margin-top: 12px;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .notice.ok {
+      display: block;
+      background: #eaf9ec;
+      border: 1px solid #abd8b1;
+      color: var(--ok);
+    }
+
+    .notice.warn {
+      display: block;
+      background: #fff7e9;
+      border: 1px solid #f1cd93;
+      color: var(--warn);
+    }
+
+    .payflow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #d7e4ff;
+      padding: 8px 12px;
+      color: #2b4486;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .stripe-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Подписка на университет</h1>
+      <p>Оплата открывает доступ только к выбранной полной странице университета. Без регистрации, быстро и безопасно.</p>
+    </section>
+
+    <section class="panel">
+      <div class="price">$1</div>
+      <div class="meta" id="targetMeta">Подписка для выбранного университета</div>
+
+      <div class="payflow-chip">Stripe Secure Checkout • 3DS при необходимости • PCI DSS</div>
+
+      <div class="visa-type">
+        <label class="visa-option">
+          <input type="radio" name="visaType" value="us" checked>
+          Американская Visa
+        </label>
+        <label class="visa-option">
+          <input type="radio" name="visaType" value="kz">
+          Казахстанская Visa
+        </label>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-method="card">Оплата картой Visa</button>
+        <button class="tab" data-method="qr">Оплата по QR</button>
+        <button class="tab" data-method="kaspi">Kaspi</button>
+      </div>
+
+      <div class="method active" id="method-card">
+        <p>Форма карты открывается автоматически. Если поля не появились, нажмите кнопку ниже.</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="payCardBtn">Показать форму карты</button>
+          <button class="btn btn-ghost" id="backBtn1">Назад</button>
+        </div>
+
+        <div id="cardShell" class="card-shell">
+          <div class="field">
+            <label for="cardholderName">Имя владельца карты</label>
+            <input id="cardholderName" type="text" placeholder="IVAN IVANOV" autocomplete="cc-name">
+          </div>
+
+          <div class="field">
+            <label>Номер карты</label>
+            <div id="stripe-card-number" class="stripe-field"></div>
+          </div>
+
+          <div class="stripe-row">
+            <div class="field">
+              <label>Срок действия</label>
+              <div id="stripe-card-expiry" class="stripe-field"></div>
+            </div>
+            <div class="field">
+              <label>CVV</label>
+              <div id="stripe-card-cvc" class="stripe-field"></div>
+            </div>
+          </div>
+
+          <div class="hint">Мы не храним реквизиты карты на вашем сервере. Обработка идет через защищенную инфраструктуру Stripe.</div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="confirmCardPayBtn">Подтвердить и оплатить $1</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="method" id="method-qr">
+        <p>Сгенерируйте QR, отсканируйте его с телефона и завершите оплату.</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="generateQrBtn">Сгенерировать QR</button>
+          <button class="btn btn-ghost" id="backBtn2">Назад</button>
+        </div>
+
+        <div class="qr" id="qrBlock" style="display:none;">
+          <img id="qrImage" alt="QR для оплаты">
+          <p id="qrHint"></p>
+          <div class="actions" style="justify-content:center;">
+            <button class="btn btn-primary" id="checkQrStatusBtn">Проверить оплату</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="method" id="method-kaspi">
+        <p>Оплатите через Kaspi по ссылке, QR или номеру. Реквизиты задаются в `.env` на сервере.</p>
+        <div id="kaspiInfo" class="qr">
+          <p id="kaspiMerchant">Получатель: не задан</p>
+          <p id="kaspiPhone">Номер Kaspi: не задан</p>
+          <img id="kaspiQr" alt="Kaspi QR" style="display:none; margin: 10px auto;" />
+          <div class="actions" style="justify-content:center;">
+            <a id="kaspiPayLink" class="btn btn-primary" href="#" target="_blank" rel="noopener" style="display:none; text-decoration:none;">Открыть оплату Kaspi</a>
+            <button class="btn btn-ghost" id="backBtn3">Назад</button>
+          </div>
+          <p class="hint">Важно: для авто-подтверждения после Kaspi нужна серверная интеграция с подтверждением платежа.</p>
+        </div>
+      </div>
+
+      <div class="notice" id="notice"></div>
+    </section>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const universityId = params.get('universityId') || '';
+    const previewPath = params.get('previewPath') || '/index5.html';
+    const premiumPath = params.get('premiumPath') || '/index5.html';
+
+    let activeMethod = 'card';
+    let latestSessionId = '';
+    let visaType = 'us';
+    let stripe = null;
+    let cardNumberElement = null;
+    let cardExpiryElement = null;
+    let cardCvcElement = null;
+    let stripeMounted = false;
+    let paymentConfig = {
+      configured: false,
+      publishableKey: '',
+      webhookConfigured: false,
+    };
+
+    function showNotice(message, type) {
+      const notice = document.getElementById('notice');
+      notice.textContent = message;
+      notice.className = 'notice ' + type;
+    }
+
+    function getAccessToken() {
+      return localStorage.getItem('universe_accessToken') || localStorage.getItem('accessToken') || '';
+    }
+
+    function ensureClientId() {
+      const key = 'findu2_client_id';
+      let clientId = localStorage.getItem(key);
+      if (!clientId) {
+        clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        localStorage.setItem(key, clientId);
+      }
+      return clientId;
+    }
+
+    async function initStripe() {
+      if (stripe) {
+        return;
+      }
+
+      const data = await loadPaymentConfig();
+
+      if (!data.configured || !data.publishableKey) {
+        throw new Error('missing-publishable-key');
+      }
+
+      stripe = Stripe(data.publishableKey);
+    }
+
+    async function loadPaymentConfig() {
+      const response = await fetch('/api/payments/config', { credentials: 'same-origin' });
+      const data = await response.json();
+      paymentConfig = data;
+      return data;
+    }
+
+    async function loadKaspiConfig() {
+      try {
+        const response = await fetch('/api/payments/kaspi-config', { credentials: 'same-origin' });
+        const data = await response.json();
+
+        document.getElementById('kaspiMerchant').textContent = `Получатель: ${data.merchantName || 'не задан'}`;
+        document.getElementById('kaspiPhone').textContent = `Номер Kaspi: ${data.phone || 'не задан'}`;
+
+        const qr = document.getElementById('kaspiQr');
+        if (data.qrImageUrl) {
+          qr.src = data.qrImageUrl;
+          qr.style.display = 'block';
+        } else {
+          qr.style.display = 'none';
+        }
+
+        const payLink = document.getElementById('kaspiPayLink');
+        if (data.paymentLink) {
+          payLink.href = data.paymentLink;
+          payLink.style.display = 'inline-flex';
+        } else {
+          payLink.style.display = 'none';
+        }
+
+        if (!data.configured) {
+          showNotice('Kaspi реквизиты пока не настроены на сервере. Заполните KASPI_* в .env', 'warn');
+        }
+      } catch (_error) {
+        showNotice('Не удалось загрузить Kaspi реквизиты.', 'warn');
+      }
+    }
+
+    async function prepareMethods() {
+      try {
+        await loadPaymentConfig();
+        await loadKaspiConfig();
+
+        if (!paymentConfig.configured) {
+          const cardBtn = document.getElementById('payCardBtn');
+          const qrBtn = document.getElementById('generateQrBtn');
+          if (cardBtn) {
+            cardBtn.disabled = true;
+          }
+          if (qrBtn) {
+            qrBtn.disabled = true;
+          }
+          showNotice('Stripe пока не настроен. Добавьте реальные STRIPE ключи в .env. Kaspi доступен отдельно.', 'warn');
+          return;
+        }
+
+        // Open card fields by default to avoid extra click confusion.
+        await startCardFlow();
+      } catch (_error) {
+        showNotice('Не удалось подготовить методы оплаты.', 'warn');
+      }
+    }
+
+    async function ensureCardElementsMounted() {
+      await initStripe();
+      if (stripeMounted) {
+        return;
+      }
+
+      const elements = stripe.elements({
+        fonts: [
+          {
+            family: 'Manrope',
+            src: 'url(https://fonts.gstatic.com/s/manrope/v15/xn7gYHE41ni1AdIRggexSvfedN4.woff2)',
+            weight: '400',
+          },
+        ],
+      });
+
+      const baseStyle = {
+        style: {
+          base: {
+            fontFamily: 'Manrope, sans-serif',
+            fontSize: '14px',
+            color: '#1b3169',
+            '::placeholder': {
+              color: '#8da0c7',
+            },
+          },
+          invalid: {
+            color: '#cc2d2d',
+          },
+        },
+      };
+
+      cardNumberElement = elements.create('cardNumber', baseStyle);
+      cardExpiryElement = elements.create('cardExpiry', baseStyle);
+      cardCvcElement = elements.create('cardCvc', baseStyle);
+
+      cardNumberElement.mount('#stripe-card-number');
+      cardExpiryElement.mount('#stripe-card-expiry');
+      cardCvcElement.mount('#stripe-card-cvc');
+
+      stripeMounted = true;
+    }
+
+    function switchMethod(method) {
+      activeMethod = method;
+
+      document.querySelectorAll('.tab').forEach((tab) => {
+        tab.classList.toggle('active', tab.dataset.method === method);
+      });
+
+      document.getElementById('method-card').classList.toggle('active', method === 'card');
+      document.getElementById('method-qr').classList.toggle('active', method === 'qr');
+      showNotice('', '');
+    }
+
+    async function createSession(paymentFlow) {
+      const token = getAccessToken();
+      const clientId = ensureClientId();
+
+      const payload = {
+        universityId,
+        premiumPath,
+        previewPath,
+        paymentFlow,
+        visaType,
+        clientId,
+      };
+
+      const response = await fetch('/api/payments/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('create-session-failed');
+      }
+
+      return response.json();
+    }
+
+    async function startCardFlow() {
+      try {
+        const shell = document.getElementById('cardShell');
+        shell.classList.add('visible');
+        await ensureCardElementsMounted();
+      } catch (error) {
+        showNotice('Не удалось инициализировать карточную форму. Проверьте Stripe publishable key.', 'warn');
+      }
+    }
+
+    async function confirmCardPayment() {
+      try {
+        const token = getAccessToken();
+        const clientId = ensureClientId();
+        const cardholderName = (document.getElementById('cardholderName').value || '').trim();
+
+        await ensureCardElementsMounted();
+
+        const intentResponse = await fetch('/api/payments/create-payment-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            universityId,
+            premiumPath,
+            previewPath,
+            visaType,
+            clientId,
+          }),
+        });
+
+        if (!intentResponse.ok) {
+          const backendError = await intentResponse.json().catch(() => ({}));
+          if (backendError.code === 'stripe_not_configured') {
+            throw new Error('stripe-not-configured');
+          }
+          throw new Error('payment-intent-create-failed');
+        }
+
+        const intentData = await intentResponse.json();
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(intentData.clientSecret, {
+          payment_method: {
+            card: cardNumberElement,
+            billing_details: {
+              name: cardholderName || undefined,
+            },
+          },
+        });
+
+        if (error) {
+          showNotice(error.message || 'Платеж не прошел. Проверьте данные карты.', 'warn');
+          return;
+        }
+
+        if (!paymentIntent || paymentIntent.status !== 'succeeded') {
+          showNotice('Оплата не завершена. Попробуйте снова.', 'warn');
+          return;
+        }
+
+        const confirmResponse = await fetch('/api/payments/confirm-payment-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            paymentIntentId: paymentIntent.id,
+            universityId,
+            clientId,
+          }),
+        });
+
+        if (!confirmResponse.ok) {
+          throw new Error('payment-intent-confirm-failed');
+        }
+
+        showNotice('Платеж подтвержден. Перенаправляем на полную страницу.', 'ok');
+        setTimeout(() => {
+          window.location.href = premiumPath;
+        }, 700);
+      } catch (error) {
+        if (error.message === 'stripe-not-configured' || error.message === 'missing-publishable-key') {
+          showNotice('Stripe ключи не настроены. Добавьте реальные STRIPE_PUBLISHABLE_KEY и STRIPE_SECRET_KEY в .env', 'warn');
+          return;
+        }
+        showNotice('Не удалось провести оплату картой. Проверьте Stripe настройки.', 'warn');
+      }
+    }
+
+    async function generateQr() {
+      try {
+        const data = await createSession('qr');
+        latestSessionId = data.sessionId;
+        const qrBlock = document.getElementById('qrBlock');
+        document.getElementById('qrImage').src = data.qrDataUrl;
+        document.getElementById('qrHint').textContent = 'После оплаты нажмите "Проверить оплату".';
+        qrBlock.style.display = 'block';
+        showNotice('QR готов. Отсканируйте код и оплатите $1.', 'ok');
+      } catch (error) {
+        showNotice('Не удалось создать QR. Проверьте Stripe настройки.', 'warn');
+      }
+    }
+
+    async function checkQrStatus() {
+      if (!latestSessionId) {
+        showNotice('Сначала сгенерируйте QR.', 'warn');
+        return;
+      }
+
+      const token = getAccessToken();
+      const clientId = ensureClientId();
+
+      try {
+        const query = new URLSearchParams({ sessionId: latestSessionId, clientId });
+        const response = await fetch(`/api/payments/session-status?${query.toString()}`, {
+          credentials: 'same-origin',
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('status-check-failed');
+        }
+
+        const status = await response.json();
+
+        if (status.paid) {
+          showNotice('Оплата подтверждена. Перенаправляем на полную страницу.', 'ok');
+          setTimeout(() => {
+            window.location.href = premiumPath;
+          }, 700);
+        } else {
+          showNotice('Оплата еще не подтверждена. Попробуйте через несколько секунд.', 'warn');
+        }
+      } catch (error) {
+        showNotice('Не удалось проверить статус оплаты.', 'warn');
+      }
+    }
+
+    function goBack() {
+      window.location.href = previewPath;
+    }
+
+    if (!universityId || !premiumPath.endsWith('1.html')) {
+      showNotice('Неверные параметры подписки. Откройте оплату из страницы университета.', 'warn');
+    }
+
+    document.getElementById('targetMeta').textContent = `Подписка для: ${universityId}`;
+
+    document.querySelectorAll('[name="visaType"]').forEach((input) => {
+      input.addEventListener('change', (event) => {
+        visaType = event.target.value;
+      });
+    });
+
+    document.querySelectorAll('.tab').forEach((tab) => {
+      tab.addEventListener('click', () => switchMethod(tab.dataset.method));
+    });
+
+    document.getElementById('payCardBtn').addEventListener('click', startCardFlow);
+    document.getElementById('confirmCardPayBtn').addEventListener('click', confirmCardPayment);
+    document.getElementById('generateQrBtn').addEventListener('click', generateQr);
+    document.getElementById('checkQrStatusBtn').addEventListener('click', checkQrStatus);
+    document.getElementById('backBtn1').addEventListener('click', goBack);
+    document.getElementById('backBtn2').addEventListener('click', goBack);
+    document.getElementById('backBtn3').addEventListener('click', goBack);
+
+    prepareMethods();
+  </script>
+</body>
+</html>
