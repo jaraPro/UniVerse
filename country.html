@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVerse — Поиск по странам</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1f1f1f;
+      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* HEADER */
+    .navbar {
+      width: 100%;
+      background: linear-gradient(90deg, #062abb 0%, #0a4bb8 100%);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.25s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: white;
+      color: #062abb;
+      transform: translateY(-1px);
+    }
+
+    .page-tabs {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .page-tab {
+      text-decoration: none;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .page-tab:hover {
+      background: white;
+      color: #1540ff;
+    }
+
+    .page-tab.active {
+      background: white;
+      color: #1540ff;
+      border-color: white;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 1300px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, #eaf1ff, #f8fbff);
+      border: 1px solid #d8e3ff;
+      border-radius: 28px;
+      padding: 36px 26px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #16213e;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #5e6475;
+      text-align: center;
+      max-width: 850px;
+      margin: 0 auto 26px;
+      line-height: 1.6;
+    }
+
+    /* SEARCH */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .search-box {
+      flex: 1 1 500px;
+      max-width: 700px;
+      display: flex;
+      background: white;
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 8px 20px rgba(22, 33, 62, 0.08);
+      border: 1px solid #e8ecf8;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 15px;
+      border-radius: 12px;
+    }
+
+    .search-box button {
+      border: none;
+      background: linear-gradient(135deg, #062abb, #0a4bb8);
+      color: white;
+      padding: 0.8rem 1.3rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .search-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.3);
+    }
+
+    /* REGION FILTERS */
+    .region-tabs {
+      max-width: 1300px;
+      margin: 24px auto 10px;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .region-btn {
+      border: 2px solid transparent;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .region-btn:hover,
+    .region-btn.active {
+      background: white;
+      color: #062abb;
+      transform: translateY(-1px);
+    }
+
+    /* COUNTRIES */
+    .section {
+      max-width: 1300px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-title h2 {
+      font-size: 30px;
+      color: #16213e;
+      font-weight: 800;
+    }
+
+    .section-title p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .countries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .country-card {
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+      border: 1px solid #edf1fb;
+      transition: 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .country-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 34px rgba(21, 64, 255, 0.12);
+    }
+
+    .country-cover {
+      height: 140px;
+      background: linear-gradient(135deg, #9ec5ff, #dfeeff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+
+    .country-content {
+      padding: 18px;
+    }
+
+    .country-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1b2340;
+      margin-bottom: 8px;
+    }
+
+    .country-meta {
+      font-size: 14px;
+      color: #6a7285;
+      min-height: 42px;
+      line-height: 1.5;
+    }
+
+    .country-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 10px;
+    }
+
+    .country-tag {
+      background: #eef3ff;
+      color: #2442b8;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .country-btn {
+      background: linear-gradient(135deg, #062abb, #0a4bb8);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .country-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.3);
+    }
+
+    /* UNIVERSITY PANEL */
+    .university-panel {
+      max-width: 1300px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+    }
+
+    .panel-box {
+      background: white;
+      border-radius: 28px;
+      padding: 28px 24px;
+      border: 1px solid #e7ebf7;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+      display: none;
+    }
+
+    .panel-box.show {
+      display: block;
+      animation: fadeUp 0.35s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .panel-header h3 {
+      font-size: 28px;
+      color: #16213e;
+      font-weight: 800;
+    }
+
+    .panel-header p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .uni-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .uni-card {
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      border: 1px solid #e6edff;
+      border-radius: 20px;
+      padding: 18px;
+      transition: 0.25s ease;
+    }
+
+    .uni-card:hover {
+      box-shadow: 0 10px 20px rgba(21, 64, 255, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .uni-card h4 {
+      font-size: 18px;
+      margin-bottom: 9px;
+      color: #1d2747;
+    }
+
+    .uni-card p {
+      font-size: 14px;
+      color: #677086;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .uni-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .mini-btn.primary {
+      background: linear-gradient(135deg, #062abb, #0a4bb8);
+      color: white;
+    }
+
+    .mini-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.3);
+    }
+
+    .mini-btn.secondary {
+      background: #eef3ff;
+      color: #2442b8;
+    }
+
+    .mini-btn.secondary:hover {
+      background: #dfe8ff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 44px 20px;
+      color: #687186;
+      font-size: 16px;
+    }
+
+    /* INFO SECTION */
+    .features {
+      max-width: 1300px;
+      margin: 10px auto 70px;
+      padding: 0 20px;
+    }
+
+    .features-title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .features-title h2 {
+      font-size: 34px;
+      color: #16213e;
+      margin-bottom: 8px;
+    }
+
+    .features-title p {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf1fb;
+      text-align: center;
+    }
+
+    .feature-card .icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      color: #1f2a4b;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: #657084;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">UniVerse</div>
+    <nav class="nav-links">
+      <a href="index2.html">Главная</a>
+      <a href="country.html" class="active">Страны</a>
+      <a href="/obshaga/obshaga.html">Общежитие</a>
+      <a href="info.html">О нас</a>
+      <a href="profile.html">Профиль</a>
+    </nav>
+  </header>
+
+  <div class="page-tabs">
+    <a class="page-tab" href="index5.html">Рейтинги</a>
+    <a class="page-tab active" href="country.html">Страны</a>
+    <a class="page-tab" href="/obshaga/obshaga.html">Общежитие</a>
+    <a class="page-tab" href="profile.html">Личный кабинет</a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-box">
+      <h1>Поиск университетов по странам</h1>
+      <p>
+        Выбирайте страну, изучайте лучшие университеты, сравнивайте возможности обучения,
+        находите подходящее место для поступления и стройте свой путь к образованию вместе с UniVerse.
+      </p>
+
+      <div class="filters">
+        <div class="search-box">
+          <input
+            type="text"
+            id="countrySearch"
+            placeholder="Например: Казахстан, США, Германия, Южная Корея..."
+          />
+          <button onclick="searchCountries()">Найти</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="region-tabs">
+    <button class="region-btn active" onclick="filterByRegion('all', this)">Все</button>
+    <button class="region-btn" onclick="filterByRegion('asia', this)">Азия</button>
+    <button class="region-btn" onclick="filterByRegion('europe', this)">Европа</button>
+    <button class="region-btn" onclick="filterByRegion('north-america', this)">Северная Америка</button>
+    <button class="region-btn" onclick="filterByRegion('oceania', this)">Океания</button>
+    <button class="region-btn" onclick="filterByRegion('middle-east', this)">Ближний Восток</button>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>Популярные страны для поступления</h2>
+      <p id="resultsInfo">Найдено стран: 18</p>
+    </div>
+
+    <div class="countries-grid" id="countriesGrid"></div>
+  </section>
+
+  <section class="university-panel">
+    <div class="panel-box" id="universityPanel">
+      <div class="panel-header">
+        <div>
+          <h3 id="panelCountryTitle">Университеты</h3>
+          <p id="panelCountryDesc">Выберите страну, чтобы увидеть университеты</p>
+        </div>
+      </div>
+
+      <div class="uni-grid" id="universitiesGrid"></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-title">
+      <h2>Что есть в UniVerse</h2>
+      <p>Всё, что помогает выбрать университет удобнее и быстрее.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🌍</div>
+        <h3>Поиск по странам</h3>
+        <p>Сравнивайте университеты по всему миру в одном месте без лишней путаницы.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🏛️</div>
+        <h3>Университеты</h3>
+        <p>Изучайте лучшие вузы, их особенности, направления и общую информацию для абитуриентов.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🏠</div>
+        <h3>Общежития</h3>
+        <p>Смотрите данные о проживании, условиях, стоимости и удобстве для студентов.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📊</div>
+        <h3>Сравнение</h3>
+        <p>Сравнивайте требования, направления, уровень университетов и удобство поступления.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    ©️ 2026 UniVerse — Платформа поиска университетов
+  </footer>
+
+  <script>
+    const countriesData = [
+      {
+        name: "Казахстан",
+        emoji: "🇰🇿",
+        region: "asia",
+        description: "Сильные национальные университеты и удобный выбор для студентов Центральной Азии.",
+        tag: "Центральная Азия",
+        universities: [
+          { name: "КазНУ имени аль-Фараби", desc: "Один из ведущих университетов Казахстана с сильными программами по науке, ИТ, международным отношениям и гуманитарным направлениям." },
+          { name: "ЕНУ имени Л.Н. Гумилёва", desc: "Крупный университет в Астане, известный программами по инженерии, экономике, филологии и государственному управлению." },
+          { name: "AlmaU", desc: "Один из известных частных университетов Алматы, особенно популярен в сфере бизнеса, менеджмента и предпринимательства." },
+          { name: "АТУ", desc: "Сильный технологический университет с направлениями по пищевой промышленности, ИТ и инженерии." }
+        ]
+      },
+      {
+        name: "США",
+        emoji: "🇺🇸",
+        region: "north-america",
+        description: "Одна из самых популярных стран мира для высшего образования и исследований.",
+        tag: "Топ-вузы мира",
+        universities: [
+          { name: "Harvard University", desc: "Один из самых известных университетов мира с сильнейшими программами в праве, бизнесе, медицине и социальных науках." },
+          { name: "Massachusetts Institute of Technology (MIT)", desc: "Легендарный технологический университет, особенно сильный в инженерии, ИТ, физике и стартап-культуре." },
+          { name: "Stanford University", desc: "Ведущий университет рядом с Кремниевой долиной, известный инновациями, предпринимательством и исследованиями." },
+          { name: "University of California, Berkeley", desc: "Один из самых сильных государственных университетов США в науке, технологиях и общественных науках." }
+        ]
+      },
+      {
+        name: "Великобритания",
+        emoji: "🇬🇧",
+        region: "europe",
+        description: "Классическое сильное образование, высокий престиж дипломов и богатая академическая история.",
+        tag: "Престиж",
+        universities: [
+          { name: "University of Oxford", desc: "Один из старейших и самых престижных университетов мира." },
+          { name: "University of Cambridge", desc: "Известен сильными академическими традициями, наукой и исследовательской базой." },
+          { name: "Imperial College London", desc: "Сильный фокус на инженерии, медицине, технологиях и естественных науках." },
+          { name: "University College London (UCL)", desc: "Один из крупнейших исследовательских университетов Великобритании." }
+        ]
+      },
+      {
+        name: "Германия",
+        emoji: "🇩🇪",
+        region: "europe",
+        description: "Популярный выбор благодаря сильной инженерной школе и доступному образованию.",
+        tag: "Инженерия",
+        universities: [
+          { name: "Technical University of Munich", desc: "Один из лучших технических университетов Европы." },
+          { name: "Ludwig Maximilian University of Munich", desc: "Известен широким спектром программ и высоким академическим уровнем." },
+          { name: "Heidelberg University", desc: "Старейший университет Германии, силён в медицине и гуманитарных науках." },
+          { name: "RWTH Aachen University", desc: "Особенно популярен среди студентов инженерных и технических направлений." }
+        ]
+      },
+      {
+        name: "Канада",
+        emoji: "🇨🇦",
+        region: "north-america",
+        description: "Комфортная страна для международных студентов с сильными вузами и высоким качеством жизни.",
+        tag: "Комфорт",
+        universities: [
+          { name: "University of Toronto", desc: "Один из ведущих университетов Канады, силён почти во всех областях." },
+          { name: "University of British Columbia", desc: "Сильный университет с международной репутацией и кампусом в Ванкувере." },
+          { name: "McGill University", desc: "Один из самых известных исследовательских университетов страны." },
+          { name: "University of Alberta", desc: "Хороший выбор для науки, инженерии и прикладных программ." }
+        ]
+      },
+      {
+        name: "Австралия",
+        emoji: "🇦🇺",
+        region: "oceania",
+        description: "Популярна среди студентов благодаря качеству образования и англоязычной среде.",
+        tag: "Англоязычная среда",
+        universities: [
+          { name: "University of Melbourne", desc: "Один из самых известных университетов Австралии." },
+          { name: "Australian National University", desc: "Сильный исследовательский университет в Канберре." },
+          { name: "University of Sydney", desc: "Престижный университет с широкой академической базой." },
+          { name: "UNSW Sydney", desc: "Особенно известен инженерией, бизнесом и технологиями." }
+        ]
+      },
+      {
+        name: "Китай",
+        emoji: "🇨🇳",
+        region: "asia",
+        description: "Огромная образовательная система, сильные технические и исследовательские университеты.",
+        tag: "Технологии",
+        universities: [
+          { name: "Tsinghua University", desc: "Один из самых сильных университетов Азии, особенно в инженерии и технологиях." },
+          { name: "Peking University", desc: "Престижный университет с сильными программами по науке, праву и гуманитарным направлениям." },
+          { name: "Fudan University", desc: "Известный университет в Шанхае с сильной академической базой." },
+          { name: "Shanghai Jiao Tong University", desc: "Один из ключевых университетов Китая для инженерии и исследований." }
+        ]
+      },
+      {
+        name: "Япония",
+        emoji: "🇯🇵",
+        region: "asia",
+        description: "Высокий уровень технологий, науки и инженерного образования.",
+        tag: "Наука",
+        universities: [
+          { name: "The University of Tokyo", desc: "Один из лучших университетов Японии с сильными научными программами." },
+          { name: "Kyoto University", desc: "Известен исследовательской культурой и сильными программами в естественных науках." },
+          { name: "Osaka University", desc: "Один из ведущих национальных университетов Японии." },
+          { name: "Tokyo Institute of Technology", desc: "Сильный технический университет для инженерии и технологий." }
+        ]
+      },
+      {
+        name: "Южная Корея",
+        emoji: "🇰🇷",
+        region: "asia",
+        description: "Сильные университеты, быстрое развитие технологий и популярность среди иностранных студентов.",
+        tag: "Инновации",
+        universities: [
+          { name: "Seoul National University", desc: "Один из самых престижных университетов Южной Кореи." },
+          { name: "KAIST", desc: "Известен инженерией, ИТ и научными разработками." },
+          { name: "POSTECH", desc: "Сильный научно-технический университет." },
+          { name: "Yonsei University", desc: "Популярен в сфере бизнеса, медицины и гуманитарных наук." }
+        ]
+      },
+      {
+        name: "Сингапур",
+        emoji: "🇸🇬",
+        region: "asia",
+        description: "Небольшая страна с очень сильными университетами и международной средой.",
+        tag: "Высокий рейтинг",
+        universities: [
+          { name: "National University of Singapore (NUS)", desc: "Один из сильнейших университетов Азии и мира." },
+          { name: "Nanyang Technological University (NTU)", desc: "Известен инженерией, наукой и бизнес-программами." },
+          { name: "Singapore Management University", desc: "Сильный выбор для бизнеса, экономики и управления." }
+        ]
+      },
+      {
+        name: "Турция",
+        emoji: "🇹🇷",
+        region: "middle-east",
+        description: "Популярное направление для студентов из СНГ благодаря доступности и географической близости.",
+        tag: "Близко и удобно",
+        universities: [
+          { name: "Middle East Technical University", desc: "Один из самых уважаемых университетов Турции." },
+          { name: "Boğaziçi University", desc: "Сильный университет с хорошей международной репутацией." },
+          { name: "Istanbul University", desc: "Один из старейших и известных вузов страны." },
+          { name: "Koç University", desc: "Популярен в области бизнеса, медицины и социальных наук." }
+        ]
+      },
+      {
+        name: "Франция",
+        emoji: "🇫🇷",
+        region: "europe",
+        description: "Сильные школы бизнеса, инженерии, политики и гуманитарных наук.",
+        tag: "Европейская классика",
+        universities: [
+          { name: "Sorbonne University", desc: "Один из самых известных университетов Франции." },
+          { name: "PSL University", desc: "Высоко оцениваемый исследовательский университет Парижа." },
+          { name: "École Polytechnique", desc: "Престижная инженерная школа." },
+          { name: "Sciences Po", desc: "Очень известен в политологии, международных отношениях и управлении." }
+        ]
+      },
+      {
+        name: "Италия",
+        emoji: "🇮🇹",
+        region: "europe",
+        description: "Исторические университеты, архитектура, дизайн и сильные академические традиции.",
+        tag: "История и дизайн",
+        universities: [
+          { name: "University of Bologna", desc: "Один из старейших университетов мира." },
+          { name: "Sapienza University of Rome", desc: "Крупный и известный университет Италии." },
+          { name: "Politecnico di Milano", desc: "Сильнейший выбор для инженерии, архитектуры и дизайна." },
+          { name: "University of Padua", desc: "Уважаемый исследовательский университет с богатой историей." }
+        ]
+      },
+      {
+        name: "Нидерланды",
+        emoji: "🇳🇱",
+        region: "europe",
+        description: "Очень популярны у международных студентов благодаря программам на английском языке.",
+        tag: "Много программ на английском",
+        universities: [
+          { name: "Delft University of Technology", desc: "Известен инженерией, технологиями и архитектурой." },
+          { name: "University of Amsterdam", desc: "Один из ведущих университетов страны." },
+          { name: "Leiden University", desc: "Старейший университет Нидерландов с сильными гуманитарными программами." },
+          { name: "Eindhoven University of Technology", desc: "Силен в инженерии и прикладных науках." }
+        ]
+      },
+      {
+        name: "Швейцария",
+        emoji: "🇨🇭",
+        region: "europe",
+        description: "Высокое качество образования, науки и технологий.",
+        tag: "Высокое качество",
+        universities: [
+          { name: "ETH Zurich", desc: "Один из лучших технических университетов мира." },
+          { name: "EPFL", desc: "Силен в инженерии, ИТ и исследованиях." },
+          { name: "University of Zurich", desc: "Один из главных университетов страны." },
+          { name: "University of Geneva", desc: "Известен международной академической средой." }
+        ]
+      },
+      {
+        name: "Испания",
+        emoji: "🇪🇸",
+        region: "europe",
+        description: "Интересное направление для студентов, особенно в бизнесе, гуманитарных науках и международных программах.",
+        tag: "Международная среда",
+        universities: [
+          { name: "University of Barcelona", desc: "Один из самых известных университетов Испании." },
+          { name: "Autonomous University of Madrid", desc: "Сильный университет по широкому кругу направлений." },
+          { name: "Pompeu Fabra University", desc: "Известен качественными программами и хорошей репутацией." },
+          { name: "IE University", desc: "Особенно популярен в бизнесе и управлении." }
+        ]
+      },
+      {
+        name: "ОАЭ",
+        emoji: "🇦🇪",
+        region: "middle-east",
+        description: "Современная образовательная среда, международные кампусы и быстрый рост сектора.",
+        tag: "Современные кампусы",
+        universities: [
+          { name: "United Arab Emirates University", desc: "Один из ключевых университетов ОАЭ." },
+          { name: "Khalifa University", desc: "Силен в инженерии, науке и технологиях." },
+          { name: "American University of Sharjah", desc: "Популярен у международных студентов." },
+          { name: "University of Dubai", desc: "Хороший вариант для бизнеса и ИТ-направлений." }
+        ]
+      },
+      {
+        name: "Малайзия",
+        emoji: "🇲🇾",
+        region: "asia",
+        description: "Доступное и популярное направление с растущей международной репутацией.",
+        tag: "Доступно",
+        universities: [
+          { name: "University of Malaya", desc: "Один из сильнейших университетов Малайзии." },
+          { name: "Universiti Putra Malaysia", desc: "Известен широким набором программ." },
+          { name: "Universiti Kebangsaan Malaysia", desc: "Сильный национальный университет." },
+          { name: "Taylor’s University", desc: "Популярен среди иностранных студентов." }
+        ]
+      }
+    ];
+
+    let currentRegion = "all";
+    let currentSearch = "";
+
+    function renderCountries() {
+      const grid = document.getElementById("countriesGrid");
+
+      let filtered = countriesData.filter(country => {
+        const matchesRegion = currentRegion === "all" || country.region === currentRegion;
+        const matchesSearch = country.name.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchesRegion && matchesSearch;
+      });
+
+      grid.innerHTML = "";
+
+      document.getElementById("resultsInfo").textContent = `Найдено стран: ${filtered.length}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            По вашему запросу ничего не найдено. Попробуйте ввести другое название страны.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(country => {
+        const card = document.createElement("div");
+        card.className = "country-card";
+        card.innerHTML = `
+          <div class="country-cover">${country.emoji}</div>
+          <div class="country-content">
+            <div class="country-name">${country.name}</div>
+            <div class="country-meta">${country.description}</div>
+            <div class="country-bottom">
+              <span class="country-tag">${country.tag}</span>
+              <button class="country-btn">Смотреть вузы</button>
+            </div>
+          </div>
+        `;
+        card.onclick = () => showUniversities(country);
+        grid.appendChild(card);
+      });
+    }
+
+    function showUniversities(country) {
+      const panel = document.getElementById("universityPanel");
+      const grid = document.getElementById("universitiesGrid");
+      const title = document.getElementById("panelCountryTitle");
+      const desc = document.getElementById("panelCountryDesc");
+
+      title.textContent = `${country.emoji} ${country.name}`;
+      desc.textContent = `Подборка университетов для страны: ${country.name}`;
+
+      grid.innerHTML = "";
+
+      country.universities.forEach(uni => {
+        const card = document.createElement("div");
+        card.className = "uni-card";
+        card.innerHTML = `
+          <h4>${uni.name}</h4>
+          <p>${uni.desc}</p>
+          <div class="uni-actions">
+            <button class="mini-btn primary">Подробнее</button>
+            <button class="mini-btn secondary">Сравнить</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      panel.classList.add("show");
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function filterByRegion(region, btn) {
+      currentRegion = region;
+      document.querySelectorAll(".region-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderCountries();
+    }
+
+    function searchCountries() {
+      currentSearch = document.getElementById("countrySearch").value.trim();
+      renderCountries();
+    }
+
+    document.getElementById("countrySearch").addEventListener("input", function() {
+      currentSearch = this.value.trim();
+      renderCountries();
+    });
+
+    renderCountries();
+  </script>
+</body>
+</html>
