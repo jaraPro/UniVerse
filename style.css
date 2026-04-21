@@ -1,0 +1,30 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  margin-top: 100px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+}
+
+input {
+  width: 250px;
+  height: 35px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+button {
+  width: 260px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #333;
+}
