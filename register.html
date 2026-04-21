@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .register-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-requirements {
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+
+    .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .register-btn:active {
+      transform: translateY(0);
+    }
+
+    .register-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 30px 0;
+      color: #999;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .divider::before {
+      margin-right: 10px;
+    }
+
+    .divider::after {
+      margin-left: 10px;
+    }
+
+    .google-btn-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: #764ba2;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .alert-error {
+      background: #fee;
+      color: #c33;
+      border: 1px solid #fcc;
+      display: block;
+    }
+
+    .alert-success {
+      background: #efe;
+      color: #3c3;
+      border: 1px solid #cfc;
+      display: block;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #667eea;
+      font-size: 14px;
+    }
+
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Регистрация</h1>
+    <p class="subtitle">Создайте новый аккаунт</p>
+
+    <div id="alert" class="alert"></div>
+
+    <div class="form-group">
+      <label for="firstName">Имя</label>
+      <input
+        id="firstName"
+        type="text"
+        placeholder="Ваше имя"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Фамилия</label>
+      <input
+        id="lastName"
+        type="text"
+        placeholder="Ваша фамилия"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="cardNumber">Номер карты</label>
+      <input
+        id="cardNumber"
+        type="text"
+        inputmode="numeric"
+        autocomplete="cc-number"
+        placeholder="0000 0000 0000 0000"
+        required
+      >
+      <div class="password-requirements">
+        Полный номер карты не отправляется и не хранится в базе, используется только безопасный идентификатор.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль</label>
+      <input 
+        id="password" 
+        type="password" 
+        placeholder="Минимум 8 символов"
+        required
+      >
+      <div class="password-requirements">
+        Пароль должен содержать минимум 8 символов
+      </div>
+    </div>
+
+    <button class="register-btn" id="registerBtn" onclick="handleRegister()">
+      Зарегистрироваться
+    </button>
+
+    <div class="divider">или</div>
+
+    <div class="google-btn-wrapper">
+      <div id="google-signin-button"></div>
+    </div>
+
+    <div class="loading" id="loading">
+      <span class="spinner"></span>
+      <span>Загрузка...</span>
+    </div>
+
+    <div class="footer">
+      Уже есть аккаунт? <a href="login.html">Войти</a>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api/auth';
+    const GOOGLE_CLIENT_ID = '983371437398-lcqaf62o1d096mrfauipfj5dqar5an0u.apps.googleusercontent.com';
+
+    // Инициализируем Google Sign-In
+    function initGoogleSignIn() {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignIn,
+        ux_mode: 'popup'
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById('google-signin-button'),
+        {
+          theme: 'outline',
+          size: 'large',
+          width: '100%',
+          text: 'signup_with'
+        }
+      );
+    }
+
+    function handleGoogleSignIn(response) {
+      const idToken = response.credential;
+      showLoading(true);
+
+      fetch(`${API_URL}/google`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ idToken })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          showAlert('Регистрация успешна!', 'success');
+          setTimeout(() => {
+            window.location.href = 'profile.html';
+          }, 1500);
+        } else {
+          showAlert(data.message || 'Ошибка регистрации', 'error');
+        }
+      })
+      .catch(err => {
+        console.error('Google signup error:', err);
+        showAlert('Ошибка при регистрации через Google', 'error');
+      })
+      .finally(() => showLoading(false));
+    }
+
+    async function sha256Hex(input) {
+      const data = new TextEncoder().encode(input);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash))
+        .map((byte) => byte.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    async function buildCardAliasEmail(cardDigits) {
+      const fingerprint = await sha256Hex(cardDigits);
+      return `card-${fingerprint.slice(0, 24)}@payid.findu2.local`;
+    }
+
+    async function handleRegister() {
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const cardNumberRaw = document.getElementById('cardNumber').value;
+      const cardDigits = (cardNumberRaw || '').replace(/\D/g, '');
+      const password = document.getElementById('password').value;
+
+      if (!firstName) {
+        showAlert('Пожалуйста, введите имя', 'error');
+        return;
+      }
+
+      if (!lastName) {
+        showAlert('Пожалуйста, введите фамилию', 'error');
+        return;
+      }
+
+      if (cardDigits.length < 12 || cardDigits.length > 19) {
+        showAlert('Введите корректный номер карты', 'error');
+        return;
+      }
+
+      if (password.length < 8) {
+        showAlert('Пароль должен содержать минимум 8 символов', 'error');
+        return;
+      }
+
+      showLoading(true);
+
+      try {
+        const email = await buildCardAliasEmail(cardDigits);
+
+        const res = await fetch(`${API_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          if (data.token) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            showAlert('Регистрация успешна!', 'success');
+            setTimeout(() => {
+              window.location.href = 'profile.html';
+            }, 1500);
+          } else {
+            showAlert(data.message || 'Регистрация успешна', 'success');
+          }
+        } else if (data.errors) {
+          const errorMessage = data.errors.map(e => e.msg).join(', ');
+          showAlert(errorMessage, 'error');
+        } else {
+          showAlert(data.message || 'Ошибка регистрации', 'error');
+        }
+      } catch (err) {
+        console.error('Registration error:', err);
+        showAlert('Ошибка при регистрации', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function showAlert(message, type) {
+      const alert = document.getElementById('alert');
+      alert.textContent = message;
+      alert.className = `alert alert-${type}`;
+      setTimeout(() => {
+        alert.className = 'alert';
+      }, 5000);
+    }
+
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+      document.querySelector('.register-btn').disabled = show;
+    }
+
+    // Обработчик Enter для регистрации
+    document.getElementById('password').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleRegister();
+      }
+    });
+
+    // Инициализируем при загрузке страницы
+    window.addEventListener('load', () => {
+      initGoogleSignIn();
+    });
+  </script>
+</body>
+</html>
