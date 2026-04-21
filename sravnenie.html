@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Сравнение университетов | UniVerse Pro</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		:root {
+			--primary: #062abb;
+			--primary-2: #0a4bb8;
+			--text: #1b2340;
+			--muted: #64719a;
+			--line: #dce4ff;
+			--surface: #ffffff;
+			--bg: #eef3ff;
+			--good: #0f9d58;
+			--warn: #cc7a00;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at 10% 0%, #dbe7ff 0%, transparent 40%),
+				radial-gradient(circle at 90% 25%, #d4f2ff 0%, transparent 35%),
+				radial-gradient(circle at 45% 90%, #efe6ff 0%, transparent 38%),
+				#f6f9ff;
+			min-height: 100vh;
+		}
+
+		.navbar {
+			background: linear-gradient(90deg, var(--primary) 0%, var(--primary-2) 100%);
+			color: white;
+			padding: 1rem 2rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 1rem;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+		}
+
+		.logo {
+			font-size: 1.55rem;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			gap: 0.55rem;
+			white-space: nowrap;
+		}
+
+		.logo i {
+			color: #ffd700;
+		}
+
+		.nav-links {
+			display: flex;
+			gap: 0.7rem;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.nav-link {
+			color: white;
+			text-decoration: none;
+			background: rgba(255,255,255,0.12);
+			border: 1px solid rgba(255,255,255,0.2);
+			border-radius: 10px;
+			padding: 0.5rem 0.95rem;
+			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.45rem;
+			transition: all 0.2s ease;
+		}
+
+		.nav-link:hover {
+			background: white;
+			color: var(--primary);
+		}
+
+		.container {
+			max-width: 1240px;
+			margin: 1.5rem auto 2.5rem;
+			padding: 0 1rem;
+		}
+
+		.hero {
+			background: linear-gradient(130deg, #0d2fb5 0%, #2562d6 52%, #3f84e8 100%);
+			color: white;
+			border-radius: 20px;
+			padding: 2rem;
+			box-shadow: 0 18px 40px rgba(18, 52, 160, 0.3);
+			position: relative;
+			overflow: hidden;
+			animation: heroIn 0.7s ease;
+		}
+
+		@keyframes heroIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px) scale(0.99);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+
+		.hero::after {
+			content: "";
+			position: absolute;
+			right: -60px;
+			top: -60px;
+			width: 240px;
+			height: 240px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+		}
+
+		.hero h1 {
+			font-size: clamp(1.7rem, 1.2rem + 2vw, 2.8rem);
+			margin-bottom: 0.65rem;
+			position: relative;
+			z-index: 1;
+		}
+
+		.hero p {
+			max-width: 800px;
+			line-height: 1.6;
+			opacity: 0.95;
+			position: relative;
+			z-index: 1;
+		}
+
+		.legend {
+			margin-top: 1rem;
+			display: flex;
+			gap: 0.65rem;
+			flex-wrap: wrap;
+			position: relative;
+			z-index: 1;
+		}
+
+		.legend span {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
+			background: rgba(255,255,255,0.14);
+			border: 1px solid rgba(255,255,255,0.25);
+			padding: 0.35rem 0.7rem;
+			border-radius: 999px;
+			font-size: 0.88rem;
+			font-weight: 600;
+		}
+
+		.section-title {
+			margin: 1.35rem 0 0.75rem;
+			color: #24305a;
+			font-size: clamp(1.15rem, 1rem + 0.6vw, 1.6rem);
+		}
+
+		.selector-panel {
+			margin-top: 1rem;
+			background: white;
+			border: 1px solid #e3eaff;
+			border-radius: 16px;
+			padding: 1rem;
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		.selector-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.7rem;
+			flex-wrap: wrap;
+		}
+
+		.selector-title {
+			font-size: 1.03rem;
+			font-weight: 800;
+			color: #27325f;
+		}
+
+		.selector-note {
+			font-size: 0.9rem;
+			color: var(--muted);
+		}
+
+		.option-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 0.65rem;
+			margin-top: 0.8rem;
+		}
+
+		.uni-option {
+			display: flex;
+			align-items: center;
+			gap: 0.55rem;
+			background: #f7f9ff;
+			border: 1px solid #dbe5ff;
+			border-radius: 10px;
+			padding: 0.6rem 0.7rem;
+			cursor: pointer;
+			font-weight: 600;
+			color: #2c3766;
+		}
+
+		.uni-option input {
+			accent-color: var(--primary);
+		}
+
+		.selector-actions {
+			margin-top: 0.85rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.7rem;
+			flex-wrap: wrap;
+		}
+
+		.helper {
+			font-size: 0.88rem;
+			color: #36457c;
+			background: #eef3ff;
+			border: 1px solid #d7e2ff;
+			padding: 0.45rem 0.65rem;
+			border-radius: 8px;
+		}
+
+		.save-btn {
+			border: none;
+			background: linear-gradient(135deg, var(--primary), var(--primary-2));
+			color: white;
+			border-radius: 10px;
+			padding: 0.62rem 1rem;
+			font-weight: 700;
+			cursor: pointer;
+			box-shadow: 0 8px 18px rgba(6,42,187,0.24);
+		}
+
+		.save-btn:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+			box-shadow: none;
+		}
+
+		.action-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			align-items: center;
+		}
+
+		.mini-btn {
+			border: 1px solid #cfd9ff;
+			background: #f8faff;
+			color: #2b3872;
+			border-radius: 9px;
+			padding: 0.52rem 0.8rem;
+			font-size: 0.84rem;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		.mini-btn:hover {
+			background: white;
+		}
+
+		.mini-btn.primary {
+			background: linear-gradient(135deg, var(--primary), var(--primary-2));
+			color: white;
+			border-color: transparent;
+		}
+
+		.insights-grid {
+			margin-top: 1rem;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 0.75rem;
+		}
+
+		.insight-card {
+			background: white;
+			border: 1px solid #e2e9ff;
+			border-radius: 14px;
+			padding: 0.9rem;
+			box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+		}
+
+		.insight-label {
+			font-size: 0.8rem;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+			font-weight: 700;
+			color: #678;
+			margin-bottom: 0.35rem;
+		}
+
+		.insight-value {
+			font-size: 1rem;
+			font-weight: 800;
+			color: #273567;
+		}
+
+		.compare-wrap {
+			background: var(--surface);
+			border-radius: 16px;
+			box-shadow: 0 14px 32px rgba(0,0,0,0.09);
+			border: 1px solid #e3eaff;
+			overflow: auto;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			min-width: 920px;
+		}
+
+		thead th {
+			position: sticky;
+			top: 0;
+			background: #f3f6ff;
+			color: #1f2a53;
+			font-weight: 800;
+			border-bottom: 1px solid var(--line);
+			padding: 0.9rem 1rem;
+			text-align: left;
+			vertical-align: top;
+		}
+
+		tbody td {
+			padding: 0.88rem 1rem;
+			border-bottom: 1px solid #edf2ff;
+			vertical-align: top;
+			line-height: 1.45;
+		}
+
+		tbody tr:hover {
+			background: #f8faff;
+		}
+
+		.best-cell {
+			background: #ecfff5;
+			box-shadow: inset 0 0 0 1px #c6f2dc;
+		}
+
+		td:first-child, th:first-child {
+			font-weight: 700;
+			color: #2d3967;
+			background: #f9fbff;
+			position: sticky;
+			left: 0;
+			z-index: 2;
+			min-width: 220px;
+		}
+
+		.badge {
+			display: inline-block;
+			border-radius: 999px;
+			padding: 0.24rem 0.55rem;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.02em;
+		}
+
+		.badge-good {
+			background: rgba(15, 157, 88, 0.15);
+			color: var(--good);
+		}
+
+		.badge-warn {
+			background: rgba(204, 122, 0, 0.15);
+			color: var(--warn);
+		}
+
+		.cards {
+			display: none;
+			gap: 1rem;
+			margin-top: 0.2rem;
+		}
+
+		.uni-card {
+			background: white;
+			border: 1px solid #e3eaff;
+			box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+			border-radius: 14px;
+			padding: 1rem;
+		}
+
+		.uni-card h3 {
+			color: var(--primary);
+			margin-bottom: 0.65rem;
+			font-size: 1.05rem;
+		}
+
+		.uni-item {
+			border-top: 1px dashed #dbe3ff;
+			padding: 0.55rem 0;
+			font-size: 0.93rem;
+		}
+
+		.uni-item strong {
+			display: block;
+			color: #2d3967;
+			margin-bottom: 0.2rem;
+		}
+
+		.toast {
+			position: fixed;
+			right: 16px;
+			bottom: 16px;
+			background: #1f2a53;
+			color: white;
+			padding: 0.75rem 0.95rem;
+			border-radius: 10px;
+			box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(8px);
+			transition: all 0.28s ease;
+			z-index: 120;
+		}
+
+		.toast.show {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		.catalog-panel {
+			margin-top: 1rem;
+			background: white;
+			border: 1px solid #e3eaff;
+			border-radius: 16px;
+			padding: 1rem;
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		.catalog-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.7rem;
+			flex-wrap: wrap;
+			margin-bottom: 0.75rem;
+		}
+
+		.catalog-title {
+			font-size: 1.03rem;
+			font-weight: 800;
+			color: #27325f;
+		}
+
+		.catalog-count {
+			font-size: 0.88rem;
+			color: var(--muted);
+		}
+
+		.catalog-tools {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			flex-wrap: wrap;
+		}
+
+		.catalog-sort {
+			border: 1px solid #d6e0ff;
+			background: white;
+			border-radius: 8px;
+			padding: 0.34rem 0.55rem;
+			font-size: 0.82rem;
+			font-weight: 600;
+			color: #2f3f77;
+		}
+
+		.selected-chips {
+			display: flex;
+			gap: 0.45rem;
+			flex-wrap: wrap;
+			margin: 0.2rem 0 0.7rem;
+		}
+
+		.selected-chip {
+			background: #eef3ff;
+			border: 1px solid #d5e0ff;
+			border-radius: 999px;
+			padding: 0.3rem 0.6rem;
+			font-size: 0.78rem;
+			font-weight: 700;
+			color: #2d3b70;
+		}
+
+		.catalog-search {
+			width: 100%;
+			padding: 0.7rem 0.85rem;
+			border: 1px solid #d7e2ff;
+			border-radius: 10px;
+			font-size: 0.96rem;
+			outline: none;
+			margin-bottom: 0.8rem;
+		}
+
+		.catalog-search:focus {
+			border-color: var(--primary);
+			box-shadow: 0 0 0 3px rgba(6,42,187,0.12);
+		}
+
+		.catalog-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+			gap: 0.75rem;
+		}
+
+		.catalog-card {
+			border: 1px solid #e2e9ff;
+			border-radius: 12px;
+			padding: 0.8rem;
+			background: #f9fbff;
+			display: flex;
+			flex-direction: column;
+			gap: 0.55rem;
+		}
+
+		.catalog-name {
+			font-size: 0.98rem;
+			font-weight: 800;
+			color: #28356a;
+			line-height: 1.35;
+		}
+
+		.catalog-meta {
+			font-size: 0.85rem;
+			color: #56648f;
+		}
+
+		.catalog-btn {
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			gap: 0.35rem;
+			text-decoration: none;
+			background: linear-gradient(135deg, var(--primary), var(--primary-2));
+			color: white;
+			padding: 0.5rem 0.8rem;
+			border-radius: 9px;
+			font-size: 0.88rem;
+			font-weight: 700;
+		}
+
+		.catalog-actions {
+			margin-top: auto;
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: 0.5rem;
+		}
+
+		.catalog-add-btn {
+			border: 1px solid #cbd8ff;
+			background: white;
+			color: var(--primary);
+			border-radius: 9px;
+			font-size: 0.88rem;
+			font-weight: 700;
+			padding: 0.5rem 0.65rem;
+			cursor: pointer;
+		}
+
+		.catalog-add-btn:disabled {
+			opacity: 0.6;
+			cursor: default;
+		}
+
+		.catalog-remove-btn {
+			border: 1px solid #ffd3d3;
+			background: #fff6f6;
+			color: #c33f3f;
+			border-radius: 9px;
+			font-size: 0.88rem;
+			font-weight: 700;
+			padding: 0.5rem 0.65rem;
+			cursor: pointer;
+		}
+
+		.catalog-remove-btn:disabled {
+			opacity: 0.6;
+			cursor: default;
+		}
+
+		.catalog-empty {
+			padding: 0.8rem;
+			border: 1px dashed #cdd8ff;
+			border-radius: 10px;
+			font-size: 0.9rem;
+			color: #435288;
+			background: #f7f9ff;
+		}
+
+		.block-panel {
+			margin-top: 1rem;
+			background: white;
+			border: 1px solid #e3eaff;
+			border-radius: 16px;
+			padding: 1rem;
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		.block-title {
+			font-size: 1.02rem;
+			font-weight: 800;
+			color: #27325f;
+			margin-bottom: 0.75rem;
+		}
+
+		.form-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+			gap: 0.7rem;
+		}
+
+		.form-grid label {
+			font-size: 0.82rem;
+			font-weight: 700;
+			color: #445383;
+			margin-bottom: 0.25rem;
+			display: block;
+		}
+
+		.form-grid select,
+		.form-grid input {
+			width: 100%;
+			padding: 0.58rem 0.65rem;
+			border: 1px solid #d7e2ff;
+			border-radius: 8px;
+			font-size: 0.9rem;
+		}
+
+		.form-grid .full {
+			grid-column: 1 / -1;
+		}
+
+		.ai-result {
+			margin-top: 0.75rem;
+			padding: 0.75rem;
+			background: #f7faff;
+			border: 1px solid #d8e4ff;
+			border-radius: 10px;
+			color: #2a3970;
+			font-size: 0.9rem;
+			line-height: 1.45;
+		}
+
+		.priority-row {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: 0.6rem;
+			align-items: center;
+			margin-bottom: 0.55rem;
+		}
+
+		.priority-row input[type="range"] {
+			width: 100%;
+		}
+
+		.priority-value {
+			font-size: 0.86rem;
+			font-weight: 700;
+			color: #2d3d75;
+			min-width: 42px;
+			text-align: right;
+		}
+
+		.calc-result {
+			margin-top: 0.7rem;
+			padding: 0.75rem;
+			border-radius: 10px;
+			background: #effaf2;
+			border: 1px solid #c9efd5;
+			font-weight: 700;
+			color: #215d39;
+		}
+
+		.reviews-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+			gap: 0.7rem;
+		}
+
+		.review-card {
+			background: #fbfcff;
+			border: 1px solid #dce5ff;
+			border-radius: 12px;
+			padding: 0.8rem;
+		}
+
+		.review-head {
+			display: flex;
+			justify-content: space-between;
+			gap: 0.5rem;
+			margin-bottom: 0.4rem;
+		}
+
+		.review-badge {
+			display: inline-block;
+			padding: 0.2rem 0.5rem;
+			border-radius: 999px;
+			font-size: 0.73rem;
+			font-weight: 700;
+			background: #eaf4ff;
+			color: #1f5ca7;
+		}
+
+		.map-layout {
+			display: grid;
+			grid-template-columns: 1fr 1.1fr;
+			gap: 0.8rem;
+		}
+
+		.campus-list {
+			display: grid;
+			gap: 0.55rem;
+			max-height: 300px;
+			overflow: auto;
+		}
+
+		.campus-item {
+			padding: 0.65rem;
+			background: #f8fbff;
+			border: 1px solid #dae4ff;
+			border-radius: 10px;
+		}
+
+		.campus-item h4 {
+			font-size: 0.92rem;
+			margin-bottom: 0.25rem;
+			color: #28366a;
+		}
+
+		.campus-meta {
+			font-size: 0.82rem;
+			color: #56638f;
+			margin-bottom: 0.4rem;
+		}
+
+		.campus-map {
+			border: 1px solid #dbe4ff;
+			border-radius: 12px;
+			overflow: hidden;
+			min-height: 300px;
+		}
+
+		@media (max-width: 1024px) {
+			.nav-links {
+				justify-content: flex-end;
+			}
+		}
+
+		@media (max-width: 860px) {
+			.navbar {
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			.nav-links {
+				justify-content: center;
+			}
+
+			.compare-wrap {
+				display: none;
+			}
+
+			.cards {
+				display: grid;
+			}
+
+			.selector-head {
+				align-items: flex-start;
+			}
+
+			.action-group {
+				width: 100%;
+			}
+
+			.catalog-tools {
+				width: 100%;
+			}
+
+			.map-layout {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar">
+		<div class="logo">
+			<i class="fas fa-graduation-cap"></i>
+			UniVerse Pro
+		</div>
+		<div class="nav-links">
+			<a class="nav-link" href="index2.html"><i class="fas fa-home"></i> Главная</a>
+			<a class="nav-link" href="index5.html"><i class="fas fa-ranking-star"></i> Рейтинги</a>
+			<a class="nav-link" href="country.html"><i class="fas fa-globe"></i> Страны</a>
+			<a class="nav-link" href="profile.html"><i class="fas fa-user"></i> Профиль</a>
+		</div>
+	</nav>
+
+	<main class="container">
+		<section class="hero">
+			<h1>Сравнение университетов</h1>
+			<p>Сравнивайте вузы по стоимости, рейтингу, языку обучения, общежитию и возможностям стипендий. Это поможет выбрать лучший вариант под ваш бюджет и цели.</p>
+			<div class="legend">
+				<span><i class="fas fa-check-circle"></i> Сильные стороны</span>
+				<span><i class="fas fa-scale-balanced"></i> Объективные метрики</span>
+				<span><i class="fas fa-mobile-screen"></i> Удобно на телефоне</span>
+			</div>
+		</section>
+
+		<section class="selector-panel" aria-label="Выбор университетов для сравнения">
+			<div class="selector-head">
+				<p class="selector-title">Выберите 2 университета для сравнения</p>
+				<p class="selector-note">Подсветка лучших: цена, рейтинг и языки обучения</p>
+			</div>
+			<div id="optionList" class="option-list"></div>
+			<div class="selector-actions">
+				<div id="selectionHelper" class="helper">Выбрано 0 из 2</div>
+				<div class="action-group">
+					<button id="smartBudgetBtn" class="mini-btn" type="button"><i class="fas fa-wallet"></i> Бюджетный топ-2</button>
+					<button id="smartRatingBtn" class="mini-btn" type="button"><i class="fas fa-trophy"></i> Топ по рейтингу</button>
+					<button id="smartLanguagesBtn" class="mini-btn" type="button"><i class="fas fa-language"></i> Больше языков</button>
+					<button id="shareComparisonBtn" class="mini-btn" type="button"><i class="fas fa-link"></i> Поделиться</button>
+					<button id="clearComparisonBtn" class="mini-btn" type="button"><i class="fas fa-eraser"></i> Очистить</button>
+					<button id="saveComparisonBtn" class="save-btn" type="button">Сохранить сравнение в профиль</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="block-panel" aria-label="AI помощник выбора вуза">
+			<p class="block-title">AI-помощник выбора вуза</p>
+			<div class="form-grid">
+				<div>
+					<label for="aiGoal">Цель</label>
+					<select id="aiGoal">
+						<option value="career">Карьера и зарплата</option>
+						<option value="budget">Минимальный бюджет</option>
+						<option value="global">Международный трек</option>
+					</select>
+				</div>
+				<div>
+					<label for="aiBudget">Бюджет в год</label>
+					<select id="aiBudget">
+						<option value="low">До 3000 USD</option>
+						<option value="mid">3000-8000 USD</option>
+						<option value="high">От 8000 USD</option>
+					</select>
+				</div>
+				<div>
+					<label for="aiLang">Язык обучения</label>
+					<select id="aiLang">
+						<option value="any">Любой</option>
+						<option value="en">Английский</option>
+						<option value="ru">Русский</option>
+					</select>
+				</div>
+				<div class="full">
+					<button id="aiPickBtn" class="mini-btn primary" type="button"><i class="fas fa-wand-magic-sparkles"></i> Подобрать топ-2 автоматически</button>
+				</div>
+			</div>
+			<div id="aiResult" class="ai-result">Ответьте на мини-опрос и нажмите кнопку для автоматического подбора.</div>
+		</section>
+
+		<section class="block-panel" aria-label="Сравнение по моим приоритетам">
+			<p class="block-title">Режим: Сравнить по моим приоритетам</p>
+			<div class="priority-row">
+				<div>
+					<label for="weightPrice">Вес цены</label>
+					<input id="weightPrice" type="range" min="0" max="100" value="40">
+				</div>
+				<span id="weightPriceValue" class="priority-value">40%</span>
+			</div>
+			<div class="priority-row">
+				<div>
+					<label for="weightRating">Вес рейтинга</label>
+					<input id="weightRating" type="range" min="0" max="100" value="35">
+				</div>
+				<span id="weightRatingValue" class="priority-value">35%</span>
+			</div>
+			<div class="priority-row">
+				<div>
+					<label for="weightLanguage">Вес языка</label>
+					<input id="weightLanguage" type="range" min="0" max="100" value="25">
+				</div>
+				<span id="weightLanguageValue" class="priority-value">25%</span>
+			</div>
+		</section>
+
+		<section class="block-panel" aria-label="Калькулятор стоимости">
+			<p class="block-title">Калькулятор стоимости обучения + проживания</p>
+			<div class="form-grid">
+				<div>
+					<label for="calcCountry">Страна</label>
+					<select id="calcCountry"></select>
+				</div>
+				<div>
+					<label for="calcTuition">Обучение в год (USD)</label>
+					<input id="calcTuition" type="number" min="0" value="5000">
+				</div>
+				<div>
+					<label for="calcLiving">Проживание в месяц (USD)</label>
+					<input id="calcLiving" type="number" min="0" value="500">
+				</div>
+				<div>
+					<label for="calcYears">Срок обучения (лет)</label>
+					<input id="calcYears" type="number" min="1" max="8" value="4">
+				</div>
+				<div class="full">
+					<button id="calcBtn" class="mini-btn" type="button"><i class="fas fa-calculator"></i> Рассчитать общий бюджет</button>
+				</div>
+			</div>
+			<div id="calcResult" class="calc-result">Общий бюджет пока не рассчитан.</div>
+		</section>
+
+		<section class="insights-grid" aria-label="Инсайты по выбранному сравнению">
+			<article class="insight-card"><p class="insight-label">Лучший по цене</p><p id="insightPrice" class="insight-value">-</p></article>
+			<article class="insight-card"><p class="insight-label">Лучший по рейтингу</p><p id="insightRating" class="insight-value">-</p></article>
+			<article class="insight-card"><p class="insight-label">Макс. языков</p><p id="insightLanguages" class="insight-value">-</p></article>
+			<article class="insight-card"><p class="insight-label">Рекомендация</p><p id="insightRecommendation" class="insight-value">Выберите 2 университета</p></article>
+		</section>
+
+		<section class="catalog-panel" aria-label="Поиск университетов">
+			<div class="catalog-head">
+				<p class="catalog-title">Поиск университетов</p>
+				<div class="catalog-tools">
+					<p id="catalogCount" class="catalog-count"></p>
+					<select id="catalogSort" class="catalog-sort">
+						<option value="name">Сортировка: по имени</option>
+						<option value="country">По стране</option>
+						<option value="city">По городу</option>
+					</select>
+				</div>
+			</div>
+			<input id="universitySearch" class="catalog-search" type="text" placeholder="Введите название, город или страну">
+			<div id="selectedChips" class="selected-chips"></div>
+			<div id="catalogGrid" class="catalog-grid"></div>
+		</section>
+
+		<h2 class="section-title">Таблица сравнения</h2>
+		<section class="compare-wrap" aria-label="Таблица сравнения университетов">
+			<table id="compareTable"></table>
+		</section>
+
+		<section id="cardsView" class="cards" aria-label="Карточки сравнения для мобильных устройств"></section>
+
+		<section class="block-panel" aria-label="Отзывы студентов">
+			<p class="block-title">Отзывы студентов с верификацией</p>
+			<div class="form-grid" style="margin-bottom: 0.7rem;">
+				<div>
+					<label for="reviewsUniFilter">Университет</label>
+					<select id="reviewsUniFilter"></select>
+				</div>
+				<div>
+					<label for="reviewsMinRating">Минимальный рейтинг</label>
+					<select id="reviewsMinRating">
+						<option value="0">Любой</option>
+						<option value="3">От 3</option>
+						<option value="4">От 4</option>
+						<option value="4.5">От 4.5</option>
+					</select>
+				</div>
+				<div>
+					<label style="display:block;">Только верифицированные</label>
+					<input id="reviewsVerifiedOnly" type="checkbox" checked>
+				</div>
+			</div>
+			<div id="reviewsGrid" class="reviews-grid"></div>
+		</section>
+
+		<section class="block-panel" aria-label="Карта кампусов и общежитий">
+			<p class="block-title">Карта кампусов и общежитий с фильтрами</p>
+			<div class="form-grid" style="margin-bottom: 0.75rem;">
+				<div>
+					<label for="mapSafetyFilter">Безопасность (минимум)</label>
+					<input id="mapSafetyFilter" type="number" min="1" max="10" value="7">
+				</div>
+				<div>
+					<label for="mapDormPriceFilter">Цена общежития до (USD/мес)</label>
+					<input id="mapDormPriceFilter" type="number" min="100" step="50" value="700">
+				</div>
+				<div>
+					<label for="mapUniFilter">Университет</label>
+					<select id="mapUniFilter"></select>
+				</div>
+			</div>
+			<div class="map-layout">
+				<div id="campusList" class="campus-list"></div>
+				<div class="campus-map">
+					<iframe id="campusMap" title="Карта кампуса" width="100%" height="100%" style="border:0; min-height:300px;" loading="lazy"></iframe>
+				</div>
+			</div>
+		</section>
+	</main>
+	<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+	<script>
+		let universities = [
+			{
+				id: 'wu-vienna',
+				name: 'WU Vienna',
+				location: 'Австрия, Вена',
+				fields: 'Экономика, Финансы, Бизнес-аналитика',
+				languages: 'Английский / Немецкий',
+				languageCount: 2,
+				tuition: '€1,500 - €8,000',
+				tuitionMin: 1500,
+				rating: '4.8 / 5',
+				ratingScore: 4.8,
+				dormitory: 'Партнерские резиденции',
+				scholarships: 'Гранты ЕС и академические скидки',
+				fit: 'Тем, кто хочет международную карьеру в Европе'
+			},
+			{
+				id: 'kimep',
+				name: 'KIMEP University',
+				location: 'Казахстан, Алматы',
+				fields: 'Менеджмент, Маркетинг, IT, Международные отношения',
+				languages: 'Английский / Русский',
+				languageCount: 2,
+				tuition: '$6,000 - $12,000',
+				tuitionMin: 6000,
+				rating: '4.6 / 5',
+				ratingScore: 4.6,
+				dormitory: 'Есть кампусное и частное размещение',
+				scholarships: 'Merit-based и социальные скидки',
+				fit: 'Тем, кто ищет англоязычную среду в СНГ'
+			},
+			{
+				id: 'almau',
+				name: 'AlmaU',
+				location: 'Казахстан, Алматы',
+				fields: 'Бизнес, Предпринимательство, Digital, Медиа',
+				languages: 'Английский / Русский / Казахский',
+				languageCount: 3,
+				tuition: '$5,000 - $10,000',
+				tuitionMin: 5000,
+				rating: '4.5 / 5',
+				ratingScore: 4.5,
+				dormitory: 'Чаще частные резиденции',
+				scholarships: 'Внутренние гранты и скидки партнеров',
+				fit: 'Тем, кто ориентирован на бизнес и стартапы'
+			},
+			{
+				id: 'kaznu',
+				name: 'КазНУ им. аль-Фараби',
+				location: 'Казахстан, Алматы',
+				fields: 'Науки, IT, Экономика, Международные отношения',
+				languages: 'Русский / Казахский / Английский',
+				languageCount: 3,
+				tuition: '$2,000 - $5,500',
+				tuitionMin: 2000,
+				rating: '4.7 / 5',
+				ratingScore: 4.7,
+				dormitory: 'Большой выбор студенческих общежитий',
+				scholarships: 'Госгранты и внутренние гранты',
+				fit: 'Тем, кому важны академические направления и кампус'
+			},
+			{
+				id: 'nazarbayev',
+				name: 'Nazarbayev University',
+				location: 'Казахстан, Астана',
+				fields: 'Инженерия, Науки, Public Policy, Медицина',
+				languages: 'Английский',
+				languageCount: 1,
+				tuition: '$0 - $16,000',
+				tuitionMin: 0,
+				rating: '4.9 / 5',
+				ratingScore: 4.9,
+				dormitory: 'Современные кампусные общежития',
+				scholarships: 'Полные и частичные гранты',
+				fit: 'Тем, кто хочет топ-университет с упором на исследования'
+			}
+		];
+
+		const optionList = document.getElementById('optionList');
+		const helper = document.getElementById('selectionHelper');
+		const saveBtn = document.getElementById('saveComparisonBtn');
+		const compareTable = document.getElementById('compareTable');
+		const cardsView = document.getElementById('cardsView');
+		const toast = document.getElementById('toast');
+		const searchInput = document.getElementById('universitySearch');
+		const catalogGrid = document.getElementById('catalogGrid');
+		const catalogCount = document.getElementById('catalogCount');
+		const selectedChips = document.getElementById('selectedChips');
+		const catalogSort = document.getElementById('catalogSort');
+		const smartBudgetBtn = document.getElementById('smartBudgetBtn');
+		const smartRatingBtn = document.getElementById('smartRatingBtn');
+		const smartLanguagesBtn = document.getElementById('smartLanguagesBtn');
+		const shareComparisonBtn = document.getElementById('shareComparisonBtn');
+		const clearComparisonBtn = document.getElementById('clearComparisonBtn');
+		const insightPrice = document.getElementById('insightPrice');
+		const insightRating = document.getElementById('insightRating');
+		const insightLanguages = document.getElementById('insightLanguages');
+		const insightRecommendation = document.getElementById('insightRecommendation');
+		const aiGoal = document.getElementById('aiGoal');
+		const aiBudget = document.getElementById('aiBudget');
+		const aiLang = document.getElementById('aiLang');
+		const aiPickBtn = document.getElementById('aiPickBtn');
+		const aiResult = document.getElementById('aiResult');
+		const weightPrice = document.getElementById('weightPrice');
+		const weightRating = document.getElementById('weightRating');
+		const weightLanguage = document.getElementById('weightLanguage');
+		const weightPriceValue = document.getElementById('weightPriceValue');
+		const weightRatingValue = document.getElementById('weightRatingValue');
+		const weightLanguageValue = document.getElementById('weightLanguageValue');
+		const calcCountry = document.getElementById('calcCountry');
+		const calcTuition = document.getElementById('calcTuition');
+		const calcLiving = document.getElementById('calcLiving');
+		const calcYears = document.getElementById('calcYears');
+		const calcBtn = document.getElementById('calcBtn');
+		const calcResult = document.getElementById('calcResult');
+		const reviewsUniFilter = document.getElementById('reviewsUniFilter');
+		const reviewsMinRating = document.getElementById('reviewsMinRating');
+		const reviewsVerifiedOnly = document.getElementById('reviewsVerifiedOnly');
+		const reviewsGrid = document.getElementById('reviewsGrid');
+		const mapSafetyFilter = document.getElementById('mapSafetyFilter');
+		const mapDormPriceFilter = document.getElementById('mapDormPriceFilter');
+		const mapUniFilter = document.getElementById('mapUniFilter');
+		const campusList = document.getElementById('campusList');
+		const campusMap = document.getElementById('campusMap');
+
+		const MAX_COMPARE = 2;
+		const priorityWeights = { price: 40, rating: 35, language: 25 };
+
+		const allUniversityPaths = [
+			'univer/UST/mit-subscription.html',
+			'univer/UST/mit.html',
+			'univer/UST/mit1.html',
+			'univer/Yaponiya/yaponiya.html',
+			'univer/Yaponiya/yaponiya1.html',
+			'univer/kazakhstan/Almaty/CAU.html',
+			'univer/kazakhstan/Almaty/CAU1.html',
+			'univer/kazakhstan/Almaty/Civil_Aviation_Academy.html',
+			'univer/kazakhstan/Almaty/Civil_Aviation_Academy1.html',
+			'univer/kazakhstan/Almaty/DMU Kazakhstan.html',
+			'univer/kazakhstan/Almaty/DMU Kazakhstan1.html',
+			'univer/kazakhstan/Almaty/EYIK.html',
+			'univer/kazakhstan/Almaty/EYIK1.html',
+			'univer/kazakhstan/Almaty/KazADImG.html',
+			'univer/kazakhstan/Almaty/KazADImG1.html',
+			'univer/kazakhstan/Almaty/KazATiSO.html',
+			'univer/kazakhstan/Almaty/KazATiSO1.html',
+			'univer/kazakhstan/Almaty/KazMUNO.html',
+			'univer/kazakhstan/Almaty/KazMUNO1.html',
+			'univer/kazakhstan/Almaty/KazNAI.html',
+			'univer/kazakhstan/Almaty/KazNAI1.html',
+			'univer/kazakhstan/Almaty/KazNAU.html',
+			'univer/kazakhstan/Almaty/KazNAU1.html',
+			'univer/kazakhstan/Almaty/KazNJP.html',
+			'univer/kazakhstan/Almaty/KazNJP1.html',
+			'univer/kazakhstan/Almaty/KazNP1.html',
+			'univer/kazakhstan/Almaty/KazNPY.html',
+			'univer/kazakhstan/Almaty/KazNaC.html',
+			'univer/kazakhstan/Almaty/KazNaC1.html',
+			'univer/kazakhstan/Almaty/Kaznmy.html',
+			'univer/kazakhstan/Almaty/Kaznmy1.html',
+			'univer/kazakhstan/Almaty/Kimep.html',
+			'univer/kazakhstan/Almaty/Kimep1.html',
+			'univer/kazakhstan/Almaty/Kunaeva.html',
+			'univer/kazakhstan/Almaty/Kunaeva1.html',
+			'univer/kazakhstan/Almaty/METU.html',
+			'univer/kazakhstan/Almaty/METU1.html',
+			'univer/kazakhstan/Almaty/MOK.html',
+			'univer/kazakhstan/Almaty/MOK1.html',
+			'univer/kazakhstan/Almaty/MTGU.html',
+			'univer/kazakhstan/Almaty/MTGU1.html',
+			'univer/kazakhstan/Almaty/MUIT.html',
+			'univer/kazakhstan/Almaty/MUIT1.html',
+			'univer/kazakhstan/Almaty/Satbayev.html',
+			'univer/kazakhstan/Almaty/Satbayev1.html',
+			'univer/kazakhstan/Almaty/Turan.html',
+			'univer/kazakhstan/Almaty/Turan1.html',
+			'univer/kazakhstan/Almaty/UIADK.html',
+			'univer/kazakhstan/Almaty/UIADK1.html',
+			'univer/kazakhstan/Almaty/UIB.html',
+			'univer/kazakhstan/Almaty/UIB1.html',
+			'univer/kazakhstan/Almaty/almau.html',
+			'univer/kazakhstan/Almaty/almau1.html',
+			'univer/kazakhstan/Almaty/aty.html',
+			'univer/kazakhstan/Almaty/aty1.html',
+			'univer/kazakhstan/Almaty/ety.html',
+			'univer/kazakhstan/Almaty/ety1.html',
+			'univer/kazakhstan/Almaty/gumaniter.html',
+			'univer/kazakhstan/Almaty/gumaniter1.html',
+			'univer/kazakhstan/Almaty/kaynar.html',
+			'univer/kazakhstan/Almaty/kaynar1.html',
+			'univer/kazakhstan/Almaty/kaznu.html',
+			'univer/kazakhstan/Almaty/kaznu1.html',
+			'univer/kazakhstan/Almaty/narhoz.html',
+			'univer/kazakhstan/Almaty/narhoz1.html',
+			'univer/kazakhstan/Almaty/univer_enerji.html',
+			'univer/kazakhstan/Almaty/univer_enerji1.html',
+			'univer/kazakhstan/Almaty/КаzАСТ.html',
+			'univer/kazakhstan/Almaty/КаzАСТ1.html',
+			'univer/kazakhstan/Astana/enu.html',
+			'univer/kazakhstan/Astana/enu1.html'
+		];
+
+		function prettyNameFromPath(path) {
+			const file = path.split('/').pop().replace('.html', '');
+			const normalized = file.replace(/1$/, '').replace('-subscription', '');
+			return normalized
+				.replace(/_/g, ' ')
+				.replace(/\s+/g, ' ')
+				.trim();
+		}
+
+		function hashId(value) {
+			let hash = 0;
+			for (let i = 0; i < value.length; i += 1) {
+				hash = ((hash << 5) - hash) + value.charCodeAt(i);
+				hash |= 0;
+			}
+			return `u_${Math.abs(hash)}`;
+		}
+
+		function buildCatalog() {
+			const map = new Map();
+			allUniversityPaths.forEach((path) => {
+				const parts = path.split('/');
+				if (parts.length < 3) return;
+				const country = parts[1] || 'Не указано';
+				const city = parts.length > 3 ? (parts[2] || 'Не указано') : 'Не указано';
+				const key = prettyNameFromPath(path).toLowerCase();
+				const existing = map.get(key);
+				const isAlt = /1\.html$/i.test(path) || /subscription/i.test(path);
+				if (!existing) {
+					map.set(key, { id: hashId(path), name: prettyNameFromPath(path), path, country, city, isAlt });
+					return;
+				}
+				if (existing.isAlt && !isAlt) {
+					map.set(key, { id: hashId(path), name: prettyNameFromPath(path), path, country, city, isAlt });
+				}
+			});
+			return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+		}
+
+		const allUniversitiesCatalog = buildCatalog();
+		const catalogById = new Map(allUniversitiesCatalog.map((item) => [item.id, item]));
+
+		function getOrCreateUniversityFromCatalog(catalogItem) {
+			let uni = universities.find((u) => u.sourcePath === catalogItem.path || u.name === catalogItem.name);
+			if (uni) return uni;
+
+			uni = {
+				id: catalogItem.id,
+				name: catalogItem.name,
+				location: `${catalogItem.country}, ${catalogItem.city}`,
+				fields: 'Информация обновляется',
+				languages: 'Н/Д',
+				languageCount: 0,
+				tuition: 'Н/Д',
+				tuitionMin: 999999999,
+				rating: 'Н/Д',
+				ratingScore: 0,
+				dormitory: 'Информация обновляется',
+				scholarships: 'Информация обновляется',
+				fit: 'Уточните детали на странице университета',
+				sourcePath: catalogItem.path
+			};
+			universities.push(uni);
+			return uni;
+		}
+
+		function addCatalogUniversityToComparison(catalogId) {
+			const catalogItem = catalogById.get(catalogId);
+			if (!catalogItem) return;
+			const uni = getOrCreateUniversityFromCatalog(catalogItem);
+
+			if (selectedIds.includes(uni.id)) {
+				showToast('Этот университет уже в сравнении');
+				return;
+			}
+
+			if (selectedIds.length >= MAX_COMPARE) {
+				showToast(`Можно выбрать максимум ${MAX_COMPARE} университета`);
+				return;
+			}
+
+			selectedIds.push(uni.id);
+			buildOptions();
+			render();
+			renderCatalog();
+			showToast(`${uni.name} добавлен в сравнение`);
+		}
+
+		function removeCatalogUniversityFromComparison(catalogId) {
+			const catalogItem = catalogById.get(catalogId);
+			if (!catalogItem) return;
+			const uni = universities.find((u) => u.sourcePath === catalogItem.path || u.name === catalogItem.name);
+			if (!uni || !selectedIds.includes(uni.id)) {
+				showToast('Этого университета нет в сравнении');
+				return;
+			}
+
+			selectedIds = selectedIds.filter((id) => id !== uni.id);
+			buildOptions();
+			render();
+			renderCatalog();
+			showToast(`${uni.name} удален из сравнения`);
+		}
+
+		let selectedIds = ['wu-vienna', 'kimep'];
+
+		const verifiedReviews = [
+			{ uniId: 'wu-vienna', student: 'A. Idris', text: 'Сильная аналитика и стажировки в банках Вены.', rating: 4.8, verified: true },
+			{ uniId: 'kimep', student: 'M. Sanzhar', text: 'Отличные англоязычные преподаватели и клубы.', rating: 4.5, verified: true },
+			{ uniId: 'almau', student: 'D. Aigerim', text: 'Много практики и проектов с бизнесом.', rating: 4.4, verified: true },
+			{ uniId: 'kaznu', student: 'R. Timur', text: 'Сильная база по фундаментальным дисциплинам.', rating: 4.6, verified: true },
+			{ uniId: 'nazarbayev', student: 'L. Daniya', text: 'Кампус и исследовательские лаборатории на высоком уровне.', rating: 4.9, verified: true }
+		];
+
+		function enrichUniversities() {
+			const byId = {
+				'wu-vienna': { country: 'Австрия', city: 'Вена', livingMonthly: 1100, internships: '93%', employmentRate: '95%', salary: 'от 3200 EUR', salaryValue: 3400, safetyScore: 9, dormPrice: 750, lat: 48.210033, lng: 16.363449 },
+				'kimep': { country: 'Казахстан', city: 'Алматы', livingMonthly: 550, internships: '86%', employmentRate: '90%', salary: 'от 850 USD', salaryValue: 850, safetyScore: 8, dormPrice: 420, lat: 43.222015, lng: 76.851248 },
+				'almau': { country: 'Казахстан', city: 'Алматы', livingMonthly: 520, internships: '82%', employmentRate: '88%', salary: 'от 780 USD', salaryValue: 780, safetyScore: 8, dormPrice: 460, lat: 43.238949, lng: 76.889709 },
+				'kaznu': { country: 'Казахстан', city: 'Алматы', livingMonthly: 500, internships: '80%', employmentRate: '87%', salary: 'от 700 USD', salaryValue: 700, safetyScore: 7, dormPrice: 300, lat: 43.222982, lng: 76.928055 },
+				'nazarbayev': { country: 'Казахстан', city: 'Астана', livingMonthly: 650, internships: '94%', employmentRate: '96%', salary: 'от 1200 USD', salaryValue: 1200, safetyScore: 9, dormPrice: 500, lat: 51.090389, lng: 71.398690 }
+			};
+
+			universities = universities.map((u) => ({
+				...u,
+				...(byId[u.id] || {}),
+				internships: (byId[u.id] && byId[u.id].internships) || 'Н/Д',
+				employmentRate: (byId[u.id] && byId[u.id].employmentRate) || 'Н/Д',
+				salary: (byId[u.id] && byId[u.id].salary) || 'Н/Д',
+				salaryValue: (byId[u.id] && byId[u.id].salaryValue) || 0,
+				country: (byId[u.id] && byId[u.id].country) || 'Не указано',
+				city: (byId[u.id] && byId[u.id].city) || 'Не указано',
+				livingMonthly: (byId[u.id] && byId[u.id].livingMonthly) || 500,
+				safetyScore: (byId[u.id] && byId[u.id].safetyScore) || 7,
+				dormPrice: (byId[u.id] && byId[u.id].dormPrice) || 500,
+				lat: (byId[u.id] && byId[u.id].lat) || 43.238949,
+				lng: (byId[u.id] && byId[u.id].lng) || 76.889709
+			}));
+		}
+
+		function computePriorityScores(selected) {
+			const wPrice = Number(weightPrice.value);
+			const wRating = Number(weightRating.value);
+			const wLanguage = Number(weightLanguage.value);
+			const wSum = wPrice + wRating + wLanguage || 1;
+
+			const priced = selected.map((u) => u.tuitionMin).filter((x) => Number.isFinite(x) && x < 999999999);
+			const minP = priced.length ? Math.min(...priced) : 0;
+			const maxP = priced.length ? Math.max(...priced) : 1;
+
+			return selected.map((u) => {
+				const priceNorm = !Number.isFinite(u.tuitionMin) || u.tuitionMin >= 999999999
+					? 0
+					: (maxP === minP ? 1 : (maxP - u.tuitionMin) / (maxP - minP));
+				const ratingNorm = Number.isFinite(u.ratingScore) ? (u.ratingScore / 5) : 0;
+				const langNorm = Number.isFinite(u.languageCount) ? Math.min(u.languageCount / 3, 1) : 0;
+				const score = ((priceNorm * wPrice) + (ratingNorm * wRating) + (langNorm * wLanguage)) / wSum;
+				return { id: u.id, score };
+			});
+		}
+
+		function refreshWeightLabels() {
+			weightPriceValue.textContent = `${weightPrice.value}%`;
+			weightRatingValue.textContent = `${weightRating.value}%`;
+			weightLanguageValue.textContent = `${weightLanguage.value}%`;
+			render();
+		}
+
+		function runAiAssistant() {
+			const goal = aiGoal.value;
+			const budget = aiBudget.value;
+			const language = aiLang.value;
+			const ranked = universities.map((u) => {
+				let score = 0;
+				if (goal === 'career') score += (u.ratingScore || 0) * 14 + (u.salaryValue || 0) / 120;
+				if (goal === 'budget') score += (20000 - (u.tuitionMin || 20000)) / 70;
+				if (goal === 'global') score += (u.languageCount || 0) * 20 + (u.ratingScore || 0) * 8;
+
+				if (budget === 'low' && (u.tuitionMin || 99999) <= 3000) score += 35;
+				if (budget === 'mid' && (u.tuitionMin || 0) > 3000 && (u.tuitionMin || 99999) <= 8000) score += 30;
+				if (budget === 'high' && (u.tuitionMin || 0) > 8000) score += 20;
+
+				if (language === 'en' && (u.languages || '').toLowerCase().includes('англ')) score += 22;
+				if (language === 'ru' && (u.languages || '').toLowerCase().includes('рус')) score += 18;
+				if (language === 'any') score += 8;
+
+				return { id: u.id, name: u.name, score };
+			}).sort((a, b) => b.score - a.score);
+
+			selectedIds = ranked.slice(0, MAX_COMPARE).map((x) => x.id);
+			buildOptions();
+			render();
+			renderCatalog();
+			aiResult.innerHTML = `AI выбрал: <strong>${ranked.slice(0, MAX_COMPARE).map((x) => x.name).join(' vs ')}</strong><br>Параметры: цель «${aiGoal.options[aiGoal.selectedIndex].text}», бюджет «${aiBudget.options[aiBudget.selectedIndex].text}», язык «${aiLang.options[aiLang.selectedIndex].text}».`;
+		}
+
+		function populateCountryCalculator() {
+			const countries = [...new Set(universities.map((u) => u.country).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ru'));
+			calcCountry.innerHTML = countries.map((c) => `<option value="${c}">${c}</option>`).join('');
+		}
+
+		function calculateBudget() {
+			const country = calcCountry.value;
+			const tuition = Number(calcTuition.value || 0);
+			const living = Number(calcLiving.value || 0);
+			const years = Number(calcYears.value || 0);
+			const total = (tuition + (living * 12)) * years;
+			calcResult.textContent = `Страна: ${country}. Общий бюджет на ${years} г.: ${total.toLocaleString('ru-RU')} USD`;
+		}
+
+		function populateReviewsFilter() {
+			reviewsUniFilter.innerHTML = ['<option value="all">Все университеты</option>']
+				.concat(universities.map((u) => `<option value="${u.id}">${u.name}</option>`))
+				.join('');
+		}
+
+		function renderReviews() {
+			const uniId = reviewsUniFilter.value;
+			const min = Number(reviewsMinRating.value || 0);
+			const onlyVerified = reviewsVerifiedOnly.checked;
+			const list = verifiedReviews.filter((r) => {
+				if (uniId !== 'all' && r.uniId !== uniId) return false;
+				if (r.rating < min) return false;
+				if (onlyVerified && !r.verified) return false;
+				return true;
+			});
+
+			if (!list.length) {
+				reviewsGrid.innerHTML = '<div class="catalog-empty">Отзывов по текущему фильтру не найдено.</div>';
+				return;
+			}
+
+			reviewsGrid.innerHTML = list.map((r) => {
+				const uni = universities.find((u) => u.id === r.uniId);
+				return `<article class="review-card"><div class="review-head"><strong>${uni ? uni.name : 'Университет'}</strong><span class="review-badge">${r.verified ? 'Верифицировано' : 'Без верификации'}</span></div><p style="font-size:0.88rem; color:#4e5d88; margin-bottom:0.35rem;">${r.text}</p><p style="font-size:0.8rem; color:#6b79a3;">${r.student} · Оценка ${r.rating}/5</p></article>`;
+			}).join('');
+		}
+
+		function populateMapFilters() {
+			mapUniFilter.innerHTML = ['<option value="all">Все университеты</option>']
+				.concat(universities.map((u) => `<option value="${u.id}">${u.name}</option>`))
+				.join('');
+		}
+
+		function showCampusOnMap(lat, lng) {
+			campusMap.src = `https://maps.google.com/maps?q=${lat},${lng}&z=14&output=embed`;
+		}
+
+		function renderCampusMap() {
+			const minSafety = Number(mapSafetyFilter.value || 0);
+			const maxDormPrice = Number(mapDormPriceFilter.value || 99999);
+			const uniFilter = mapUniFilter.value;
+			const list = universities.filter((u) => {
+				if (uniFilter !== 'all' && u.id !== uniFilter) return false;
+				if ((u.safetyScore || 0) < minSafety) return false;
+				if ((u.dormPrice || 99999) > maxDormPrice) return false;
+				return true;
+			});
+
+			if (!list.length) {
+				campusList.innerHTML = '<div class="catalog-empty">Нет кампусов по выбранным фильтрам.</div>';
+				showCampusOnMap(43.238949, 76.889709);
+				return;
+			}
+
+			campusList.innerHTML = list.map((u) => `<article class="campus-item"><h4>${u.name}</h4><div class="campus-meta">${u.location} · Безопасность ${u.safetyScore}/10 · Общежитие ${u.dormPrice} USD/мес</div><button class="mini-btn" type="button" data-map-id="${u.id}">Показать на карте</button></article>`).join('');
+			campusList.querySelectorAll('[data-map-id]').forEach((btn) => {
+				btn.addEventListener('click', () => {
+					const uni = universities.find((u) => u.id === btn.dataset.mapId);
+					if (uni) showCampusOnMap(uni.lat, uni.lng);
+				});
+			});
+
+			showCampusOnMap(list[0].lat, list[0].lng);
+		}
+
+		function showToast(message) {
+			toast.textContent = message;
+			toast.classList.add('show');
+			setTimeout(() => toast.classList.remove('show'), 2300);
+		}
+
+		function getSelectedUniversities() {
+			return universities.filter((u) => selectedIds.includes(u.id));
+		}
+
+		function buildOptions() {
+			optionList.innerHTML = universities.map((u) => {
+				const checked = selectedIds.includes(u.id) ? 'checked' : '';
+				return `<label class="uni-option"><input type="checkbox" value="${u.id}" ${checked}> ${u.name}</label>`;
+			}).join('');
+
+			optionList.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+				input.addEventListener('change', () => {
+					if (input.checked) {
+						if (selectedIds.length >= MAX_COMPARE) {
+							input.checked = false;
+							showToast(`Можно выбрать максимум ${MAX_COMPARE} университета`);
+							return;
+						}
+						selectedIds.push(input.value);
+					} else {
+						selectedIds = selectedIds.filter((id) => id !== input.value);
+					}
+					render();
+				});
+			});
+		}
+
+		function bestMetrics(selected) {
+			const priced = selected.filter((u) => Number.isFinite(u.tuitionMin) && u.tuitionMin < 999999999);
+			const rated = selected.filter((u) => Number.isFinite(u.ratingScore) && u.ratingScore > 0);
+			const langed = selected.filter((u) => Number.isFinite(u.languageCount) && u.languageCount > 0);
+			const minPrice = priced.length ? Math.min(...priced.map((u) => u.tuitionMin)) : null;
+			const maxRating = rated.length ? Math.max(...rated.map((u) => u.ratingScore)) : null;
+			const maxLang = langed.length ? Math.max(...langed.map((u) => u.languageCount)) : null;
+			return { minPrice, maxRating, maxLang };
+		}
+
+		function renderInsights(selected) {
+			if (selected.length < 2) {
+				insightPrice.textContent = '-';
+				insightRating.textContent = '-';
+				insightLanguages.textContent = '-';
+				insightRecommendation.textContent = 'Выберите 2 университета';
+				return;
+			}
+
+			const best = bestMetrics(selected);
+			const bestPriceUni = best.minPrice === null ? null : selected.find((u) => u.tuitionMin === best.minPrice);
+			const bestRatingUni = best.maxRating === null ? null : selected.find((u) => u.ratingScore === best.maxRating);
+			const bestLangUni = best.maxLang === null ? null : selected.find((u) => u.languageCount === best.maxLang);
+
+			insightPrice.textContent = bestPriceUni ? `${bestPriceUni.name} (${bestPriceUni.tuition})` : 'Недостаточно данных';
+			insightRating.textContent = bestRatingUni ? `${bestRatingUni.name} (${bestRatingUni.rating})` : 'Недостаточно данных';
+			insightLanguages.textContent = bestLangUni ? `${bestLangUni.name} (${bestLangUni.languages})` : 'Недостаточно данных';
+
+			let recommendation = 'Сбалансированный выбор';
+			if (bestPriceUni && bestRatingUni && bestPriceUni.id === bestRatingUni.id) {
+				recommendation = `Лучший общий вариант: ${bestPriceUni.name}`;
+			} else if (bestRatingUni) {
+				recommendation = `Для качества: ${bestRatingUni.name}; для бюджета: ${bestPriceUni ? bestPriceUni.name : 'нет данных'}`;
+			}
+			const priorityScores = computePriorityScores(selected);
+			const topPriority = priorityScores.sort((a, b) => b.score - a.score)[0];
+			const topUni = selected.find((u) => u.id === topPriority.id);
+			if (topUni) {
+				recommendation += `. По вашим весам лидирует: ${topUni.name}`;
+			}
+			insightRecommendation.textContent = recommendation;
+		}
+
+		function runSmartSelection(mode) {
+			const candidates = universities.filter((u) => !String(u.id).startsWith('u_'));
+			let sorted = [];
+			if (mode === 'budget') {
+				sorted = [...candidates].sort((a, b) => a.tuitionMin - b.tuitionMin);
+			}
+			if (mode === 'rating') {
+				sorted = [...candidates].sort((a, b) => b.ratingScore - a.ratingScore);
+			}
+			if (mode === 'languages') {
+				sorted = [...candidates].sort((a, b) => b.languageCount - a.languageCount);
+			}
+			selectedIds = sorted.slice(0, MAX_COMPARE).map((u) => u.id);
+			buildOptions();
+			render();
+			renderCatalog();
+		}
+
+		function clearComparison() {
+			selectedIds = [];
+			buildOptions();
+			render();
+			renderCatalog();
+			showToast('Сравнение очищено');
+		}
+
+		function shareComparison() {
+			if (selectedIds.length !== MAX_COMPARE) {
+				showToast(`Выберите ровно ${MAX_COMPARE} университета`);
+				return;
+			}
+			const url = new URL(window.location.href);
+			url.searchParams.set('compare', selectedIds.join(','));
+			if (navigator.clipboard && window.isSecureContext) {
+				navigator.clipboard.writeText(url.toString()).then(() => showToast('Ссылка скопирована'));
+				return;
+			}
+			showToast('Скопируйте ссылку из адресной строки');
+			window.history.replaceState({}, '', url.toString());
+		}
+
+		function loadComparisonFromUrl() {
+			const params = new URLSearchParams(window.location.search);
+			const raw = params.get('compare');
+			if (!raw) return;
+			const ids = raw.split(',').map((x) => x.trim()).filter(Boolean);
+			const valid = ids.filter((id) => universities.some((u) => u.id === id)).slice(0, MAX_COMPARE);
+			if (valid.length >= MAX_COMPARE) {
+				selectedIds = valid;
+			}
+		}
+
+		function renderTable(selected) {
+			if (selected.length < 2) {
+				compareTable.innerHTML = '<thead><tr><th>Параметр</th></tr></thead><tbody><tr><td>Выберите минимум 2 университета для сравнения.</td></tr></tbody>';
+				return;
+			}
+
+			const best = bestMetrics(selected);
+			const header = `<thead><tr><th>Параметр</th>${selected.map((u) => `<th>${u.name}</th>`).join('')}</tr></thead>`;
+
+			const rows = [
+				{ label: 'Страна и город', key: 'location' },
+				{ label: 'Направления', key: 'fields' },
+				{ label: 'Языки обучения', key: 'languages', metric: 'language' },
+				{ label: 'Годовая стоимость', key: 'tuition', metric: 'price' },
+				{ label: 'Рейтинг (из 5)', key: 'rating', metric: 'rating' },
+				{ label: 'Стажировки', key: 'internships' },
+				{ label: 'Трудоустройство', key: 'employmentRate' },
+				{ label: 'Средняя зарплата выпускников', key: 'salary' },
+				{ label: 'Проживание в месяц (USD)', key: 'livingMonthly' },
+				{ label: 'Безопасность кампуса', key: 'safetyScore' },
+				{ label: 'Общежитие', key: 'dormitory' },
+				{ label: 'Цена общежития (USD/мес)', key: 'dormPrice' },
+				{ label: 'Стипендии', key: 'scholarships' },
+				{ label: 'Кому подходит', key: 'fit' }
+			];
+
+			const scores = computePriorityScores(selected);
+			const bestScore = Math.max(...scores.map((s) => s.score));
+
+			const body = rows.map((row) => {
+				const cells = selected.map((u) => {
+					let isBest = false;
+					let suffix = '';
+					if (row.metric === 'price' && best.minPrice !== null && u.tuitionMin === best.minPrice) {
+						isBest = true;
+						suffix = ' <span class="badge badge-good">лучшая цена</span>';
+					}
+					if (row.metric === 'rating' && best.maxRating !== null && u.ratingScore === best.maxRating) {
+						isBest = true;
+						suffix = ' <span class="badge badge-good">лучший рейтинг</span>';
+					}
+					if (row.metric === 'language' && best.maxLang !== null && u.languageCount === best.maxLang) {
+						isBest = true;
+						suffix = ' <span class="badge badge-good">больше языков</span>';
+					}
+					const cls = isBest ? ' class="best-cell"' : '';
+					return `<td${cls}>${u[row.key]}${suffix}</td>`;
+				}).join('');
+				return `<tr><td>${row.label}</td>${cells}</tr>`;
+			}).join('') + `<tr><td>Итоговый score по вашим весам</td>${selected.map((u) => {
+				const sc = scores.find((s) => s.id === u.id);
+				const val = sc ? (sc.score * 100).toFixed(1) : '0.0';
+				const cls = sc && sc.score === bestScore ? ' class="best-cell"' : '';
+				return `<td${cls}>${val} / 100</td>`;
+			}).join('')}</tr>`;
+
+			compareTable.innerHTML = `${header}<tbody>${body}</tbody>`;
+		}
+
+		function renderCards(selected) {
+			if (selected.length < 2) {
+				cardsView.innerHTML = '<article class="uni-card"><h3>Нужно минимум 2 университета</h3><div class="uni-item">Отметьте еще один вуз в списке выше.</div></article>';
+				return;
+			}
+			const best = bestMetrics(selected);
+			cardsView.innerHTML = selected.map((u) => {
+				const marks = [];
+				if (best.minPrice !== null && u.tuitionMin === best.minPrice) marks.push('<span class="badge badge-good">лучшая цена</span>');
+				if (best.maxRating !== null && u.ratingScore === best.maxRating) marks.push('<span class="badge badge-good">лучший рейтинг</span>');
+				if (best.maxLang !== null && u.languageCount === best.maxLang) marks.push('<span class="badge badge-good">больше языков</span>');
+				return `
+					<article class="uni-card">
+						<h3>${u.name}</h3>
+						<div class="uni-item"><strong>Метки</strong>${marks.join(' ') || 'Без лидерской метки'}</div>
+						<div class="uni-item"><strong>Страна и город</strong>${u.location}</div>
+						<div class="uni-item"><strong>Стоимость</strong>${u.tuition}</div>
+						<div class="uni-item"><strong>Рейтинг</strong>${u.rating}</div>
+						<div class="uni-item"><strong>Языки</strong>${u.languages}</div>
+					</article>
+				`;
+			}).join('');
+		}
+
+		function saveComparison() {
+			if (selectedIds.length !== MAX_COMPARE) {
+				showToast(`Для сохранения выберите ровно ${MAX_COMPARE} университета`);
+				return;
+			}
+			const key = 'universe_profile_comparisons';
+			const raw = localStorage.getItem(key);
+			const existing = raw ? JSON.parse(raw) : [];
+			const selected = getSelectedUniversities();
+			existing.push({
+				id: Date.now(),
+				createdAt: new Date().toISOString(),
+				universities: selected.map((u) => ({ id: u.id, name: u.name }))
+			});
+			localStorage.setItem(key, JSON.stringify(existing));
+			showToast('Сравнение сохранено в профиль');
+		}
+
+		function render() {
+			const selected = getSelectedUniversities();
+			helper.textContent = `Выбрано ${selected.length} из ${MAX_COMPARE}`;
+			saveBtn.disabled = selected.length < 2;
+			renderTable(selected);
+			renderCards(selected);
+			renderInsights(selected);
+			selectedChips.innerHTML = selected.length
+				? selected.map((u) => `<span class="selected-chip">${u.name}</span>`).join('')
+				: '<span class="selected-chip">Ничего не выбрано</span>';
+		}
+
+		function renderCatalog() {
+			const query = searchInput.value.trim().toLowerCase();
+			let filtered = allUniversitiesCatalog.filter((u) => {
+				return u.name.toLowerCase().includes(query)
+					|| u.city.toLowerCase().includes(query)
+					|| u.country.toLowerCase().includes(query);
+			});
+
+			if (catalogSort.value === 'country') {
+				filtered = [...filtered].sort((a, b) => `${a.country}${a.name}`.localeCompare(`${b.country}${b.name}`, 'ru'));
+			} else if (catalogSort.value === 'city') {
+				filtered = [...filtered].sort((a, b) => `${a.city}${a.name}`.localeCompare(`${b.city}${b.name}`, 'ru'));
+			} else {
+				filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+			}
+
+			catalogCount.textContent = `Найдено: ${filtered.length} из ${allUniversitiesCatalog.length}`;
+			if (!filtered.length) {
+				catalogGrid.innerHTML = '<div class="catalog-empty">По вашему запросу ничего не найдено. Попробуйте другое название.</div>';
+				return;
+			}
+
+			catalogGrid.innerHTML = filtered.map((u) => {
+				const inComparison = selectedIds.includes((universities.find((item) => item.sourcePath === u.path || item.name === u.name) || {}).id);
+				const disabled = inComparison ? 'disabled' : '';
+				const removeDisabled = inComparison ? '' : 'disabled';
+				const btnText = inComparison ? 'Уже в сравнении' : 'Добавить в сравнение';
+				return `
+					<article class="catalog-card">
+						<div class="catalog-name">${u.name}</div>
+						<div class="catalog-meta">${u.country}, ${u.city}</div>
+						<div class="catalog-actions">
+							<a class="catalog-btn" href="${u.path}"><i class="fas fa-arrow-up-right-from-square"></i> Подробнее</a>
+							<button class="catalog-add-btn" type="button" data-catalog-id="${u.id}" ${disabled}>${btnText}</button>
+							<button class="catalog-remove-btn" type="button" data-catalog-id="${u.id}" ${removeDisabled}>Убрать</button>
+						</div>
+					</article>
+				`;
+			}).join('');
+
+			catalogGrid.querySelectorAll('.catalog-add-btn').forEach((btn) => {
+				btn.addEventListener('click', () => addCatalogUniversityToComparison(btn.dataset.catalogId));
+			});
+
+			catalogGrid.querySelectorAll('.catalog-remove-btn').forEach((btn) => {
+				btn.addEventListener('click', () => removeCatalogUniversityFromComparison(btn.dataset.catalogId));
+			});
+		}
+
+		saveBtn.addEventListener('click', saveComparison);
+		searchInput.addEventListener('input', renderCatalog);
+		catalogSort.addEventListener('change', renderCatalog);
+		smartBudgetBtn.addEventListener('click', () => runSmartSelection('budget'));
+		smartRatingBtn.addEventListener('click', () => runSmartSelection('rating'));
+		smartLanguagesBtn.addEventListener('click', () => runSmartSelection('languages'));
+		shareComparisonBtn.addEventListener('click', shareComparison);
+		clearComparisonBtn.addEventListener('click', clearComparison);
+		aiPickBtn.addEventListener('click', runAiAssistant);
+		[weightPrice, weightRating, weightLanguage].forEach((slider) => slider.addEventListener('input', refreshWeightLabels));
+		calcBtn.addEventListener('click', calculateBudget);
+		reviewsUniFilter.addEventListener('change', renderReviews);
+		reviewsMinRating.addEventListener('change', renderReviews);
+		reviewsVerifiedOnly.addEventListener('change', renderReviews);
+		mapSafetyFilter.addEventListener('input', renderCampusMap);
+		mapDormPriceFilter.addEventListener('input', renderCampusMap);
+		mapUniFilter.addEventListener('change', renderCampusMap);
+
+		enrichUniversities();
+		loadComparisonFromUrl();
+		populateCountryCalculator();
+		populateReviewsFilter();
+		populateMapFilters();
+		refreshWeightLabels();
+		buildOptions();
+		render();
+		renderCatalog();
+		renderReviews();
+		renderCampusMap();
+	</script>
+<script src="/design-switcher-index2.js"></script>
+</body>
+</html>
