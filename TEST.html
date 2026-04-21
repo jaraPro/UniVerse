@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тестирование UniVerse Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .test-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .test-card h2 {
+      color: #062abb;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .test-item {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #062abb;
+    }
+
+    .test-item h3 {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .test-item p {
+      margin: 0.3rem 0;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .code {
+      background: #f0f0f0;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+      display: inline-block;
+      margin: 0.3rem 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      background: #062abb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background: #0a4bb8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(6, 42, 187, 0.3);
+    }
+
+    .btn-secondary {
+      background: #ff6b6b;
+    }
+
+    .btn-secondary:hover {
+      background: #ff4757;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #2ecc71;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #2ecc71;
+    }
+
+    .warning {
+      background: #fff3cd;
+      color: #f39c12;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #f39c12;
+    }
+
+    .checklist {
+      list-style: none;
+    }
+
+    .checklist li {
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding-left: 2.5rem;
+      position: relative;
+    }
+
+    .checklist li:before {
+      content: "✓";
+      position: absolute;
+      left: 1rem;
+      color: #2ecc71;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .copy-btn {
+      background: #4ecdc4;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+
+    .copy-btn:hover {
+      background: #3ab8b0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- HEADER -->
+  <div class="test-card">
+    <h2 style="font-size: 2rem; margin-bottom: 1rem;">
+      <i class="fas fa-flask"></i> Тестирование UniVerse Pro
+    </h2>
+    <p style="font-size: 1.1rem; color: #666;">
+      Добро пожаловать на страницу тестирования! Здесь вы найдете всю информацию для проверки новой системы.
+    </p>
+    <div class="success">
+      <i class="fas fa-check-circle"></i> <strong>Все компоненты готовы к тестированию!</strong>
+    </div>
+  </div>
+
+  <!-- DEMO ACCOUNTS -->
+  <div class="test-card">
+    <h2><i class="fas fa-user-circle"></i> Демо-аккаунты для тестирования</h2>
+    
+    <div class="test-item">
+      <h3>👤 Аккаунт #1 (Основной)</h3>
+      <p>Email: <span class="code">test@example.com</span> 
+        <button class="btn copy-btn" onclick="copy('test@example.com')">Копировать</button></p>
+      <p>Пароль: <span class="code">password123</span>
+        <button class="btn copy-btn" onclick="copy('password123')">Копировать</button></p>
+      <p style="margin-top: 0.8rem; color: #999; font-style: italic;">Создан автоматически для демонстрации</p>
+    </div>
+
+    <div class="test-item">
+      <h3>👤 Аккаунт #2 (Альтернативный)</h3>
+      <p>Email: <span class="code">student@example.com</span>
+        <button class="btn copy-btn" onclick="copy('student@example.com')">Копировать</button></p>
+      <p>Пароль: <span class="code">testpass456</span>
+        <button class="btn copy-btn" onclick="copy('testpass456')">Копировать</button></p>
+      <p style="margin-top: 0.8rem; color: #999; font-style: italic;">Для тестирования многоаккаунтности</p>
+    </div>
+
+    <button class="btn" onclick="injectDemoAccounts()">
+      <i class="fas fa-inject"></i> Инъектировать демо-аккаунты
+    </button>
+  </div>
+
+  <!-- TESTING CHECKLIST -->
+  <div class="test-card">
+    <h2><i class="fas fa-tasks"></i> Чек-лист тестирования</h2>
+    
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">функциональность:</h3>
+    <ul class="checklist">
+      <li>index2.html - Главная страница загружается без ошибок</li>
+      <li>index5.html - Страница поиска загружается без ошибок</li>
+      <li>profile.html - Профиль загружается без ошибок</li>
+      <li>auth.js - Модальное окно открывается при клике</li>
+      <li>Регистрация - Можно создать новый аккаунт</li>
+      <li>Вход - Можно войти с существующим аккаунтом</li>
+      <li>Выход - Кнопка выхода удаляет session</li>
+    </ul>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Поиск и фильтры:</h3>
+    <ul class="checklist">
+      <li>Поиск по названию университета работает</li>
+      <li>Фильтр по стране работает</li>
+      <li>Фильтр по городу работает</li>
+      <li>Фильтр по рейтингу работает</li>
+      <li>Сортировка по названию (A-Z) работает</li>
+      <li>Сортировка по городу работает</li>
+      <li>Сортировка по рейтингу работает</li>
+      <li>Кнопка "Очистить" сбрасывает все фильтры</li>
+    </ul>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Профиль пользователя:</h3>
+    <ul class="checklist">
+      <li>Боковая панель профиля отображает корректные данные</li>
+      <li>Вкладка "Профиль" показывает информацию для чтения</li>
+      <li>Вкладка "Редактирование" позволяет менять данные</li>
+      <li>Вкладка "Избранное" показывает выбранные университеты</li>
+      <li>Вкладка "Настройки" отображается корректно</li>
+      <li>Можно переключаться между аккаунтами</li>
+      <li>Можно добавить новый аккаунт из профиля</li>
+      <li>Можно удалить аккаунт с подтверждением</li>
+    </ul>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Избранное:</h3>
+    <ul class="checklist">
+      <li>Нажим ❤️ добавляет университет в избранное</li>
+      <li>Нажим ❤️ красная - удаляет из избранного</li>
+      <li>Избранное сохраняется в localStorage</li>
+      <li>Избранное не требует аутентификации для просмотра</li>
+      <li>Избранное показывается на вкладке профиля</li>
+    </ul>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Мобильная адаптивность:</h3>
+    <ul class="checklist">
+      <li>На мобильном (320px) все элементы видны</li>
+      <li>На планшете (768px) навигация работает</li>
+      <li>На десктопе (1200px+) макет оптимален</li>
+      <li>Все кнопки кликабельны на мобильном</li>
+      <li>Модальное окно правильно позиционировано на всех размерах</li>
+    </ul>
+  </div>
+
+  <!-- PAGES TO TEST -->
+  <div class="test-card">
+    <h2><i class="fas fa-globe"></i> Страницы для тестирования</h2>
+    
+    <div class="test-item">
+      <h3>1️⃣ Главная страница</h3>
+      <p>Начните здесь - красивый hero раздел, преимущества, статистика</p>
+      <a href="index2.html" class="btn">
+        <i class="fas fa-home"></i> Открыть index2.html
+      </a>
+    </div>
+
+    <div class="test-item">
+      <h3>2️⃣ Поиск университетов</h3>
+      <p>Основной функционал - поиск, фильтры, сортировка, избранное</p>
+      <a href="index5.html" class="btn">
+        <i class="fas fa-search"></i> Открыть index5.html
+      </a>
+    </div>
+
+    <div class="test-item">
+      <h3>3️⃣ Профиль пользователя</h3>
+      <p>Требует аутентификации - личные данные, аккаунты, избранное</p>
+      <a href="profile.html" class="btn">
+        <i class="fas fa-user"></i> Открыть profile.html
+      </a>
+    </div>
+
+    <div class="test-item">
+      <h3>4️⃣ Документация</h3>
+      <p><i class="fas fa-book"></i> Интерактивный гайд по интеграции auth.js</p>
+      <a href="INTEGRATION_GUIDE.html" class="btn">
+        <i class="fas fa-code"></i> Открыть INTEGRATION_GUIDE.html
+      </a>
+    </div>
+  </div>
+
+  <!-- QUICK TESTS -->
+  <div class="test-card">
+    <h2><i class="fas fa-bolt"></i> Быстрые тесты</h2>
+    
+    <div class="test-item">
+      <h3>Тест #1: Открыть модальное окно</h3>
+      <p>Проверит, что auth.js загружен и работает</p>
+      <button class="btn" onclick="testAuthModal()">
+        <i class="fas fa-sign-in-alt"></i> Открыть окно входа
+      </button>
+    </div>
+
+    <div class="test-item">
+      <h3>Тест #2: Проверить localStorage</h3>
+      <p>Посмотрит, какие данные хранятся в браузере</p>
+      <button class="btn" onclick="testLocalStorage()">
+        <i class="fas fa-database"></i> Проверить хранилище
+      </button>
+    </div>
+
+    <div class="test-item">
+      <h3>Тест #3: Проверить текущего пользователя</h3>
+      <p>Выведет информацию о залогиненном пользователе</p>
+      <button class="btn" onclick="testCurrentUser()">
+        <i class="fas fa-user-check"></i> Проверить пользователя
+      </button>
+    </div>
+
+    <div class="test-item">
+      <h3>Тест #4: Очистить все данные</h3>
+      <p>⚠️ Удалит всех пользователей и выйдет из аккаунта</p>
+      <button class="btn btn-secondary" onclick="clearAllData()">
+        <i class="fas fa-trash"></i> Очистить все данные
+      </button>
+    </div>
+  </div>
+
+  <!-- ERRORS TO CHECK -->
+  <div class="test-card">
+    <h2><i class="fas fa-exclamation-triangle"></i> Проверка ошибок</h2>
+    
+    <div class="warning">
+      <strong>Откройте консоль браузера</strong> (F12 → Console) чтобы увидеть логи
+    </div>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Что проверить в консоли:</h3>
+    <ul class="checklist">
+      <li>Ошибок при загрузке страниц не должно быть</li>
+      <li>CORS ошибок не должно быть</li>
+      <li>Undefined переменных не должно быть</li>
+      <li>universeAuth должен быть доступен глобально</li>
+      <li>localStorage должен содержать 'universe_users' и 'universe_currentUser'</li>
+    </ul>
+
+    <h3 style="color: #333; margin: 1.5rem 0 1rem;">Команды для консоли:</h3>
+    <p style="margin: 1rem 0;">
+      Введите в консоль для проверки:
+    </p>
+    <pre style="background: #f5f5f5; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+// Проверить класс
+universeAuth
+
+// Проверить текущего пользователя
+universeAuth.currentUser
+
+// Проверить всех пользователей
+JSON.parse(localStorage.getItem('universe_users'))
+
+// Проверить избранное
+JSON.parse(localStorage.getItem('universe_favorites'))
+
+// Проверить аутентификацию
+universeAuth.isAuthenticated()
+    </pre>
+  </div>
+
+  <!-- KNOWN ISSUES -->
+  <div class="test-card">
+    <h2><i class="fas fa-bug"></i> Известные особенности</h2>
+    
+    <div class="warning" style="border-left-color: #f39c12;">
+      <strong>⚠️ Важно для production:</strong>
+      <ul style="margin-top: 0.8rem; padding-left: 1.5rem;">
+        <li>Пароли хранятся в открытом виде (увеличить безопасность)</li>
+        <li>Нет HTTPS (добавить для production)</li>
+        <li>Нет backend (добавить Node.js + MongoDB)</li>
+        <li>localStorage только на одном браузере (добавить синхронизацию)</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 1rem; color: #666;">
+      Несмотря на это, для разработки и демонстрации система работает отлично!
+    </p>
+  </div>
+
+  <!-- NEW FEATURES -->
+  <div class="test-card">
+    <h2><i class="fas fa-star"></i> ✨ Новые функции (v2.0)</h2>
+
+    <div class="test-item">
+      <h3>🔒 Backend с JWT и bcrypt</h3>
+      <p><strong>Что добавлено:</strong> Полноценный Node.js сервер с MongoDB, JWT-аутентификация, bcrypt-хэширование паролей</p>
+      <p><strong>Как запустить:</strong></p>
+      <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin: 0.5rem 0;">
+        <code>cd backend && npm install && npm start</code><br>
+        <small>Сервер запустится на http://localhost:5000</small>
+      </div>
+      <p><strong>Тестирование:</strong> Все API эндпоинты доступны для тестирования</p>
+    </div>
+
+    <div class="test-item">
+      <h3>📧 Email/SMS верификация</h3>
+      <p><strong>Что добавлено:</strong> Верификация email при регистрации, восстановление пароля, SMS-уведомления</p>
+      <p><strong>Настройка:</strong> Добавьте API ключи SendGrid и Twilio в .env файл</p>
+      <p><strong>Тестирование:</strong> Регистрация отправляет email для подтверждения</p>
+    </div>
+
+    <div class="test-item">
+      <h3>🌐 Google OAuth 2.0</h3>
+      <p><strong>Что добавлено:</strong> Вход через Google-аккаунт в модальном окне</p>
+      <p><strong>Настройка:</strong> Добавьте Google Client ID в backend/.env</p>
+      <p><strong>Тестирование:</strong> Кнопка "Войти через Google" в форме входа</p>
+    </div>
+
+    <div class="test-item">
+      <h3>🔐 Двухфакторная аутентификация (2FA)</h3>
+      <p><strong>Что добавлено:</strong> 2FA с Google Authenticator, QR-коды, резервные коды</p>
+      <p><strong>Тестирование:</strong> В профиле → Настройки → Настроить 2FA</p>
+      <p><strong>Особенности:</strong> 10 резервных кодов для восстановления доступа</p>
+    </div>
+
+    <div class="test-item">
+      <h3>🌙 Темная тема</h3>
+      <p><strong>Что добавлено:</strong> Переключатель светлая/темная тема в профиле</p>
+      <p><strong>Тестирование:</strong> В профиле нажмите кнопку луны/солнца в правом верхнем углу</p>
+      <p><strong>Особенности:</strong> Тема сохраняется в localStorage</p>
+    </div>
+
+    <div class="test-item">
+      <h3>✨ Анимации и микро-интеракции</h3>
+      <p><strong>Что добавлено:</strong> Плавные переходы, hover-эффекты, анимации карточек</p>
+      <p><strong>Тестирование:</strong> Наведите курсор на карточки университетов</p>
+      <p><strong>Особенности:</strong> fadeIn, slideIn, pulse анимации</p>
+    </div>
+
+    <div class="test-item">
+      <h3>📱 PWA (Progressive Web App)</h3>
+      <p><strong>Что добавлено:</strong> Установка как приложение, оффлайн-режим, service worker</p>
+      <p><strong>Тестирование:</strong> В браузере появится баннер "Установить UniVerse Pro"</p>
+      <p><strong>Особенности:</strong> Кэширование страниц, background sync</p>
+    </div>
+
+    <div class="test-item">
+      <h3>🔔 Push-уведомления</h3>
+      <p><strong>Что добавлено:</strong> Push-уведомления о новых университетах</p>
+      <p><strong>Тестирование:</strong> В профиле → Настройки → Push-уведомления</p>
+      <p><strong>Настройка:</strong> Требуется VAPID ключ для отправки уведомлений</p>
+    </div>
+  </div>
+
+  <!-- BACKEND STATUS -->
+  <div class="test-card">
+    <h2><i class="fas fa-server"></i> Статус Backend</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div class="test-item" style="text-align: center;">
+        <h3 style="color: #2ecc71;">✅ Готов</h3>
+        <p>Node.js + Express</p>
+        <p>Port: 5000</p>
+      </div>
+      <div class="test-item" style="text-align: center;">
+        <h3 style="color: #2ecc71;">✅ Готов</h3>
+        <p>MongoDB</p>
+        <p>Database: universe_pro</p>
+      </div>
+      <div class="test-item" style="text-align: center;">
+        <h3 style="color: #2ecc71;">✅ Готов</h3>
+        <p>JWT Auth</p>
+        <p>Access + Refresh tokens</p>
+      </div>
+      <div class="test-item" style="text-align: center;">
+        <h3 style="color: #f39c12;">⚠️ Настройка</h3>
+        <p>Email/SMS</p>
+        <p>Требуются API ключи</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-radius: 10px; border-left: 4px solid #f39c12;">
+      <h3 style="color: #f39c12; margin-bottom: 0.5rem;">📋 Для полного тестирования:</h3>
+      <ol style="padding-left: 1.5rem;">
+        <li>Установите MongoDB</li>
+        <li>Скопируйте backend/.env.example в .env</li>
+        <li>Добавьте API ключи (Google, SendGrid, Twilio)</li>
+        <li>Запустите: <code style="background: #f0f0f0; padding: 0.2rem 0.5rem; border-radius: 3px;">cd backend && npm start</code></li>
+        <li>Фронтенд автоматически подключится к backend</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="test-card" style="text-align: center; background: #f0f7ff; border: 2px solid #062abb;">
+    <h2 style="margin-bottom: 1rem;">Готово к тестированию! 🚀</h2>
+    <p>Начните с главной страницы (index2.html)</p>
+    <a href="index2.html" class="btn" style="margin-top: 1rem;">
+      <i class="fas fa-rocket"></i> Перейти на главную
+    </a>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+function copy(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert('✅ Скопировано: ' + text);
+  });
+}
+
+function injectDemoAccounts() {
+  const users = [
+    {
+      id: 1,
+      name: "Тестовый пользователь",
+      email: "test@example.com",
+      phone: "+7 (777) 111-11-11",
+      password: "password123",
+      bio: "Ищу хороший университет в Казахстане",
+      city: "Алматы",
+      picture: null,
+      provider: "local",
+      isEmailVerified: false,
+      isPhoneVerified: false,
+      createdAt: new Date().toISOString(),
+      favorites: [1, 3, 10]
+    },
+    {
+      id: 2,
+      name: "Студент",
+      email: "student@example.com",
+      phone: "+7 (777) 222-22-22",
+      password: "testpass456",
+      bio: "Интересуюсь международными университетами",
+      city: "Астана",
+      picture: null,
+      provider: "local",
+      isEmailVerified: false,
+      isPhoneVerified: false,
+      createdAt: new Date().toISOString(),
+      favorites: [2, 11]
+    }
+  ];
+
+  localStorage.setItem('universe_users', JSON.stringify(users));
+  localStorage.setItem('universe_favorites', JSON.stringify([1, 3, 10, 2, 11]));
+  
+  alert('✅ Демо-аккаунты инъектированы!\n\nТеперь можно войти с:\ntest@example.com / password123\nили\nstudent@example.com / testpass456');
+}
+
+function testAuthModal() {
+  universeAuth.openModal();
+}
+
+function testLocalStorage() {
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  const current = localStorage.getItem('universe_currentUser');
+  const favs = JSON.parse(localStorage.getItem('universe_favorites') || '[]');
+  
+  alert(`localStorage содержит:
+  
+Всего пользователей: ${users.length}
+Текущий пользователь: ${current ? JSON.parse(current).name : 'Не авторизован'}
+Избранных университетов: ${favs.length}
+
+Откройте консоль (F12) чтобы увидеть полные данные`);
+  
+  console.log('=== UNIVERSE_USERS ===', users);
+  console.log('=== UNIVERSE_CURRENT_USER ===', JSON.parse(current || 'null'));
+  console.log('=== UNIVERSE_FAVORITES ===', favs);
+}
+
+function testCurrentUser() {
+  const user = universeAuth.currentUser;
+  if (user) {
+    alert(`✅ Вы авторизованы!
+
+Имя: ${user.name}
+Email: ${user.email}
+ID: ${user.id}
+Избранных: ${user.favorites ? user.favorites.length : 0}`);
+  } else {
+    alert('❌ Вы не авторизованы. Нажмите кнопку входа!');
+  }
+}
+
+function clearAllData() {
+  if (confirm('⚠️ Вы уверены? Это удалит все данные!')) {
+    localStorage.removeItem('universe_users');
+    localStorage.removeItem('universe_currentUser');
+    localStorage.removeItem('universe_favorites');
+    location.reload();
+  }
+}
+</script>
+
+</body>
+</html>
