@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UniVerse - Личный кабинет</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    header {
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #6366f1;
+    }
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #6366f1;
+    }
+    .profile-btn {
+      padding: 10px 20px;
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .profile-btn:hover {
+      background-color: #4f46e5;
+    }
+    .header-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-container">
+    <div class="logo">UniVerse</div>
+    <div class="header-right">
+      <nav>
+        <a href="index2.html">Главная</a>
+        <a href="index5.html">Университеты</a>
+        <a href="obshaga/obshaga.html">Общежития</a>
+        <a href="info.html">О нас</a>
+      </nav>
+      <a href="profile.html" class="profile-btn">👤 Профиль</a>
+    </div>
+  </div>
+</header>
+
+<h2>Добро пожаловать в UniVerse</h2>
+<p id="welcomeUser"></p>
+
+<button onclick="logout()">Выйти</button>
+
+<script src="app.js"></script>
+</body>
+</html>
